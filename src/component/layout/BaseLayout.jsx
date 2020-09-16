@@ -21,7 +21,7 @@ function _Layout(props) {
             {/* <TabBar /> */}
             <div>
                 {console.log(props.isPc)}
-                {props.isPc !== 'init' ? <>{false ? <Together /> : <MobileTogether />}</> : null}
+                {props.isPc !== 'init' ? <>{!props.isPc ?<MobileTogether /> : <Together /> }</> : null}
             </div>
         </div>
     )

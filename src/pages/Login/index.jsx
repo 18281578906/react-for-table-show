@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import { useHistory } from 'react-router-dom';
 import { mapStateToProps, mapDispatchToProps } from '../../redux/actionCreator'
 import { connect } from 'react-redux'
@@ -8,7 +8,7 @@ import {
 } from 'antd';
 import './style.less';
 import request from '../../api/request';
-
+import 'react-photo-view/dist/index.css';
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 20 },
@@ -16,16 +16,18 @@ const layout = {
 };
 
 const LoginPage = (props) => {
+  const [width,setWidth]=useState('40%')
+
   const history = useHistory();
-  const login=async (account, password) =>{
-   return await request({
+  const login = async (account, password) => {
+    return await request({
       method: 'post',
       url: '/merchant/v1/login',
       params: {
         account,
         password,
       }
-  })
+    })
   }
 
   const onFinish = async (values) => {
@@ -33,8 +35,9 @@ const LoginPage = (props) => {
     const result = await login(username, password);
     if (result) {
       history.push('/');
-      localStorage.setItem('loginInfo',JSON.stringify(result));
-    props.getInfo(result)
+      localStorage.setItem('loginInfo', JSON.stringify(result));
+      props.getInfo(result)
+      window.location.reload('/')
 
     }
   };
@@ -42,18 +45,25 @@ const LoginPage = (props) => {
   const onFinishFailed = (err) => {
     console.log('err', err);
   };
+useEffect(() => {
+  if(props.isPc===true){
+    setWidth('400px')
+  }else{
+    setWidth('40% ')
 
+  }
+}, [props.isPc])
   return (
     <div className="page-login">
       <div className="login-wrap">
-        <div className="login-box">
+        <div className="login-box" style={{width}}>
           <Form
             className="login-form"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             {...layout}
           >
-        
+
             <Form.Item
               label="账号"
               name="username"
@@ -82,7 +92,7 @@ const LoginPage = (props) => {
             </div>
           </Form>
         </div>
-   
+
       </div>
     </div>
   );

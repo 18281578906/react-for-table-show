@@ -1,39 +1,35 @@
-.together{
+.together2{
   background-color: #D6e9fe;
-  
-    .menu-header{
+ 
+  .menu-header{
     width: 100%;
-    padding: 30px 24px 0 24px;
+    margin-top: 8px;
+    padding: 30px 24px 24px 24px;
     background-color: #ffffff;
     display: flex;
     position: relative;
-    margin-top: 10px;
+  
     .img{
-      width:70px;
-      height: 70px;
+      width: 150px;
+      height: auto;
+
+      border: 1px solid grey;
       margin-right: 20px;
-      margin-top: 8px;
       img{
-        width:70px;
-        height: 70px;
+        width:150px;
+        height: auto;
       }
   
     }
     .menu-header-left{
-      width: 76%;
+      width: 60%;
       color: #87888A;
       font-size: 14px;
       line-height: 24px;
-      p{
-        font-size: 10px;
-      }
       .header-title{
         display: flex;
         justify-content: flex-start;
         line-height: 32px;
-        .btn{
-          margin-left: 20px;
-        }
         .form-page-header{
           width: 100px;
         }
@@ -46,7 +42,39 @@
         }
       }
     }
+    .menu-header-right{
+      text-align: right;
+      width: 40%;
+      .ant-statistic-content{
+        text-align: center;
+      }
+      .menu-header-active{
+        font-size: 14px;
+        color: #3894FF;
+        text-decoration: underline;
+      }
+      .header-right-data{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        position: absolute;
+        bottom: 24px;
+        right: 24px;
+        .right-databox{
+          border-right: 1px solid rgba(233, 233, 233, 1);
+          padding: 0px 30px;
+          .databox-span{
+            color: rgba(135, 136, 138, 1);
+            font-size: 14px;
+          }
+        }
+        .right-databox:nth-child(3){
+          border-right: 1px solid #ffffff;
+          padding: 0px 0px 0px 30px;
+        }
+      }
   
+    }
   }
   .pan{
       position: relative;
@@ -74,8 +102,10 @@
       text-align: left;
       position: relative;
       display: flex;
+    float: left;
       span{
       display: inline-flex;
+      margin-left: 0;
       }
     
     }
@@ -92,10 +122,13 @@
       
     }
     .pic{
-      width:50px;
+      // width:50px;
       text-align: right;
       margin: 0 8px 0 0;
       line-height: 32px;
+      span{
+        margin-left: 0;
+      }
     }
   }
   
@@ -151,3 +184,14 @@
   
     // padding: 24px 30px;
   }
+  // body{
+  //   position: relative;
+  //   overflow: hidden;
+  //   section{
+  //     position: fixed;
+  //     top: 50%;
+  //     left: 50%;
+  //     transform: translate(-50%,-50%);
+
+  //   }
+  // }

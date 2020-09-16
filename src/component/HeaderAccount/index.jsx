@@ -6,10 +6,13 @@ import {
   LogoutOutlined
 } from '@ant-design/icons';
 import request from '../../api/request';
+import { useHistory } from 'react-router-dom';
 
-const HeaderAccount = () => {
+const HeaderAccount = (props) => {
   const [visible, setVisible] = useState(false)
-  const [account, setAccount] = useState(null)
+  const [account, setAccount] = useState(null);
+  const history=useHistory();
+
   const changeShow = () => {
     setVisible(!visible)
   }
@@ -32,9 +35,14 @@ const HeaderAccount = () => {
     setVisible(!visible)
 
   }
+  const loginOut=()=>{
+    localStorage.removeItem('loginInfo');
+    console.log(history);
+    history.push('/login')
+  }
   useEffect(() => {
     handleGetAccountInfo();
-
+   
   }, [])
   return <div>
     <header className="header-account" onClick={changeShow}>
@@ -58,7 +66,7 @@ const HeaderAccount = () => {
           <span className='role'>{account && account.role_name}</span>
         <Button type="dashed" danger style={{float:'right',width:'120px',padding:'4px 8px 4px 8px',borderRadius:'10px'}}>
           <LogoutOutlined style={{marginLeft:'0'}}/>
-        <span style={{marginLeft:'4px'}}>退出登录</span>
+        <span style={{marginLeft:'4px'}} onClick={loginOut}>退出登录</span>
         </Button>
         </p>
         <p className='line'>工号: <span>{account && account.username}</span></p>
