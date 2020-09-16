@@ -1,7 +1,7 @@
 import React from 'react'
 import { mapStateToProps, mapDispatchToProps } from './redux/actionCreator'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect ,withRouter, useHistory} from 'react-router-dom'
 
 
 //路由
@@ -17,6 +17,7 @@ import './App.css'
 import Login from './pages/Login'
 import { useEffect } from 'react'
 import VConsole from 'vconsole';
+import { useState } from 'react'
 
 function _App(props) {
     function IsPC() {
@@ -34,21 +35,19 @@ function _App(props) {
         return flag;
     }
 
-
     useEffect(() => {
-        if (!IsPC()) {
-            new VConsole()
-        }
+        // if (!IsPC()) {
+        //     new VConsole()
+        // }
         props.getIsPc(IsPC())
-        if(localStorage.getItem('loginInfo')){
-               if(Object.keys(JSON.parse(localStorage.getItem('loginInfo')))[0]){
-            props.getInfo(JSON.parse(localStorage.getItem('loginInfo')))
-        } 
+        if (localStorage.getItem('loginInfo')) {
+            if (Object.keys(JSON.parse(localStorage.getItem('loginInfo')))[0]) {
+                props.getInfo(JSON.parse(localStorage.getItem('loginInfo')))
+            }
+        }else{
+            props.getInfo({})
         }
-  
-        console.log(IsPC(),props);
     }, [props.IsPC])
-
     return (
         <>
             <Router>

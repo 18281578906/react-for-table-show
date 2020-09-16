@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Button, Input, DatePicker, Table, Spin, Statistic
+  Button, Input, DatePicker, Table, Spin, Statistic, message
 } from 'antd';
 import { request } from '../../api/request'
 import moment from 'moment';
 import HeaderAccount from '../../component/HeaderAccount'
-import { PhotoProvider ,PhotoSlider} from 'react-photo-view';
+import { PhotoProvider, PhotoSlider } from 'react-photo-view';
 import {
   UndoOutlined
 } from '@ant-design/icons';
 
 import './style.less';
+import { useHistory } from 'react-router-dom';
 
 
 
 const { Search } = Input;
-const { RangePicker } = DatePicker;
-const Together = () => {
+const Together = (props) => {
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [totalInfo, setTotalInfo] = useState(null);
-  const [url,setUrl]=useState([])
+  const [url, setUrl] = useState([])
   const [shopId, setShopId] = useState(0);
   const [list, setList] = useState([]);
   const [pageobj, setPageObj] = useState({
     page: 1,
-    pageSize: 10
+    pageSize: 5
   })
   const [total, setTotal] = useState(1)
+  const history=useHistory();
   //请求数据
   const getList = (params) => {
     return request({
@@ -88,22 +89,44 @@ const Together = () => {
 
   useEffect(() => {
     handleGetShop();
+      if(!JSON.parse(localStorage.getItem('loginInfo'))){
+            message.error('请先登录！') ;
+            history.replace('/login')
+        }
   }, [])
   const [keyValue, setKeyValue] = useState('');
   const [orderNum, setOrderNum] = useState('');
-  // const [timeRange, setTimeRange] = useState(null);
+  const [timeChioce1, setTime1] = useState('');
+  const [timeChioce2, setTime2] = useState('');
+  const [timeChiocekey1, setTimekey1] = useState('');
+  const [timeChiocekey2, setTimekey2] = useState('');
   const clearPage = () => {
     setPageObj({
       page: 1,
-      pageSize: 10,
+      pageSize: 5,
     })
   }
-  const onReset = () => {
-    setKeyValue(new Date());
+  const onReset1 = () => {
+    setTimekey1(new Date());
+    setTimekey2(new Date());
+setTime1('')
+setTime2('')
+
     handleGetList({
       shop_id: shopId,
       page: 1,
-      pageSize: 10,
+      pageSize: 5,
+    });
+    clearPage();
+  };
+  const onReset2 = () => {
+    setTimekey2(new Date());
+    setTime2('')
+
+    handleGetList({
+      shop_id: shopId,
+      page: 1,
+      pageSize: 5,
     });
     clearPage();
   };
@@ -112,7 +135,7 @@ const Together = () => {
     handleGetList({
       shop_id: shopId,
       page: 1,
-      pageSize: 10,
+      pageSize: 5,
     });
     clearPage();
 
@@ -124,7 +147,7 @@ const Together = () => {
     handleGetList({
       shop_id: shopId,
       page: 1,
-      pageSize: 10,
+      pageSize: 5,
       pay_order_id: val,
 
     });
@@ -200,18 +223,88 @@ const Together = () => {
       width: 60,
     },
   ];
-  const changeTime = (e) => {
-    const time1 = e && e[0].format('YYYY-MM-DD HH:mm:ss');
-    const time2 = e && e[1].format('YYYY-MM-DD HH:mm:ss');
-    // setTimeRange(`${time1}|${time2}`);
-    clearPage();
+  // const changeTime1 = (e) => {
+  //   let time1,time2;
+  //   if(type===1){
+  //         time1 = e && e.format('YYYY-MM-DD HH:mm:ss');
+  //         setTime1(time1)
+  //   }
+  //   if(type===2){
+  //         time2 = e && e.format('YYYY-MM-DD HH:mm:ss');
+  //         setTime2(time2)
+  //   }
+  //   console.log(timeChioce1,timeChioce2);
+  //   clearPage();
+  //   handleGetList({
+  //     shop_id: shopId,
+  //     page: 1,
+  //     pageSize: 5,
+  //     date: e ? `${time1}|${time2}` : null,
+  //   });
+  // };
+  const changeTime1 = (e) => {
+    const time1 = e && e.format('YYYY-MM-DD HH:mm:ss');
+    setTime1(time1)
+    console.log(timeChioce1, time1);
+    clearPage();  
+    if (timeChioce2!=='') {
+  const timeNum1=Number(e.format('YYYYMMDDHHmmss'));
+  const mm=timeChioce2.split(' ');
+      const timeNum2=Number(mm[0].split('-').join('')+mm[1].split(':').join(''));
+    console.log(timeNum1,timeNum2);
+    if(timeNum1>=timeNum2){
+      message.error('开始时间不能大于结束时间');
+      setTimekey1(new Date())
+      setTime1('')
+    }
+      console.log(timeChioce1, time1);
+    
+      clearPage();
+      handleGetList({
+        shop_id: shopId,
+        page: 1,
+        pageSize: 5,
+        date: e ? `${time1}|${timeChioce2}` : null,
+      });
+    }
 
-    handleGetList({
-      shop_id: shopId,
-      page: 1,
-      pageSize: 10,
-      date: e ? `${time1}|${time2}` : null,
-    });
+ 
+  };
+  const changeTime2 = (e) => {
+    const time2 = e && e.format('YYYY-MM-DD HH:mm:ss');
+    setTime2(time2.toString())
+    if (timeChioce1==='') {
+      message.error('请选择开始时间！')
+      setTimekey2(new Date())
+      setTime2('')
+
+      return;
+    } else {
+      const timeNum2=Number(e.format('YYYYMMDDHHmmss'));
+
+      const mm=timeChioce1.split(' ');
+      const timeNum1=Number(mm[0].split('-').join('')+mm[1].split(':').join(''));
+    console.log(timeNum1,timeNum2);
+    if(timeNum2<=timeNum1){
+      message.error('结束时间不能小于开始时间');
+      setTimekey2(new Date())
+      setTime2('')
+      return;
+
+    }
+      console.log(timeChioce1, time2);
+      clearPage();
+      handleGetList({
+        shop_id: shopId,
+        page: 1,
+        pageSize: 5,
+        date: e ? `${timeChioce1}|${time2}` : null,
+      });
+    }
+
+
+
+
   };
   // const searchTime = () => {
   //   clearPage();
@@ -219,7 +312,7 @@ const Together = () => {
   //   handleGetList({
   //     shop_id: shopId,
   //     page: 1,
-  //     pageSize: 10,
+  //     pageSize: 5,
   //     date: timeRange,
   //   });
   // };
@@ -232,7 +325,7 @@ const Together = () => {
     handleGetList({
       shop_id: shopId,
       page: 1,
-      pageSize: 10,
+      pageSize: 5,
     });
   };
 
@@ -256,9 +349,9 @@ const Together = () => {
       spinning={loading2}
     >
       <div className="together">
-        <HeaderAccount />
+        <HeaderAccount/>
         <div className="menu-header">
-        <div className="img"
+          <div className="img"
             onClick={() => {
               setFlag(!flag)
             }}
@@ -271,9 +364,9 @@ const Together = () => {
 
 
             {url[0] ?
-          
-              <PhotoProvider 
-              
+
+              <PhotoProvider
+
               >
                 <PhotoSlider
                   photoClosable={true}
@@ -319,7 +412,7 @@ const Together = () => {
             </div>
           </div>
         </div>
-        <div className="together-content">
+        <div className="together-content timeChioce">
           <div className="pan">
             <div className="search">
               <div className="line">
@@ -329,7 +422,7 @@ const Together = () => {
                     className="pic"
                     placeholder="搜索"
                     style={{
-                      width: 180,
+                      width: 300,
                       height: 32,
                       borderRadius: 3,
                       backgroundColor: 'rgba(255, 255, 255, 1) ',
@@ -347,20 +440,54 @@ const Together = () => {
                 </div>
 
               </div>
-              <div className="line">
-                <p className="pic">时间</p>
+              <div className="line" >
+                <p className="pic">开始时间</p>
                 <div className='input_wrap'>
-                  <RangePicker
+                  {console.log(timeChioce1)}
+                  <DatePicker
                     className="pic"
                     format="YYYY-MM-DD HH:mm:ss"
                     showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
-                    style={{ width: 180 }}
-                    key={keyValue}
-                    onChange={changeTime}
+                    style={{ width: 300 }}
+                    key={timeChiocekey1}
+                    onChange={changeTime1}
+                    inputReadOnly={true}
+                    popupStyle={{
+                      transform: 'scale(0.8)',
+                      transition: '300ms',
+                      
+                    }}
                   />
 
                   <Button className="pic" type="default"
-                    onClick={onReset} style={{ lineHeight: '0' }}
+                    onClick={onReset1} style={{ lineHeight: '0' }}
+                  >
+                    <UndoOutlined style={{ margin: '0' }} />
+
+                  </Button>
+                </div>
+
+              </div>
+              <div className="line" >
+                <p className="pic">结束时间</p>
+                <div className='input_wrap'>
+                  <DatePicker
+                    className="pic"
+                    format="YYYY-MM-DD HH:mm:ss"
+                    showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                    style={{ width: 300 }}
+                    key={timeChiocekey2}
+                    onChange={changeTime2}
+                    inputReadOnly={true}
+                    popupStyle={{
+
+                      transform: 'scale(0.8)',
+                      transition: '300ms',
+                    }}
+                  />
+
+                  <Button className="pic" type="default"
+                    onClick={onReset2} style={{ lineHeight: '0' }}
                   >
                     <UndoOutlined style={{ margin: '0' }} />
 

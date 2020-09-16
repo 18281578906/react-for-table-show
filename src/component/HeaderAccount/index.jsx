@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logoBlock from '../../assets/images/logoBlock.png'
+import { mapStateToProps, mapDispatchToProps } from '../../redux/actionCreator'
+import { connect } from 'react-redux'
 import { Drawer, Button } from 'antd'
 import './style.less'
 import {
@@ -37,17 +39,19 @@ const HeaderAccount = (props) => {
   }
   const loginOut=()=>{
     localStorage.removeItem('loginInfo');
-    console.log(history);
-    history.push('/login')
+    history.push('/login');
+    props.getInfo({})
+  //  window.location.reload()
   }
   useEffect(() => {
     handleGetAccountInfo();
    
   }, [])
-  return <div>
-    <header className="header-account" onClick={changeShow}>
-      <img src={logoBlock} alt=""></img>
-      <p>454851</p>
+  return <div   onClick={changeShow}>
+    <header className="header-account">
+          <span   onClick={changeShow}><img src={logoBlock} alt=""></img>
+      <p>{account && account.username}</p> 
+   </span>
     </header>
     <div className="drawer"
     >
@@ -76,4 +80,4 @@ const HeaderAccount = (props) => {
     </div>
   </div>
 }
-export default HeaderAccount;
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderAccount)

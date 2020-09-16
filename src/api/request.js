@@ -25,12 +25,7 @@ export function request(config) {
             'Token':JSON.parse(localStorage.getItem('loginInfo'))&&JSON.parse(localStorage.getItem('loginInfo')).token
         }
     })
-    setTimeout(()=>{
-  if(!JSON.parse(localStorage.getItem('loginInfo'))){
-        message.error('请先登录！') ;
-    }
-
-    },2000)
+ 
   
     //! 数据过滤
     instance.interceptors.response.use(res => {

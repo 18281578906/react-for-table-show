@@ -4,7 +4,7 @@ import { mapStateToProps, mapDispatchToProps } from '../../redux/actionCreator'
 import { connect } from 'react-redux'
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import {
-  Input, Button, Form,
+  Input, Button, Form, message,
 } from 'antd';
 import './style.less';
 import request from '../../api/request';
@@ -37,8 +37,12 @@ const LoginPage = (props) => {
       history.push('/');
       localStorage.setItem('loginInfo', JSON.stringify(result));
       props.getInfo(result)
-      window.location.reload('/')
+      window.location.reload('/');
+      message.success('登录成功！')
 
+    }
+    else{
+      message.error('密码或用户名错误！')
     }
   };
 

@@ -4,17 +4,20 @@ import {
 } from 'antd';
 import { request } from '../../api/request'
 import moment from 'moment';
+import {message} from 'antd'
 import HeaderAccount from '../../component/HeaderAccount'
 import { PhotoProvider, PhotoSlider } from 'react-photo-view';
 
 
 import './style.less';
+import { useHistory } from 'react-router-dom';
 
 
 
 const { Search } = Input;
 const { RangePicker } = DatePicker;
-const Together = () => {
+const Together = (props) => {
+  const history=useHistory();
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [totalInfo, setTotalInfo] = useState(null);
@@ -25,7 +28,7 @@ const Together = () => {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [pageobj, setPageObj] = useState({
     page: 1,
-    pageSize: 10
+    pageSize: 6
   })
   const [total, setTotal] = useState(1)
   //请求数据
@@ -89,6 +92,11 @@ const Together = () => {
 
   useEffect(() => {
     handleGetShop();
+    if(!JSON.parse(localStorage.getItem('loginInfo'))){
+      message.error('请先登录！') ;
+      history.replace('/login');
+
+  }
   }, [])
   const [keyValue, setKeyValue] = useState('');
   const [orderNum, setOrderNum] = useState('');
@@ -96,7 +104,7 @@ const Together = () => {
   const clearPage = () => {
     setPageObj({
       page: 1,
-      pageSize: 10,
+      pageSize: 6,
     })
   }
   const onReset = () => {
@@ -104,7 +112,7 @@ const Together = () => {
     handleGetList({
       shop_id: shopId,
       page: 1,
-      pageSize: 10,
+      pageSize: 6,
     });
     clearPage();
   };
@@ -113,7 +121,7 @@ const Together = () => {
     handleGetList({
       shop_id: shopId,
       page: 1,
-      pageSize: 10,
+      pageSize: 6,
     });
     clearPage();
 
@@ -124,7 +132,7 @@ const Together = () => {
     handleGetList({
       shop_id: shopId,
       page: 1,
-      pageSize: 10,
+      pageSize: 6,
       pay_order_id: val,
 
     });
@@ -209,7 +217,7 @@ const Together = () => {
     handleGetList({
       shop_id: shopId,
       page: 1,
-      pageSize: 10,
+      pageSize: 6,
       date: e ? `${time1}|${time2}` : null,
     });
   };
@@ -219,7 +227,7 @@ const Together = () => {
   //   handleGetList({
   //     shop_id: shopId,
   //     page: 1,
-  //     pageSize: 10,
+  //     pageSize: 6,
   //     date: timeRange,
   //   });
   // };
@@ -232,7 +240,7 @@ const Together = () => {
     handleGetList({
       shop_id: shopId,
       page: 1,
-      pageSize: 10,
+      pageSize: 6,
     });
   };
 
@@ -288,7 +296,6 @@ const Together = () => {
               </PhotoProvider>
               : null}
 
-            {console.log(flag, url[0], 'gengx')}
 
 
           </div>
@@ -330,7 +337,7 @@ const Together = () => {
                     className="pic"
                     placeholder="搜索"
                     style={{
-                      width: 180,
+                      width: 300,
                       height: 32,
                       borderRadius: 3,
                       backgroundColor: 'rgba(255, 255, 255, 1) ',
@@ -356,7 +363,7 @@ const Together = () => {
                     className="pic"
                     format="YYYY-MM-DD HH:mm:ss"
                     showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
-                    style={{ width: 180 }}
+                    style={{ width: 500 }}
                     key={keyValue}
                     onChange={changeTime}
                   />
