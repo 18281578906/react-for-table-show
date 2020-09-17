@@ -12,11 +12,63 @@ import {
 
 import './style.less';
 import { useHistory } from 'react-router-dom';
-
+import { debounce } from '../../utils/utils'
 
 
 const { Search } = Input;
 const Together = (props) => {
+  //（浏览器窗口上边界内容高度）
+  function getDocumentTop() {
+    var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
+    if (document.body) {
+      bodyScrollTop = document.body.scrollTop;
+    }
+    if (document.documentElement) {
+      documentScrollTop = document.documentElement.scrollTop;
+    }
+    scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+    // console.log("scrollTop:" + scrollTop);
+    return scrollTop;
+  }
+
+
+
+  //可视窗口高度（屏幕可以看见的高度）
+  function getWindowHeight() {
+    var windowHeight = 0;
+    if (document.compatMode == "CSS1Compat") {
+      windowHeight = document.documentElement.clientHeight;
+    } else {
+      windowHeight = document.body.clientHeight;
+    }
+    // console.log("windowHeight:" + windowHeight);
+    return windowHeight;
+  }
+
+
+
+  //滚动条滚动高度（即整个网页的高度）
+  function getScrollHeight() {
+    var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
+    if (document.body) {
+      bodyScrollHeight = document.body.scrollHeight;
+    }
+    if (document.documentElement) {
+      documentScrollHeight = document.documentElement.scrollHeight;
+    }
+    scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
+    // console.log("scrollHeight:" + scrollHeight);
+    return scrollHeight;
+  }
+
+  window.onscroll = debounce(function () {
+    //监听事件内容
+    if (getScrollHeight() == getDocumentTop() + getWindowHeight()) {
+      //当滚动条到底时,这里是触发内容
+      console.log('到底了');
+    }
+  }, 600, false)
+
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [totalInfo, setTotalInfo] = useState(null);
@@ -28,7 +80,7 @@ const Together = (props) => {
     pageSize: 5
   })
   const [total, setTotal] = useState(1)
-  const history=useHistory();
+  const history = useHistory();
   //请求数据
   const getList = (params) => {
     return request({
@@ -89,10 +141,10 @@ const Together = (props) => {
 
   useEffect(() => {
     handleGetShop();
-      if(!JSON.parse(localStorage.getItem('loginInfo'))){
-            message.error('请先登录！') ;
-            history.replace('/login')
-        }
+    if (!JSON.parse(localStorage.getItem('loginInfo'))) {
+      message.error('请先登录！');
+      history.replace('/login')
+    }
   }, [])
   const [keyValue, setKeyValue] = useState('');
   const [orderNum, setOrderNum] = useState('');
@@ -109,8 +161,8 @@ const Together = (props) => {
   const onReset1 = () => {
     setTimekey1(new Date());
     setTimekey2(new Date());
-setTime1('')
-setTime2('')
+    setTime1('')
+    setTime2('')
 
     handleGetList({
       shop_id: shopId,
@@ -246,19 +298,19 @@ setTime2('')
     const time1 = e && e.format('YYYY-MM-DD HH:mm:ss');
     setTime1(time1)
     console.log(timeChioce1, time1);
-    clearPage();  
-    if (timeChioce2!=='') {
-  const timeNum1=Number(e.format('YYYYMMDDHHmmss'));
-  const mm=timeChioce2.split(' ');
-      const timeNum2=Number(mm[0].split('-').join('')+mm[1].split(':').join(''));
-    console.log(timeNum1,timeNum2);
-    if(timeNum1>=timeNum2){
-      message.error('开始时间不能大于结束时间');
-      setTimekey1(new Date())
-      setTime1('')
-    }
+    clearPage();
+    if (timeChioce2 !== '') {
+      const timeNum1 = Number(e.format('YYYYMMDDHHmmss'));
+      const mm = timeChioce2.split(' ');
+      const timeNum2 = Number(mm[0].split('-').join('') + mm[1].split(':').join(''));
+      console.log(timeNum1, timeNum2);
+      if (timeNum1 >= timeNum2) {
+        message.error('开始时间不能大于结束时间');
+        setTimekey1(new Date())
+        setTime1('')
+      }
       console.log(timeChioce1, time1);
-    
+
       clearPage();
       handleGetList({
         shop_id: shopId,
@@ -268,30 +320,30 @@ setTime2('')
       });
     }
 
- 
+
   };
   const changeTime2 = (e) => {
     const time2 = e && e.format('YYYY-MM-DD HH:mm:ss');
     setTime2(time2.toString())
-    if (timeChioce1==='') {
+    if (timeChioce1 === '') {
       message.error('请选择开始时间！')
       setTimekey2(new Date())
       setTime2('')
 
       return;
     } else {
-      const timeNum2=Number(e.format('YYYYMMDDHHmmss'));
+      const timeNum2 = Number(e.format('YYYYMMDDHHmmss'));
 
-      const mm=timeChioce1.split(' ');
-      const timeNum1=Number(mm[0].split('-').join('')+mm[1].split(':').join(''));
-    console.log(timeNum1,timeNum2);
-    if(timeNum2<=timeNum1){
-      message.error('结束时间不能小于开始时间');
-      setTimekey2(new Date())
-      setTime2('')
-      return;
+      const mm = timeChioce1.split(' ');
+      const timeNum1 = Number(mm[0].split('-').join('') + mm[1].split(':').join(''));
+      console.log(timeNum1, timeNum2);
+      if (timeNum2 <= timeNum1) {
+        message.error('结束时间不能小于开始时间');
+        setTimekey2(new Date())
+        setTime2('')
+        return;
 
-    }
+      }
       console.log(timeChioce1, time2);
       clearPage();
       handleGetList({
@@ -349,7 +401,7 @@ setTime2('')
       spinning={loading2}
     >
       <div className="together">
-        <HeaderAccount/>
+        <HeaderAccount />
         <div className="menu-header">
           <div className="img"
             onClick={() => {
@@ -455,7 +507,7 @@ setTime2('')
                     popupStyle={{
                       transform: 'scale(0.8)',
                       transition: '300ms',
-                      
+
                     }}
                   />
 
