@@ -1,7 +1,7 @@
 import React from 'react'
 import { mapStateToProps, mapDispatchToProps } from './redux/actionCreator'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Switch, Redirect ,withRouter, useHistory} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 
 
 //路由
@@ -16,8 +16,6 @@ import './App.css'
 //组件
 import Login from './pages/Login'
 import { useEffect } from 'react'
-import VConsole from 'vconsole';
-import { useState } from 'react'
 
 function _App(props) {
     function IsPC() {

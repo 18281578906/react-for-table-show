@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { baseURL, timeout } from './config'
-import { message } from 'antd';
 
 let pending = []; //声明一个数组用于存储每个请求的取消函数和axios标识
 // let cancelToken = axios.CancelToken;

@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { mapStateToProps, mapDispatchToProps } from '../../redux/actionCreator'
 import { connect } from 'react-redux'

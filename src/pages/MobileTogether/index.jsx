@@ -28,7 +28,7 @@ const Together = (props) => {
     pageSize: 5
   })
   const [total, setTotal] = useState(1)
-  const history=useHistory();
+  const history = useHistory();
   //请求数据
   const getList = (params) => {
     return request({
@@ -89,12 +89,13 @@ const Together = (props) => {
 
   useEffect(() => {
     handleGetShop();
-      if(!JSON.parse(localStorage.getItem('loginInfo'))){
-            message.error('请先登录！') ;
-            history.replace('/login')
-        }
+    if (!JSON.parse(localStorage.getItem('loginInfo'))) {
+      message.error('请先登录！');
+      history.replace('/login')
+    }
   }, [])
   const [keyValue, setKeyValue] = useState('');
+  console.log(keyValue);
   const [orderNum, setOrderNum] = useState('');
   const [timeChioce1, setTime1] = useState('');
   const [timeChioce2, setTime2] = useState('');
@@ -109,8 +110,8 @@ const Together = (props) => {
   const onReset1 = () => {
     setTimekey1(new Date());
     setTimekey2(new Date());
-setTime1('')
-setTime2('')
+    setTime1('')
+    setTime2('')
 
     handleGetList({
       shop_id: shopId,
@@ -246,19 +247,19 @@ setTime2('')
     const time1 = e && e.format('YYYY-MM-DD HH:mm:ss');
     setTime1(time1)
     console.log(timeChioce1, time1);
-    clearPage();  
-    if (timeChioce2!=='') {
-  const timeNum1=Number(e.format('YYYYMMDDHHmmss'));
-  const mm=timeChioce2.split(' ');
-      const timeNum2=Number(mm[0].split('-').join('')+mm[1].split(':').join(''));
-    console.log(timeNum1,timeNum2);
-    if(timeNum1>=timeNum2){
-      message.error('开始时间不能大于结束时间');
-      setTimekey1(new Date())
-      setTime1('')
-    }
+    clearPage();
+    if (timeChioce2 !== '') {
+      const timeNum1 = Number(e.format('YYYYMMDDHHmmss'));
+      const mm = timeChioce2.split(' ');
+      const timeNum2 = Number(mm[0].split('-').join('') + mm[1].split(':').join(''));
+      console.log(timeNum1, timeNum2);
+      if (timeNum1 >= timeNum2) {
+        message.error('开始时间不能大于结束时间');
+        setTimekey1(new Date())
+        setTime1('')
+      }
       console.log(timeChioce1, time1);
-    
+
       clearPage();
       handleGetList({
         shop_id: shopId,
@@ -268,30 +269,30 @@ setTime2('')
       });
     }
 
- 
+
   };
   const changeTime2 = (e) => {
     const time2 = e && e.format('YYYY-MM-DD HH:mm:ss');
     setTime2(time2.toString())
-    if (timeChioce1==='') {
+    if (timeChioce1 === '') {
       message.error('请选择开始时间！')
       setTimekey2(new Date())
       setTime2('')
 
       return;
     } else {
-      const timeNum2=Number(e.format('YYYYMMDDHHmmss'));
+      const timeNum2 = Number(e.format('YYYYMMDDHHmmss'));
 
-      const mm=timeChioce1.split(' ');
-      const timeNum1=Number(mm[0].split('-').join('')+mm[1].split(':').join(''));
-    console.log(timeNum1,timeNum2);
-    if(timeNum2<=timeNum1){
-      message.error('结束时间不能小于开始时间');
-      setTimekey2(new Date())
-      setTime2('')
-      return;
+      const mm = timeChioce1.split(' ');
+      const timeNum1 = Number(mm[0].split('-').join('') + mm[1].split(':').join(''));
+      console.log(timeNum1, timeNum2);
+      if (timeNum2 <= timeNum1) {
+        message.error('结束时间不能小于开始时间');
+        setTimekey2(new Date())
+        setTime2('')
+        return;
 
-    }
+      }
       console.log(timeChioce1, time2);
       clearPage();
       handleGetList({
@@ -349,7 +350,7 @@ setTime2('')
       spinning={loading2}
     >
       <div className="together">
-        <HeaderAccount/>
+        <HeaderAccount />
         <div className="menu-header">
           <div className="img"
             onClick={() => {
@@ -445,6 +446,7 @@ setTime2('')
                 <div className='input_wrap'>
                   {console.log(timeChioce1)}
                   <DatePicker
+                    placeholder='请选择时间段'
                     className="pic"
                     format="YYYY-MM-DD HH:mm:ss"
                     showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
@@ -455,7 +457,7 @@ setTime2('')
                     popupStyle={{
                       transform: 'scale(0.8)',
                       transition: '300ms',
-                      
+
                     }}
                   />
 
@@ -463,7 +465,6 @@ setTime2('')
                     onClick={onReset1} style={{ lineHeight: '0' }}
                   >
                     <UndoOutlined style={{ margin: '0' }} />
-
                   </Button>
                 </div>
 
@@ -472,6 +473,7 @@ setTime2('')
                 <p className="pic">结束时间</p>
                 <div className='input_wrap'>
                   <DatePicker
+                    placeholder='请选择时间段'
                     className="pic"
                     format="YYYY-MM-DD HH:mm:ss"
                     showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
