@@ -12,11 +12,63 @@ import {
 
 import './style.less';
 import { useHistory } from 'react-router-dom';
-
+import { debounce } from '../../utils/utils'
 
 
 const { Search } = Input;
 const Together = (props) => {
+  //（浏览器窗口上边界内容高度）
+  function getDocumentTop() {
+    var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
+    if (document.body) {
+      bodyScrollTop = document.body.scrollTop;
+    }
+    if (document.documentElement) {
+      documentScrollTop = document.documentElement.scrollTop;
+    }
+    scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+    // console.log("scrollTop:" + scrollTop);
+    return scrollTop;
+  }
+
+
+
+  //可视窗口高度（屏幕可以看见的高度）
+  function getWindowHeight() {
+    var windowHeight = 0;
+    if (document.compatMode == "CSS1Compat") {
+      windowHeight = document.documentElement.clientHeight;
+    } else {
+      windowHeight = document.body.clientHeight;
+    }
+    // console.log("windowHeight:" + windowHeight);
+    return windowHeight;
+  }
+
+
+
+  //滚动条滚动高度（即整个网页的高度）
+  function getScrollHeight() {
+    var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
+    if (document.body) {
+      bodyScrollHeight = document.body.scrollHeight;
+    }
+    if (document.documentElement) {
+      documentScrollHeight = document.documentElement.scrollHeight;
+    }
+    scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
+    // console.log("scrollHeight:" + scrollHeight);
+    return scrollHeight;
+  }
+
+  window.onscroll = debounce(function () {
+    //监听事件内容
+    if (getScrollHeight() == getDocumentTop() + getWindowHeight()) {
+      //当滚动条到底时,这里是触发内容
+      console.log('到底了');
+    }
+  }, 600, false)
+
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [totalInfo, setTotalInfo] = useState(null);
