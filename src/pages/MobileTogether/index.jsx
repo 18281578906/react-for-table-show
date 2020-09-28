@@ -36,7 +36,7 @@ const Together = (props) => {
   //可视窗口高度（屏幕可以看见的高度）
   function getWindowHeight() {
     var windowHeight = 0;
-    if (document.compatMode == "CSS1Compat") {
+    if (document.compatMode === "CSS1Compat") {
       windowHeight = document.documentElement.clientHeight;
     } else {
       windowHeight = document.body.clientHeight;
@@ -63,7 +63,7 @@ const Together = (props) => {
 
   window.onscroll = debounce(function () {
     //监听事件内容
-    if (getScrollHeight() == getDocumentTop() + getWindowHeight()) {
+    if (getScrollHeight() === getDocumentTop() + getWindowHeight()) {
       //当滚动条到底时,这里是触发内容
       console.log('到底了');
     }
