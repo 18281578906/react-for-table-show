@@ -1,4 +1,5 @@
 .together2{
+  width: 100%;
   background-color: #D6e9fe;
   .header-account{
     position: fixed;
@@ -6,12 +7,13 @@
   }
   .menu-header{
     width: 100%;
-    padding: 30px 24px 24px 24px;
+    padding: 30px;
     background-color: #ffffff;
     display: flex;
     position: relative;
-    padding-top: 75px;
-  
+    padding-top: 35px;
+    font-size: 15px;
+
     .img{
       width: 150px;
       height: auto;
@@ -24,63 +26,37 @@
       }
   
     }
-    .menu-header-left{
-      width: 60%;
-      color: #87888A;
-      font-size: 14px;
-      line-height: 24px;
-      .header-title{
-        display: flex;
-        justify-content: flex-start;
-        line-height: 32px;
-        .form-page-header{
-          width: 100px;
-        }
-        .title-mark{
-          color: #316DE8;
-          font-size: 14px;
-          text-align: left;
-          margin-left: 20px;
-          cursor: pointer;
+    .header-top{
+      width:60%;
+      .top-time{
+        display: inline-block;
+        padding-right: 20px;
+        font-size: 15px;
+      }
+
+    }
+    .header_center{
+      width:40%;
+      .line{
+        display: inline-block;
+        span{
+          margin: ;
         }
       }
     }
-    .menu-header-right{
-      text-align: right;
-      width: 40%;
-      .ant-statistic-content{
-        text-align: center;
+    .center_number{
+      .btn{
+        margin-left: 15px;
       }
-      .menu-header-active{
-        font-size: 14px;
-        color: #3894FF;
-        text-decoration: underline;
-      }
-      .header-right-data{
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        position: absolute;
-        bottom: 24px;
-        right: 24px;
-        .right-databox{
-          border-right: 1px solid rgba(233, 233, 233, 1);
-          padding: 0px 30px;
-          .databox-span{
-            color: rgba(135, 136, 138, 1);
-            font-size: 14px;
-          }
-        }
-        .right-databox:nth-child(3){
-          border-right: 1px solid #ffffff;
-          padding: 0px 0px 0px 30px;
-        }
-      }
-  
     }
+
+
   }
   .pan{
       position: relative;
+      background-color: #fff;
+    height: 100px;
+    margin: 20px 0;
       .ant-tabs-nav{
         margin-bottom: 0!important;
         padding-left: 60px;
@@ -100,21 +76,18 @@
     margin-top: 14px;
     // padding: 0;
     .line{
-      padding: 15px;
+      padding: 30px;
       border-bottom: 1px dotted  rgba(233, 233, 233, 1);
       text-align: left;
       position: relative;
       display: flex;
+
     float: left;
       span{
       display: inline-flex;
       margin-left: 0;
       }
     
-    }
-    .line:last-child{
-      padding: 15px;
-      border-bottom: none;
     }
     p{
       color: rgba(16, 16, 16, 1);
@@ -182,22 +155,55 @@
     color: rgba(16, 16, 16, 1);
     font-size: 14px;
     font-family: Roboto;
-    margin:0;
+    margin:30px;
     margin-top: 16px;
-  
-    // padding: 24px 30px;
-  }
-  // body{
-  //   position: relative;
-  //   overflow: hidden;
-  //   section{
-  //     position: fixed;
-  //     top: 50%;
-  //     left: 50%;
-  //     transform: translate(-50%,-50%);
+    .table{
+      width: 100%;
+      display: flex;
+      //  border: 1px solid grey;
 
-  //   }
-  // }
+    }
+    input{
+      width:90%;
+    }
+.table_left{
+  // width: 10%;
+  flex: 1;
+  padding:0 20px 20px 0;
+  background-color: #fafafa;
+
+  .line_input{
+    margin:20px 10px;
+  }
+  .product_name,.success_percent{
+    text-align: center;
+  }
+}
+.table_right{
+  width: 80%;
+  flex: 4;
+  margin-left: 20px;
+}
+  
+  }
+
   .ant-pagination{
     margin: 16px 24px !important;
   }
+  .ant-table-cell{
+    .ant-btn{
+      margin: 0 5px;
+    }
+  }
+  .ant-table-expanded-row-fixed{
+    margin-left: 20px;
+  }
+  .scroll{
+    overflow-y: scroll;
+  }
+  .hidden{
+    overflow-y: hidden;
+  }
+  .line span {
+    margin-left: 0;
+}
