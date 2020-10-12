@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Button, Input, DatePicker, Table, Spin, Select, Modal,Form
+  Button, Input, DatePicker, Table, Spin, Select, Modal, Form
 } from 'antd';
 import { request } from '../../api/request'
 import moment from 'moment';
@@ -21,7 +21,7 @@ const Together = (props) => {
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [shopId, setShopId] = useState(0);
-  const [visible,setVisible]=useState(false);
+  const [visible, setVisible] = useState(false);
   const [list, setList] = useState([
     { id: 1, name: '正在生产', mm: [1, 2, 3] },
     { id: 2, name: '将要生产', mm: [4, 5, 6] },
@@ -120,9 +120,9 @@ const Together = (props) => {
   const Actionrender = (text, record) => {
 
     let val = <Button>qc</Button>;
-    if (record.id === 1) val =<div><Button type='primary'>完成</Button><Button danger>异常</Button></div> 
+    if (record.id === 1) val = <div><Button type='primary'>完成</Button><Button danger>异常</Button></div>
     if (record.id === 2) val = <div><Button type='primary'>完成</Button><Button danger>异常</Button></div>
-    if (record.id === 3) val =<Button onClick={()=>setVisible(true)} type='primary'>qc</Button>
+    if (record.id === 3) val = <Button onClick={() => setVisible(true)} type='primary'>qc</Button>
     if (record.id === 4) val = <Button type='primary'>恢复</Button>;
     return val;
   }
@@ -215,7 +215,14 @@ const Together = (props) => {
       align: 'center',
     },
     {
-      title: '支数',
+      title: '整支规格',
+      dataIndex: 'kk',
+      key: 'kk',
+      width: 80,
+      align: 'center', 交货方式
+    },
+    {
+      title: '交货方式',
       dataIndex: 'kk',
       key: 'kk',
       width: 80,
@@ -449,54 +456,54 @@ const Together = (props) => {
           visible={visible}
           okText='确认'
           cancelText="取消"
-          onOk={  ()=>setVisible(false)}
-          onCancel={()=>setVisible(false)}
-          >
-        <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-      <Form.Item name="序号" label="序号" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="客户类型" label="客户类型" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="客户要求交期" label="客户要求交期" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="型号" label="型号" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="开始时间" label="开始时间" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="预计完成时间" label="预计完成时间" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="完成时间" label="完成时间" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="厚度" label="厚度" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
+          onOk={() => setVisible(false)}
+          onCancel={() => setVisible(false)}
+        >
+          <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+            <Form.Item name="序号" label="序号" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="客户类型" label="客户类型" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="客户要求交期" label="客户要求交期" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="型号" label="型号" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="开始时间" label="开始时间" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="预计完成时间" label="预计完成时间" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="完成时间" label="完成时间" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="厚度" label="厚度" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
 
-      <Form.Item name="宽度" label="宽度" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="长度" label="长度" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="支数" label="支数" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="实际平方" label="实际平方" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="备注" label="备注" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="异常原因" label="异常原因" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-    </Form>
+            <Form.Item name="宽度" label="宽度" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="长度" label="长度" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="支数" label="支数" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="实际平方" label="实际平方" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="备注" label="备注" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="异常原因" label="异常原因" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+          </Form>
         </Modal>
       </div>
 
