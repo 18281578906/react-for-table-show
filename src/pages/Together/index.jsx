@@ -219,7 +219,7 @@ const Together = (props) => {
       dataIndex: 'kk',
       key: 'kk',
       width: 80,
-      align: 'center', 交货方式
+      align: 'center', 
     },
     {
       title: '交货方式',
