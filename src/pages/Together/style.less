@@ -110,7 +110,13 @@
   
   
   }
-  
+
+
+
+  //table
+
+
+
   }
   .imgMoadl{
     .anticon-exclamation-circle{
@@ -181,8 +187,41 @@
 }
 .table_right{
   width: 80%;
-  flex: 4;
+  overflow-x: scroll;
   margin-left: 20px;
+  .table_head{
+    height: 80px;
+    line-height: 80px;
+    // background-color: aquamarine;
+    table {
+      width: 100%;
+      text-align: left;
+      border-radius: 2px 2px 0 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      padding: 0 20px;
+      th{
+        padding-right: 180px;
+      }
+     
+  }
+
+  }
+  .table_line{
+    display: flex;
+    flex-wrap: wrap;
+      .table_type{
+ min-width: 250px;
+ max-width: 250px;
+ width: 250px;
+  }
+  .type_table{
+    min-width: 550px;
+    max-width: 550px;
+    width: 550px;
+     }
+  }
+
 }
   
   }

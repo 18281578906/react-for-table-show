@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
 import { mapStateToProps, mapDispatchToProps } from './redux/actionCreator'
 import { connect } from 'react-redux'

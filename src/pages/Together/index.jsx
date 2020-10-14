@@ -1,24 +1,20 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
-  Button, Input, DatePicker, Table, Spin, Select, Modal, Form
+  Button, Input, DatePicker, Spin, Select, Modal, Form
 } from 'antd';
 import { request } from '../../api/request'
-import moment from 'moment';
 import { message } from 'antd'
-import HeaderAccount from '../../component/HeaderAccount'
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-
-
-import './style.less';
 import { useHistory } from 'react-router-dom';
+import DragSortingTable from '../../component/DragSortingTable'
+import './style.less';
 
 
 const { confirm } = Modal;
 
-const { Search } = Input;
 const Together = (props) => {
   const history = useHistory();
-  const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [shopId, setShopId] = useState(0);
   const [visible, setVisible] = useState(false);
@@ -27,13 +23,12 @@ const Together = (props) => {
     { id: 2, name: '将要生产', mm: [4, 5, 6] },
     { id: 3, name: '已完成生产', mm: [7, 8, 9] },
     { id: 4, name: '生产异常', mm: [10, 11, 12] },
-
   ]);
+  console.log(list);
   const [pageobj, setPageObj] = useState({
     page: 1,
     pageSize: 6
   })
-  const [total, setTotal] = useState(1)
   //请求数据
   const getList = (params) => {
     return request({
@@ -49,13 +44,10 @@ const Together = (props) => {
     })
   }
   const handleGetList = async (obj) => {
-    setLoading(true)
     const data = await getList(obj);
     if (data) {
       setList(data.list);
-      setTotal(data.total);
     }
-    setLoading(false)
   }
 
 
@@ -86,26 +78,14 @@ const Together = (props) => {
     }
     setLoading2(false)
   }, [])
-  const [keyValue, setKeyValue] = useState('');
-  const [orderNum, setOrderNum] = useState('');
-  // const [timeRange, setTimeRange] = useState(null);
   const clearPage = () => {
     setPageObj({
       page: 1,
       pageSize: 6,
     })
   }
-  const onReset = () => {
-    setKeyValue(new Date());
-    handleGetList({
-      shop_id: shopId,
-      page: 1,
-      pageSize: 6,
-    });
-    clearPage();
-  };
+
   const onResetOrder = () => {
-    setOrderNum(null);
     handleGetList({
       shop_id: shopId,
       page: 1,
@@ -117,189 +97,156 @@ const Together = (props) => {
 
 
 
-  const Actionrender = (text, record) => {
 
-    let val = <Button>qc</Button>;
-    if (record.id === 1) val = <div><Button type='primary'>完成</Button><Button danger>异常</Button></div>
-    if (record.id === 2) val = <div><Button type='primary'>完成</Button><Button danger>异常</Button></div>
-    if (record.id === 3) val = <Button onClick={() => setVisible(true)} type='primary'>qc</Button>
-    if (record.id === 4) val = <Button type='primary'>恢复</Button>;
-    return val;
-  }
+  // const columns = [
+  //   {
+  //     dataIndex: 'name',
+  //     key: 'name',
+  //     width: 120,
+  //     align: 'center',
+  //     fixed: 'left',
+  //   },
+  //   {
+  //     title: '序号',
+  //     dataIndex: 'mm',
+  //     key: 'mm',
+  //     width: 80,
+  //     align: 'center',
+  //     render: (text, record) => {
+  //       return <div className={text.length > 3 ? 'scroll' : 'hidden'}>
+  //         {
+  //           text.map(e => <div>{e}</div>
+  //           )
+  //         }
 
-  const columns = [
-    {
-      dataIndex: 'name',
-      key: 'name',
-      width: 120,
-      align: 'center',
-      fixed: 'left',
-    },
-    {
-      title: '序号',
-      dataIndex: 'mm',
-      key: 'mm',
-      width: 80,
-      align: 'center',
-      render: (text, record) => {
-        return <div className={text.length > 3 ? 'scroll' : 'hidden'}>
-          {
-            text.map(e => <div>{e}</div>
-            )
-          }
+  //       </div>
+  //     }
+  //   },
+  //   {
+  //     title: '客户类型',
+  //     dataIndex: 'ee',
+  //     key: 'ee',
+  //     width: 100,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '客户要求交期',
+  //     dataIndex: 'rr',
+  //     key: 'rr',
+  //     width: 120,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '型号',
+  //     dataIndex: 'tt',
+  //     key: 'tt',
+  //     width: 80,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '开始时间',
+  //     dataIndex: 'yy',
+  //     key: 'yy',
+  //     width: 100,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '预计完成时间',
+  //     dataIndex: 'uu',
+  //     key: 'uu',
+  //     width: 120,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '完成时间',
+  //     dataIndex: 'ii',
+  //     key: 'ii',
+  //     width: 100,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '厚度',
+  //     dataIndex: 'oo',
+  //     key: 'oo',
+  //     width: 80,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '宽度',
+  //     dataIndex: 'pp',
+  //     key: 'pp',
+  //     width: 80,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '长度',
+  //     dataIndex: 'll',
+  //     key: 'll',
+  //     width: 80,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '整支规格',
+  //     dataIndex: 'kk',
+  //     key: 'kk',
+  //     width: 80,
+  //     align: 'center', 
+  //   },
+  //   {
+  //     title: '交货方式',
+  //     dataIndex: 'kk',
+  //     key: 'kk',
+  //     width: 80,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '实际平方',
+  //     dataIndex: 'jj',
+  //     key: 'jj',
+  //     width: 100,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '备注',
+  //     dataIndex: 'hh',
+  //     key: 'hh',
+  //     width: 80,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '异常原因',
+  //     dataIndex: 'gg',
+  //     key: 'gg',
+  //     width: 100,
+  //     align: 'center',
+  //   },
+  //   {
+  //     title: '操作',
+  //     dataIndex: 'action',
+  //     key: 'action',
+  //     width: 200,
+  //     align: 'center',
+  //     fixed: 'right',
+  //     render: (text, record) => Actionrender(text, record)
 
-        </div>
-      }
-    },
-    {
-      title: '客户类型',
-      dataIndex: 'ee',
-      key: 'ee',
-      width: 100,
-      align: 'center',
-    },
-    {
-      title: '客户要求交期',
-      dataIndex: 'rr',
-      key: 'rr',
-      width: 120,
-      align: 'center',
-    },
-    {
-      title: '型号',
-      dataIndex: 'tt',
-      key: 'tt',
-      width: 80,
-      align: 'center',
-    },
-    {
-      title: '开始时间',
-      dataIndex: 'yy',
-      key: 'yy',
-      width: 100,
-      align: 'center',
-    },
-    {
-      title: '预计完成时间',
-      dataIndex: 'uu',
-      key: 'uu',
-      width: 120,
-      align: 'center',
-    },
-    {
-      title: '完成时间',
-      dataIndex: 'ii',
-      key: 'ii',
-      width: 100,
-      align: 'center',
-    },
-    {
-      title: '厚度',
-      dataIndex: 'oo',
-      key: 'oo',
-      width: 80,
-      align: 'center',
-    },
-    {
-      title: '宽度',
-      dataIndex: 'pp',
-      key: 'pp',
-      width: 80,
-      align: 'center',
-    },
-    {
-      title: '长度',
-      dataIndex: 'll',
-      key: 'll',
-      width: 80,
-      align: 'center',
-    },
-    {
-      title: '整支规格',
-      dataIndex: 'kk',
-      key: 'kk',
-      width: 80,
-      align: 'center', 
-    },
-    {
-      title: '交货方式',
-      dataIndex: 'kk',
-      key: 'kk',
-      width: 80,
-      align: 'center',
-    },
-    {
-      title: '实际平方',
-      dataIndex: 'jj',
-      key: 'jj',
-      width: 100,
-      align: 'center',
-    },
-    {
-      title: '备注',
-      dataIndex: 'hh',
-      key: 'hh',
-      width: 80,
-      align: 'center',
-    },
-    {
-      title: '异常原因',
-      dataIndex: 'gg',
-      key: 'gg',
-      width: 100,
-      align: 'center',
-    },
-    {
-      title: '操作',
-      dataIndex: 'action',
-      key: 'action',
-      width: 200,
-      align: 'center',
-      fixed: 'right',
-      render: (text, record) => Actionrender(text, record)
+  //   },
+  // ]
 
-    },
-  ]
+  // const changeTime = (e) => {
+  //   const time1 = e && e[0].format('YYYY-MM-DD HH:mm:ss');
+  //   const time2 = e && e[1].format('YYYY-MM-DD HH:mm:ss');
+  //   // setTimeRange(`${time1}|${time2}`);
+  //   clearPage();
 
-  const changeTime = (e) => {
-    const time1 = e && e[0].format('YYYY-MM-DD HH:mm:ss');
-    const time2 = e && e[1].format('YYYY-MM-DD HH:mm:ss');
-    // setTimeRange(`${time1}|${time2}`);
-    clearPage();
+  //   handleGetList({
+  //     shop_id: shopId,
+  //     page: 1,
+  //     pageSize: 6,
+  //     date: e ? `${time1}|${time2}` : null,
+  //   });
+  // };
 
-    handleGetList({
-      shop_id: shopId,
-      page: 1,
-      pageSize: 6,
-      date: e ? `${time1}|${time2}` : null,
-    });
-  };
 
-  const refresh = () => {
-    setKeyValue(new Date());
-
-    setOrderNum(null);
-    clearPage();
-
-    handleGetList({
-      shop_id: shopId,
-      page: 1,
-      pageSize: 6,
-    });
-  };
-
-  const changePage = (e) => {
-    setPageObj({
-      page: e.current,
-      pageSize: e.pageSize
-    })
-    handleGetList({
-      page: e.current,
-      pageSize: e.pageSize,
-      shop_id: shopId
-    })
-
-  }
   const { Option } = Select;
 
   function onChange(value) {
@@ -342,6 +289,7 @@ const Together = (props) => {
   const onFinish = values => {
     console.log(values);
   };
+
 
 
   return (
@@ -421,8 +369,6 @@ const Together = (props) => {
 
         </div>
         <div className="together-content">
-
-
           <div className="showTable_mobile">
             <div className='table'>
               <div className='table_left'>
@@ -430,23 +376,59 @@ const Together = (props) => {
                 <Input className='line_input' placeholder='请输入异常停机时间'></Input>
                 <div className='product_name line_input'>C09</div>
                 <div className='success_percent line_input'>完成率(<span>10</span>%)</div>
-
               </div>
               <div className='table_right'>
-                <Table
-                  columns={columns}
-                  bordered
-                  dataSource={list}
-                  rowKey={(row) => row.listpay_order_id}
-                  scroll={{ x: '100%' }}
-                  loading={loading}
-                  onChange={changePage}
-                  pagination={{
-                    current: pageobj.page,
-                    pageSize: pageobj.pageSize,
-                    total: total
-                  }}
-                />
+                <div className="table_container">
+                  <div className='table_head'>
+                  <div className='tabel_type'><p></p></div>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                          <th>7447</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                  <div className='table_line'>
+                    <div className='tabel_type'><p>正在生产</p></div>
+                    <DragSortingTable showHeader={false} className="type_table"/>
+                  </div>
+                  <div className='table_line'>
+                    <div className='tabel_type'><p>将要生产</p></div>
+                    <DragSortingTable showHeader={true}  className="type_table"/>
+                  </div>
+                  <div className='table_line'>
+                    <div className='tabel_type'><p>已完成生产</p></div>
+                    <DragSortingTable showHeader={false}  className="type_table"/>
+                  </div>
+                  <div className='table_line'>
+                    <div className='tabel_type'><p>生产异常</p></div>
+                    <DragSortingTable showHeader={false}  className="type_table"/>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
