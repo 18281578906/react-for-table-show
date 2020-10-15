@@ -3,46 +3,15 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Input, DatePicker, Spin, Select, Modal, Form
 } from 'antd';
-import { request } from '../../api/request'
-import { message } from 'antd'
-import { useHistory } from 'react-router-dom';
 import DragSortingTable from '../../component/DragSortingTable'
 import './style.less';
 
 const Together = (props) => {
-  const history = useHistory();
   const [loading2, setLoading2] = useState(false);
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
 
-  const [list, setList] = useState([
-    { id: 1, name: '正在生产', mm: [1, 2, 3] },
-    { id: 2, name: '将要生产', mm: [4, 5, 6] },
-    { id: 3, name: '已完成生产', mm: [7, 8, 9] },
-    { id: 4, name: '生产异常', mm: [10, 11, 12] },
-  ]);
-  console.log(list);
-  //请求数据
-  const getList = (params) => {
-    return request({
-      method: 'post',
-      url: '/merchant/v1/shop/shop/together/list',
-      params: params  //post data:
-    })
-  }
-  const getShopInfo = () => {
-    return request({
-      method: 'post',
-      url: '/merchant/v1/shop/shop/info',
-    })
-  }
-  const handleGetList = async (obj) => {
-    const data = await getList(obj);
-    if (data) {
-      setList(data.list);
-    }
-  }
   const columns=[ 
     {
     title: '序号',
@@ -168,7 +137,8 @@ const Together = (props) => {
     <Button size="small" type="primary" onClick={()=>setVisible(true)}>QC</Button>
     <Button size="small" type="primary">完成</Button>
     <Button size="small" danger>异常</Button>
-    
+    <Button size="small" danger>二维码</Button>
+
     </div>
   },
   ];
@@ -176,25 +146,7 @@ const Together = (props) => {
   //调用数据
 
 
-  //店铺id
-  const handleGetShop = async () => {
-    const data = await getShopInfo();
-    if (data) {
-      const obj = {
-        shop_id: data.shop.shop_id,
-      }
-      handleGetList(obj);
-
-    }
-  }
-
   useEffect(() => {
-    handleGetShop();
-    if (!JSON.parse(localStorage.getItem('loginInfo'))) {
-      message.error('请先登录！');
-      history.replace('/login');
-
-    }
     setLoading2(false)
   }, [])
 
