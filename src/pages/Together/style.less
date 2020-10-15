@@ -1,6 +1,7 @@
 .together2{
   width: 100%;
   background-color: #D6e9fe;
+  overflow: hidden;
   .header-account{
     position: fixed;
     z-index: 999;
@@ -13,7 +14,6 @@
     position: relative;
     padding-top: 35px;
     font-size: 15px;
-
     .img{
       width: 150px;
       height: auto;
@@ -39,9 +39,7 @@
       width:40%;
       .line{
         display: inline-block;
-        span{
-          margin: ;
-        }
+       
       }
     }
     .center_number{
@@ -113,8 +111,6 @@
 
 
 
-  //table
-
 
 
   }
@@ -164,7 +160,6 @@
     margin:30px;
     margin-top: 16px;
     .table{
-      width: 100%;
       display: flex;
       //  border: 1px solid grey;
 
@@ -176,7 +171,7 @@
   // width: 10%;
   flex: 1;
   padding:0 20px 20px 0;
-  background-color: #fafafa;
+  background-color: #eae9e966;
 
   .line_input{
     margin:20px 10px;
@@ -188,39 +183,80 @@
 .table_right{
   width: 80%;
   overflow-x: scroll;
+  overflow-y: hidden;
   margin-left: 20px;
+  // border: 1px solid grey;
+  background-color: #eae9e966;
+
   .table_head{
     height: 80px;
-    line-height: 80px;
-    // background-color: aquamarine;
+    // line-height: 80px;
     table {
-      width: 100%;
+      width: 2000px;
       text-align: left;
       border-radius: 2px 2px 0 0;
       border-collapse: separate;
       border-spacing: 0;
       padding: 0 20px;
-      th{
-        padding-right: 180px;
+      td{
+        padding-right: 32px;        
+        width:200px;
+        position: relative;
+    overflow-wrap: break-word;
       }
      
   }
 
   }
-  .table_line{
-    display: flex;
-    flex-wrap: wrap;
-      .table_type{
- min-width: 250px;
- max-width: 250px;
- width: 250px;
+    //table
+.table_line{
+  height:170px;
+  margin-bottom: 10px;
+  position: relative;
+background-color: #fff;
+  .tabel_type{
+    display: inline-block;
+
+    position:absolute;
+    width: 150px;
+    line-height: 180px;
+    top:0px;
+    left:0px;
+
+    text-align: center;
+    font-size: 16px;
   }
   .type_table{
-    min-width: 550px;
-    max-width: 550px;
-    width: 550px;
-     }
+    margin-left:150px;
+    display: inline-block;
+
   }
+}
+.table_line:first-child{
+  height: 109px;
+  // overflow-y: hidden;
+}
+.table_head{
+  position: relative;
+  line-height: 80px;
+  // background-color: #d2d2d270;
+  .tabel_type{
+    position:absolute;
+    width: 150px;
+    line-height: 180px;
+    top:0px;
+
+    left:0px;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+  }
+  .type_table{
+    margin-left:150px;
+    display: inline-block;
+  }
+}
+
 
 }
   

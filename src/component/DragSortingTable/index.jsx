@@ -42,45 +42,11 @@ const type = 'DragableBodyRow';
     );
   };
   
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-  ];
+
+  const DragSortingTable: React.FC = (props) => {  
+    const columns = props.columns;
   
-  const DragSortingTable: React.FC = (props) => {
-    const [data, setData] = useState([
-      {
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-      },
-      {
-        key: '2',
-        name: 'Jim Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-      },
-      {
-        key: '3',
-        name: 'Joe Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-      },
-    ]);
+    const [data, setData] = useState(props.data);
   
     const components = {
       body: {
@@ -116,7 +82,10 @@ const type = 'DragableBodyRow';
             moveRow,
           })}
           showHeader={props.showHeader}
-          pagination={false}
+          pagination={props.pagination}
+          rowSelection={props.rowSelection}
+          scroll={{y:'170px'}}
+          // bordered
         />
       </DndProvider>
     );

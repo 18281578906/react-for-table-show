@@ -3,7 +3,7 @@ import { Route, useHistory } from 'react-router-dom';
 import { mapStateToProps, mapDispatchToProps } from '../../redux/actionCreator'
 import { connect } from 'react-redux'
 import Together from '../../pages/Together'
-import MobileTogether from '../../pages/MobileTogether'
+// import MobileTogether from '../../pages/MobileTogether'
 import './BaseLayout.scss'
 //路由
 import router from '../../router/router'
@@ -30,7 +30,7 @@ let history=useHistory()
             {/* <TabBar /> */}
             <div>
                 {console.log(props.isPc)}
-                {props.isPc !== 'init' ? <>{!props.isPc ?<MobileTogether /> : <Together /> }</> : null}
+                {props.isPc !== 'init' ? <>{!props.isPc ?<Together /> : <Together /> }</> : null}
             </div>
         </div>
     )

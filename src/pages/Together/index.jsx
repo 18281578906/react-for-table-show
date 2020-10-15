@@ -13,11 +13,15 @@ import './style.less';
 
 const { confirm } = Modal;
 
+  
+
 const Together = (props) => {
   const history = useHistory();
   const [loading2, setLoading2] = useState(false);
-  const [shopId, setShopId] = useState(0);
   const [visible, setVisible] = useState(false);
+  const [visible2, setVisible2] = useState(false);
+  const [visible3, setVisible3] = useState(false);
+
   const [list, setList] = useState([
     { id: 1, name: '正在生产', mm: [1, 2, 3] },
     { id: 2, name: '将要生产', mm: [4, 5, 6] },
@@ -25,10 +29,6 @@ const Together = (props) => {
     { id: 4, name: '生产异常', mm: [10, 11, 12] },
   ]);
   console.log(list);
-  const [pageobj, setPageObj] = useState({
-    page: 1,
-    pageSize: 6
-  })
   //请求数据
   const getList = (params) => {
     return request({
@@ -49,7 +49,135 @@ const Together = (props) => {
       setList(data.list);
     }
   }
-
+  const columns=[ 
+    {
+    title: '序号',
+    dataIndex: '1',
+    key: '1',
+    width:200
+  },
+  {
+    title: '销售订单',
+    dataIndex: '2',
+    key: '2',
+    width:200
+  },
+  {
+    title: '购货单位',
+    dataIndex: '3',
+    key: '3',
+    width:200
+  },
+  {
+    title: '规格型号',
+    dataIndex: '4',
+    key: '4',
+    width:200
+  },
+  {
+    title: '产品规格(厚*宽*长*只)',
+    dataIndex: '5',
+    key: '5',
+    width:200
+  },
+  {
+    title: '交货日期',
+    dataIndex: '6',
+    key: '6',
+    width:200
+  },
+  {
+    title: '开始时间',
+    dataIndex: '7',
+    key: '7',
+    width:200
+  },
+  {
+    title: '预计完成时间',
+    dataIndex: '8',
+    key: '8',
+    width:200
+  },
+  {
+    title: '完成时间',
+    dataIndex: '9',
+    key: '9',
+    width:200
+  },
+  {
+    title: '投料单单号',
+    dataIndex: '10',
+    key: '10',
+    width:200
+  },
+  {
+    title: '总平方数',
+    dataIndex: '11',
+    key: '11',
+    width:200
+  },
+  {
+    title: '提供生产批号',
+    dataIndex: '12',
+    key: '12',
+    width:200
+  },
+  {
+    title: '是否可接膜',
+    dataIndex: '13',
+    key: '13',
+    width:200
+  },
+  {
+    title: '是否可多米',
+    dataIndex: '14',
+    key: '14',
+    width:200
+  },
+  {
+    title: '是否可少米',
+    dataIndex: '15',
+    key: '15',
+    width:200
+  },
+  {
+    title: '是否可彩纹印',
+    dataIndex: '16',
+    key: '16',
+    width:200
+  },
+  {
+    title: '是否可换规格',
+    dataIndex: '17',
+    key: '17',
+    width:200
+  },
+  {
+    title: '备注',
+    dataIndex: '18',
+    key: '18',
+    width:200
+  },
+  {
+    title: '异常备注',
+    dataIndex: '19',
+    key: '19',
+    width:200
+  },
+  {
+    title: '操作',
+    dataIndex: '19',
+    key: '19',
+    width:200,
+    fixed:'right',
+  render:(text)=><div>
+    <Button size="small" type="primary" onClick={()=>setVisible(true)}>QC</Button>
+    <Button size="small" type="primary">完成</Button>
+    <Button size="small" danger>异常</Button>
+    
+    </div>
+  },
+  ];
 
   //调用数据
 
@@ -60,11 +188,8 @@ const Together = (props) => {
     if (data) {
       const obj = {
         shop_id: data.shop.shop_id,
-        page: pageobj.page,
-        pageSize: pageobj.pageSize,
       }
       handleGetList(obj);
-      setShopId(data.shop.shop_id)
 
     }
   }
@@ -78,174 +203,96 @@ const Together = (props) => {
     }
     setLoading2(false)
   }, [])
-  const clearPage = () => {
-    setPageObj({
-      page: 1,
-      pageSize: 6,
-    })
-  }
 
-  const onResetOrder = () => {
-    handleGetList({
-      shop_id: shopId,
-      page: 1,
-      pageSize: 6,
-    });
-    clearPage();
-
-  };
-
-
-
-
-  // const columns = [
-  //   {
-  //     dataIndex: 'name',
-  //     key: 'name',
-  //     width: 120,
-  //     align: 'center',
-  //     fixed: 'left',
-  //   },
-  //   {
-  //     title: '序号',
-  //     dataIndex: 'mm',
-  //     key: 'mm',
-  //     width: 80,
-  //     align: 'center',
-  //     render: (text, record) => {
-  //       return <div className={text.length > 3 ? 'scroll' : 'hidden'}>
-  //         {
-  //           text.map(e => <div>{e}</div>
-  //           )
-  //         }
-
-  //       </div>
-  //     }
-  //   },
-  //   {
-  //     title: '客户类型',
-  //     dataIndex: 'ee',
-  //     key: 'ee',
-  //     width: 100,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '客户要求交期',
-  //     dataIndex: 'rr',
-  //     key: 'rr',
-  //     width: 120,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '型号',
-  //     dataIndex: 'tt',
-  //     key: 'tt',
-  //     width: 80,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '开始时间',
-  //     dataIndex: 'yy',
-  //     key: 'yy',
-  //     width: 100,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '预计完成时间',
-  //     dataIndex: 'uu',
-  //     key: 'uu',
-  //     width: 120,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '完成时间',
-  //     dataIndex: 'ii',
-  //     key: 'ii',
-  //     width: 100,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '厚度',
-  //     dataIndex: 'oo',
-  //     key: 'oo',
-  //     width: 80,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '宽度',
-  //     dataIndex: 'pp',
-  //     key: 'pp',
-  //     width: 80,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '长度',
-  //     dataIndex: 'll',
-  //     key: 'll',
-  //     width: 80,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '整支规格',
-  //     dataIndex: 'kk',
-  //     key: 'kk',
-  //     width: 80,
-  //     align: 'center', 
-  //   },
-  //   {
-  //     title: '交货方式',
-  //     dataIndex: 'kk',
-  //     key: 'kk',
-  //     width: 80,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '实际平方',
-  //     dataIndex: 'jj',
-  //     key: 'jj',
-  //     width: 100,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '备注',
-  //     dataIndex: 'hh',
-  //     key: 'hh',
-  //     width: 80,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '异常原因',
-  //     dataIndex: 'gg',
-  //     key: 'gg',
-  //     width: 100,
-  //     align: 'center',
-  //   },
-  //   {
-  //     title: '操作',
-  //     dataIndex: 'action',
-  //     key: 'action',
-  //     width: 200,
-  //     align: 'center',
-  //     fixed: 'right',
-  //     render: (text, record) => Actionrender(text, record)
-
-  //   },
-  // ]
-
-  // const changeTime = (e) => {
-  //   const time1 = e && e[0].format('YYYY-MM-DD HH:mm:ss');
-  //   const time2 = e && e[1].format('YYYY-MM-DD HH:mm:ss');
-  //   // setTimeRange(`${time1}|${time2}`);
-  //   clearPage();
-
-  //   handleGetList({
-  //     shop_id: shopId,
-  //     page: 1,
-  //     pageSize: 6,
-  //     date: e ? `${time1}|${time2}` : null,
-  //   });
-  // };
-
+  const data1=[
+    {
+      key: '1',
+      1: 'John Brown',
+      2: 32,
+      3: 'New York ',
+      4:'hhh',
+      5:2122,
+      6:'hjhj',
+      7:'www',
+      8:12,
+      9:'hjuhju',
+      10:'jweiwj',
+      11: 'John Brown',
+      12: 32,
+      13: 'New Yo',
+      14:'hhh',
+      15:2122,
+      16:'hjhj',
+      17:'www',
+      18:12,
+      19:'hjuhju',
+    },
+  ]
+const data=[
+    {key: '1',
+      1: 'John Brown',
+      2: 32,
+      3: 'New York ',
+      4:'hhh',
+      5:2122,
+      6:'hjhj',
+      7:'www',
+      8:12,
+      9:'hjuhju',
+      10:'jweiwj',
+      11: 'John Brown',
+      12: 32,
+      13: 'New Yo',
+      14:'hhh',
+      15:2122,
+      16:'hjhj',
+      17:'www',
+      18:12,
+      19:'hjuhju',
+    },
+    {key: '2',
+    1: 'John Brown',
+    2: 32,
+    3: 'New York ',
+    4:'hhh',
+    5:2122,
+    6:'hjhj',
+    7:'www',
+    8:12,
+    9:'hjuhju',
+    10:'jweiwj',
+    11: 'John Brown',
+    12: 32,
+    13: 'New Yo',
+    14:'hhh',
+    15:2122,
+    16:'hjhj',
+    17:'www',
+    18:12,
+    19:'hjuhju',
+  },
+  {key: '3',
+  1: 'John Brown',
+  2: 32,
+  3: 'New York ',
+  4:'hhh',
+  5:2122,
+  6:'hjhj',
+  7:'www',
+  8:12,
+  9:'hjuhju',
+  10:'jweiwj',
+  11: 'John Brown',
+  12: 32,
+  13: 'New Yo',
+  14:'hhh',
+  15:2122,
+  16:'hjhj',
+  17:'www',
+  18:12,
+  19:'hjuhju',
+},
+]
 
   const { Option } = Select;
 
@@ -264,23 +311,7 @@ const Together = (props) => {
   function onSearch(val) {
     console.log('search:', val);
   }
-  function showConfirm() {
-    confirm({
-      title: <div>请选择日期<DatePicker placeholder='请选择时间' style={{ marginLeft: 15, width: 200 }} /></div>,
-      icon: <ExclamationCircleOutlined />,
-      content: <div style={{ height: 50 }}>
-      </div>,
-      okText: '下载异常清单',
-      cancelText: '下载已完成清单',
-      placeholder: '请选择时间',
-      onOk() {
-        console.log('OK');
-      },
-      onCancel() {
-        console.log('Cancel');
-      },
-    });
-  }
+
   const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 16 },
@@ -290,7 +321,16 @@ const Together = (props) => {
     console.log(values);
   };
 
-
+//选择table项
+const rowSelection = {
+  onChange: (selectedRowKeys, selectedRows) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  },
+  getCheckboxProps: record => ({
+    disabled: record.name === 'Disabled User', // Column configuration not to be checked
+    name: record.name,
+  }),
+};
 
   return (
     <Spin
@@ -324,7 +364,7 @@ const Together = (props) => {
               </Select>
             </div>
             <div className="center_number line"> 完成率(<span>10</span>%)
-            <Button type='primary' className='btn' onClick={showConfirm}>导出为Excel</Button>
+            <Button type='primary' className='btn' onClick={()=>setVisible3(true)}>导出为Excel</Button>
             </div>
           </div>
         </div>
@@ -357,10 +397,10 @@ const Together = (props) => {
                   <Option value="C10">C10</Option>
                   <Option value="C11">C11</Option>
                 </Select>
-                <Button className="pic" type="default" htmlType="button" style={{ lineHeight: '0' }}
-                  onClick={onResetOrder}
+                <Button className="pic" type="primary" htmlType="button" style={{ lineHeight: '0' }}
+                onClick={()=>setVisible2(true)}
                 >
-                  重置
+                  切换为下一班
               </Button>
               </div>
 
@@ -379,54 +419,21 @@ const Together = (props) => {
               </div>
               <div className='table_right'>
                 <div className="table_container">
-                  <div className='table_head'>
-                  <div className='tabel_type'><p></p></div>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                          <th>7447</th>
-                        </tr>
-                      </thead>
-                    </table>
-                  </div>
                   <div className='table_line'>
                     <div className='tabel_type'><p>正在生产</p></div>
-                    <DragSortingTable showHeader={false} className="type_table"/>
+                    <div className="type_table"> <DragSortingTable showHeader={true}  data={data1} columns={columns} pagination={false}/></div>
                   </div>
                   <div className='table_line'>
                     <div className='tabel_type'><p>将要生产</p></div>
-                    <DragSortingTable showHeader={true}  className="type_table"/>
+                    <div className="type_table"> <DragSortingTable showHeader={false}   data={data} columns={columns} pagination={false}/></div>
                   </div>
                   <div className='table_line'>
                     <div className='tabel_type'><p>已完成生产</p></div>
-                    <DragSortingTable showHeader={false}  className="type_table"/>
+                    <div className="type_table"> <DragSortingTable showHeader={false}   data={data} columns={columns}  pagination={false}/></div>
                   </div>
                   <div className='table_line'>
                     <div className='tabel_type'><p>生产异常</p></div>
-                    <DragSortingTable showHeader={false}  className="type_table"/>
+                    <div className="type_table"> <DragSortingTable showHeader={false}  data={data} columns={columns}  /></div>
                   </div>
                 </div>
               </div>
@@ -442,50 +449,81 @@ const Together = (props) => {
           onCancel={() => setVisible(false)}
         >
           <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-            <Form.Item name="序号" label="序号" rules={[{ required: true }]}>
+            <Form.Item name="生产批号" label="生产批号" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
-            <Form.Item name="客户类型" label="客户类型" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="客户要求交期" label="客户要求交期" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="型号" label="型号" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="开始时间" label="开始时间" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="预计完成时间" label="预计完成时间" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="完成时间" label="完成时间" rules={[{ required: true }]}>
+            <Form.Item name="要求离型力" label="客户类型" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
             <Form.Item name="厚度" label="厚度" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
-
             <Form.Item name="宽度" label="宽度" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
             <Form.Item name="长度" label="长度" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
-            <Form.Item name="支数" label="支数" rules={[{ required: true }]}>
+            <Form.Item name="实测离型力" label="实测离型力" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
-            <Form.Item name="实际平方" label="实际平方" rules={[{ required: true }]}>
+            <Form.Item name="涂布离型力" label="涂布离型力" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="内管" label="内管" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+
+            <Form.Item name="收卷 不良" label="收卷 不良" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="擦花" label="擦花" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="压痕/褶皱" label="压痕/褶皱" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="脏污/白印" label="脏污/白印" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="接头/批号说明" label="接头/批号说明" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="生产卷数" label="生产卷数" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="判定" label="判定" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="检验员" label="检验员" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
             <Form.Item name="备注" label="备注" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
-            <Form.Item name="异常原因" label="异常原因" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
           </Form>
+        </Modal>
+        <Modal title="下一班将要生产"
+          visible={visible2}
+          okText='确认'
+          cancelText="取消"
+          onOk={() => setVisible2(false)}
+          onCancel={() => setVisible2(false)}
+          width={1080}
+        >
+          <DragSortingTable showHeader={true} columns={columns} data={data} rowSelection={{
+          ...rowSelection,
+        }}/>
+        </Modal>
+        <Modal title='请选择日期'
+          visible={visible3}
+          okText='下载异常清单'
+          cancelText="下载已完成清单"
+          onOk={() => setVisible3(false)}
+          onCancel={() => setVisible3(false)}
+          width={400}
+        >
+      <DatePicker placeholder='请选择时间' style={{ marginLeft: 15, width: 300 }} />
         </Modal>
       </div>
 
