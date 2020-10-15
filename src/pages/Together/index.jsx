@@ -5,15 +5,9 @@ import {
 } from 'antd';
 import { request } from '../../api/request'
 import { message } from 'antd'
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import DragSortingTable from '../../component/DragSortingTable'
 import './style.less';
-
-
-const { confirm } = Modal;
-
-  
 
 const Together = (props) => {
   const history = useHistory();
