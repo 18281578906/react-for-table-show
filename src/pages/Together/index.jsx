@@ -4,6 +4,7 @@ import {
   Button, Input, DatePicker, Spin, Select, Modal, Form
 } from 'antd';
 import DragSortingTable from '../../component/DragSortingTable'
+import { request } from '../../api/request'
 import './style.less';
 
 const Together = (props) => {
@@ -12,233 +13,250 @@ const Together = (props) => {
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
 
-  const columns=[ 
+  const columns = [
     {
-    title: '序号',
-    dataIndex: '1',
-    key: '1',
-    width:200
-  },
-  {
-    title: '销售订单',
-    dataIndex: '2',
-    key: '2',
-    width:200
-  },
-  {
-    title: '购货单位',
-    dataIndex: '3',
-    key: '3',
-    width:200
-  },
-  {
-    title: '规格型号',
-    dataIndex: '4',
-    key: '4',
-    width:200
-  },
-  {
-    title: '产品规格(厚*宽*长*只)',
-    dataIndex: '5',
-    key: '5',
-    width:200
-  },
-  {
-    title: '交货日期',
-    dataIndex: '6',
-    key: '6',
-    width:200
-  },
-  {
-    title: '开始时间',
-    dataIndex: '7',
-    key: '7',
-    width:200
-  },
-  {
-    title: '预计完成时间',
-    dataIndex: '8',
-    key: '8',
-    width:200
-  },
-  {
-    title: '完成时间',
-    dataIndex: '9',
-    key: '9',
-    width:200
-  },
-  {
-    title: '投料单单号',
-    dataIndex: '10',
-    key: '10',
-    width:200
-  },
-  {
-    title: '总平方数',
-    dataIndex: '11',
-    key: '11',
-    width:200
-  },
-  {
-    title: '提供生产批号',
-    dataIndex: '12',
-    key: '12',
-    width:200
-  },
-  {
-    title: '是否可接膜',
-    dataIndex: '13',
-    key: '13',
-    width:200
-  },
-  {
-    title: '是否可多米',
-    dataIndex: '14',
-    key: '14',
-    width:200
-  },
-  {
-    title: '是否可少米',
-    dataIndex: '15',
-    key: '15',
-    width:200
-  },
-  {
-    title: '是否可彩纹印',
-    dataIndex: '16',
-    key: '16',
-    width:200
-  },
-  {
-    title: '是否可换规格',
-    dataIndex: '17',
-    key: '17',
-    width:200
-  },
-  {
-    title: '备注',
-    dataIndex: '18',
-    key: '18',
-    width:200
-  },
-  {
-    title: '异常备注',
-    dataIndex: '19',
-    key: '19',
-    width:200
-  },
-  {
-    title: '操作',
-    dataIndex: '19',
-    key: '19',
-    width:200,
-    fixed:'right',
-  render:(text)=><div>
-    <Button size="small" type="primary" onClick={()=>setVisible(true)}>QC</Button>
-    <Button size="small" type="primary">完成</Button>
-    <Button size="small" danger>异常</Button>
-    <Button size="small" danger>二维码</Button>
+      title: '序号',
+      dataIndex: '1',
+      key: '1',
+      width: 200
+    },
+    {
+      title: '销售订单',
+      dataIndex: '2',
+      key: '2',
+      width: 200
+    },
+    {
+      title: '购货单位',
+      dataIndex: '3',
+      key: '3',
+      width: 200
+    },
+    {
+      title: '规格型号',
+      dataIndex: '4',
+      key: '4',
+      width: 200
+    },
+    {
+      title: '产品规格(厚*宽*长*只)',
+      dataIndex: '5',
+      key: '5',
+      width: 200
+    },
+    {
+      title: '交货日期',
+      dataIndex: '6',
+      key: '6',
+      width: 200
+    },
+    {
+      title: '开始时间',
+      dataIndex: '7',
+      key: '7',
+      width: 200
+    },
+    {
+      title: '预计完成时间',
+      dataIndex: '8',
+      key: '8',
+      width: 200
+    },
+    {
+      title: '完成时间',
+      dataIndex: '9',
+      key: '9',
+      width: 200
+    },
+    {
+      title: '投料单单号',
+      dataIndex: '10',
+      key: '10',
+      width: 200
+    },
+    {
+      title: '总平方数',
+      dataIndex: '11',
+      key: '11',
+      width: 200
+    },
+    {
+      title: '提供生产批号',
+      dataIndex: '12',
+      key: '12',
+      width: 200
+    },
+    {
+      title: '是否可接膜',
+      dataIndex: '13',
+      key: '13',
+      width: 200
+    },
+    {
+      title: '是否可多米',
+      dataIndex: '14',
+      key: '14',
+      width: 200
+    },
+    {
+      title: '是否可少米',
+      dataIndex: '15',
+      key: '15',
+      width: 200
+    },
+    {
+      title: '是否可彩纹印',
+      dataIndex: '16',
+      key: '16',
+      width: 200
+    },
+    {
+      title: '是否可换规格',
+      dataIndex: '17',
+      key: '17',
+      width: 200
+    },
+    {
+      title: '备注',
+      dataIndex: '18',
+      key: '18',
+      width: 200
+    },
+    {
+      title: '异常备注',
+      dataIndex: '19',
+      key: '19',
+      width: 200
+    },
+    {
+      title: '操作',
+      dataIndex: '19',
+      key: '19',
+      width: 200,
+      fixed: 'right',
+      render: (text) => <div>
+        <Button size="small" type="primary" onClick={() => setVisible(true)}>QC</Button>
+        <Button size="small" type="primary">完成</Button>
+        <Button size="small" danger>异常</Button>
+        <Button size="small" danger>二维码</Button>
 
-    </div>
-  },
+      </div>
+    },
   ];
 
   //调用数据
-
+  const getInfo = (params) => {
+    return request({
+      method: 'get',
+      url: '',
+      params: params  //post data:
+    })
+  }
+  const handleGetInfo = async () => {
+    const data = await getInfo({
+      page: 1,
+      pageSize: 10
+    });
+    console.log(data);
+  }
 
   useEffect(() => {
-    setLoading2(false)
+    setLoading2(false);
+    handleGetInfo();
   }, [])
 
-  const data1=[
+  const data1 = [
     {
       key: '1',
       1: 'John Brown',
       2: 32,
       3: 'New York ',
-      4:'hhh',
-      5:2122,
-      6:'hjhj',
-      7:'www',
-      8:12,
-      9:'hjuhju',
-      10:'jweiwj',
+      4: 'hhh',
+      5: 2122,
+      6: 'hjhj',
+      7: 'www',
+      8: 12,
+      9: 'hjuhju',
+      10: 'jweiwj',
       11: 'John Brown',
       12: 32,
       13: 'New Yo',
-      14:'hhh',
-      15:2122,
-      16:'hjhj',
-      17:'www',
-      18:12,
-      19:'hjuhju',
+      14: 'hhh',
+      15: 2122,
+      16: 'hjhj',
+      17: 'www',
+      18: 12,
+      19: 'hjuhju',
     },
   ]
-const data=[
-    {key: '1',
+  const data = [
+    {
+      key: '1',
       1: 'John Brown',
       2: 32,
       3: 'New York ',
-      4:'hhh',
-      5:2122,
-      6:'hjhj',
-      7:'www',
-      8:12,
-      9:'hjuhju',
-      10:'jweiwj',
+      4: 'hhh',
+      5: 2122,
+      6: 'hjhj',
+      7: 'www',
+      8: 12,
+      9: 'hjuhju',
+      10: 'jweiwj',
       11: 'John Brown',
       12: 32,
       13: 'New Yo',
-      14:'hhh',
-      15:2122,
-      16:'hjhj',
-      17:'www',
-      18:12,
-      19:'hjuhju',
+      14: 'hhh',
+      15: 2122,
+      16: 'hjhj',
+      17: 'www',
+      18: 12,
+      19: 'hjuhju',
     },
-    {key: '2',
-    1: 'John Brown',
-    2: 32,
-    3: 'New York ',
-    4:'hhh',
-    5:2122,
-    6:'hjhj',
-    7:'www',
-    8:12,
-    9:'hjuhju',
-    10:'jweiwj',
-    11: 'John Brown',
-    12: 32,
-    13: 'New Yo',
-    14:'hhh',
-    15:2122,
-    16:'hjhj',
-    17:'www',
-    18:12,
-    19:'hjuhju',
-  },
-  {key: '3',
-  1: 'John Brown',
-  2: 32,
-  3: 'New York ',
-  4:'hhh',
-  5:2122,
-  6:'hjhj',
-  7:'www',
-  8:12,
-  9:'hjuhju',
-  10:'jweiwj',
-  11: 'John Brown',
-  12: 32,
-  13: 'New Yo',
-  14:'hhh',
-  15:2122,
-  16:'hjhj',
-  17:'www',
-  18:12,
-  19:'hjuhju',
-},
-]
+    {
+      key: '2',
+      1: 'John Brown',
+      2: 32,
+      3: 'New York ',
+      4: 'hhh',
+      5: 2122,
+      6: 'hjhj',
+      7: 'www',
+      8: 12,
+      9: 'hjuhju',
+      10: 'jweiwj',
+      11: 'John Brown',
+      12: 32,
+      13: 'New Yo',
+      14: 'hhh',
+      15: 2122,
+      16: 'hjhj',
+      17: 'www',
+      18: 12,
+      19: 'hjuhju',
+    },
+    {
+      key: '3',
+      1: 'John Brown',
+      2: 32,
+      3: 'New York ',
+      4: 'hhh',
+      5: 2122,
+      6: 'hjhj',
+      7: 'www',
+      8: 12,
+      9: 'hjuhju',
+      10: 'jweiwj',
+      11: 'John Brown',
+      12: 32,
+      13: 'New Yo',
+      14: 'hhh',
+      15: 2122,
+      16: 'hjhj',
+      17: 'www',
+      18: 12,
+      19: 'hjuhju',
+    },
+  ]
 
   const { Option } = Select;
 
@@ -267,16 +285,16 @@ const data=[
     console.log(values);
   };
 
-//选择table项
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  getCheckboxProps: record => ({
-    disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    name: record.name,
-  }),
-};
+  //选择table项
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    },
+    getCheckboxProps: record => ({
+      disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      name: record.name,
+    }),
+  };
 
   return (
     <Spin
@@ -310,7 +328,7 @@ const rowSelection = {
               </Select>
             </div>
             <div className="center_number line"> 完成率(<span>10</span>%)
-            <Button type='primary' className='btn' onClick={()=>setVisible3(true)}>导出为Excel</Button>
+            <Button type='primary' className='btn' onClick={() => setVisible3(true)}>导出为Excel</Button>
             </div>
           </div>
         </div>
@@ -344,7 +362,7 @@ const rowSelection = {
                   <Option value="C11">C11</Option>
                 </Select>
                 <Button className="pic" type="primary" htmlType="button" style={{ lineHeight: '0' }}
-                onClick={()=>setVisible2(true)}
+                  onClick={() => setVisible2(true)}
                 >
                   切换为下一班
               </Button>
@@ -367,19 +385,19 @@ const rowSelection = {
                 <div className="table_container">
                   <div className='table_line'>
                     <div className='tabel_type'><p>正在生产</p></div>
-                    <div className="type_table"> <DragSortingTable showHeader={true}  data={data1} columns={columns} pagination={false}/></div>
+                    <div className="type_table"> <DragSortingTable showHeader={true} data={data1} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line'>
                     <div className='tabel_type'><p>将要生产</p></div>
-                    <div className="type_table"> <DragSortingTable showHeader={false}   data={data} columns={columns} pagination={false}/></div>
+                    <div className="type_table"> <DragSortingTable showHeader={false} data={data} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line'>
                     <div className='tabel_type'><p>已完成生产</p></div>
-                    <div className="type_table"> <DragSortingTable showHeader={false}   data={data} columns={columns}  pagination={false}/></div>
+                    <div className="type_table"> <DragSortingTable showHeader={false} data={data} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line'>
                     <div className='tabel_type'><p>生产异常</p></div>
-                    <div className="type_table"> <DragSortingTable showHeader={false}  data={data} columns={columns}  /></div>
+                    <div className="type_table"> <DragSortingTable showHeader={false} data={data} columns={columns} /></div>
                   </div>
                 </div>
               </div>
@@ -458,8 +476,8 @@ const rowSelection = {
           width={1080}
         >
           <DragSortingTable showHeader={true} columns={columns} data={data} rowSelection={{
-          ...rowSelection,
-        }}/>
+            ...rowSelection,
+          }} />
         </Modal>
         <Modal title='请选择日期'
           visible={visible3}
@@ -469,7 +487,7 @@ const rowSelection = {
           onCancel={() => setVisible3(false)}
           width={400}
         >
-      <DatePicker placeholder='请选择时间' style={{ marginLeft: 15, width: 300 }} />
+          <DatePicker placeholder='请选择时间' style={{ marginLeft: 15, width: 300 }} />
         </Modal>
       </div>
 

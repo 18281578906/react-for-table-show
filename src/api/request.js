@@ -20,12 +20,18 @@ export function request(config) {
         baseURL,
         timeout,
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Token':JSON.parse(localStorage.getItem('loginInfo'))&&JSON.parse(localStorage.getItem('loginInfo')).token
+//            ' Access-Control-Allow-Origin':'*',
+// 'Access-Control-Allow-Methods':"POST, GET, OPTIONS, DELETE",
+            'Cache-Control': 'no-cache',
+            Accept: 'application/json',
+
+            'Content-Type': 'application/json; charset=UTF-8',
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+            'Token': JSON.parse(localStorage.getItem('loginInfo')) && JSON.parse(localStorage.getItem('loginInfo')).token,
         }
     })
- 
-  
+
+
     //! 数据过滤
     instance.interceptors.response.use(res => {
         return res.data.result
