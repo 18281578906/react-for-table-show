@@ -5,7 +5,10 @@ import {
 } from 'antd';
 import DragSortingTable from '../../component/DragSortingTable'
 import { request } from '../../api/request'
+import moment from 'moment'
 import './style.less';
+
+const { Search } = Input;
 
 const Together = (props) => {
   const [loading2, setLoading2] = useState(false);
@@ -13,6 +16,15 @@ const Together = (props) => {
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
 
+
+  const [isLight, setIsLight] = useState(null)
+
+  const [info, setInfo] = useState({});
+  //选择新旧线
+  const [rateLine, setRateLine] = useState(null)
+  //选择生产线
+  //时间
+  const [time, setTime] = useState(null)
   const columns = [
     {
       title: '序号',
@@ -22,73 +34,73 @@ const Together = (props) => {
     },
     {
       title: '销售订单',
-      dataIndex: '2',
-      key: '2',
+      dataIndex: 'order_id',
+      key: 'order_id',
       width: 200
     },
     {
       title: '购货单位',
-      dataIndex: '3',
-      key: '3',
+      dataIndex: 'customer_name',
+      key: 'customer_name',
       width: 200
     },
     {
       title: '规格型号',
-      dataIndex: '4',
-      key: '4',
+      dataIndex: 'customer_model',
+      key: 'customer_model',
       width: 200
     },
     {
       title: '产品规格(厚*宽*长*只)',
-      dataIndex: '5',
-      key: '5',
+      dataIndex: 'product_model',
+      key: 'product_model',
       width: 200
     },
     {
       title: '交货日期',
-      dataIndex: '6',
-      key: '6',
+      dataIndex: 'customer_require_date',
+      key: 'customer_require_date',
       width: 200
     },
     {
       title: '开始时间',
-      dataIndex: '7',
-      key: '7',
+      dataIndex: 'start',
+      key: 'start',
       width: 200
     },
     {
       title: '预计完成时间',
-      dataIndex: '8',
-      key: '8',
+      dataIndex: 'pre_date',
+      key: 'pre_date',
       width: 200
     },
     {
       title: '完成时间',
-      dataIndex: '9',
-      key: '9',
+      dataIndex: 'complete_date',
+      key: 'complete_date',
       width: 200
     },
     {
       title: '投料单单号',
-      dataIndex: '10',
-      key: '10',
+      dataIndex: 'feed_id',
+      key: 'feed_id',
       width: 200
     },
     {
       title: '总平方数',
-      dataIndex: '11',
-      key: '11',
+      dataIndex: 'square',
+      key: 'square',
       width: 200
     },
     {
       title: '提供生产批号',
-      dataIndex: '12',
-      key: '12',
+      dataIndex: 'support_create_number',
+      key: 'support_create_number',
       width: 200
     },
     {
       title: '是否可接膜',
-      dataIndex: '13',
+      dataIndex: 'is_add_membran',
       key: '13',
       width: 200
     },
@@ -152,17 +164,21 @@ const Together = (props) => {
       params: params  //post data:
     })
   }
-  const handleGetInfo = async () => {
-    const data = await getInfo({
-      page: 1,
-      pageSize: 10
-    });
-    console.log(data);
+
+  const handleGetInfo = async (obj) => {
+    const data = await getInfo(obj);
+    setInfo(data);
+    setIsLight(data.shift)
+    setTime(data.date)
+
   }
 
   useEffect(() => {
     setLoading2(false);
-    handleGetInfo();
+    handleGetInfo({
+      page: 1,
+      pageSize: 10
+    });
   }, [])
 
   const data1 = [
@@ -189,6 +205,7 @@ const Together = (props) => {
       19: 'hjuhju',
     },
   ]
+
   const data = [
     {
       key: '1',
@@ -260,16 +277,22 @@ const Together = (props) => {
 
   const { Option } = Select;
 
-  function onChange(value) {
+  function onChange1(value) {
+    console.log(`selected ${value}`);
+    setRateLine(value)
+  }
+
+  function onChange2(value) {
     console.log(`selected ${value}`);
   }
 
-  function onBlur() {
-    console.log('blur');
-  }
-
-  function onFocus() {
-    console.log('focus');
+  function onChange3(value) {
+    console.log(`selected ${value}`);
+    handleGetInfo({
+      page: 1,
+      pageSize: 10,
+      day_shift:value
+    })
   }
 
   function onSearch(val) {
@@ -280,33 +303,62 @@ const Together = (props) => {
     labelCol: { span: 6 },
     wrapperCol: { span: 16 },
   };
+
   const [form] = Form.useForm();
+
   const onFinish = values => {
     console.log(values);
   };
 
   //选择table项
   const rowSelection = {
+
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
+
     getCheckboxProps: record => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked
       name: record.name,
     }),
   };
+  const dateFormat = 'YYYY年MM月DD日';
 
   return (
     <Spin
       spinning={loading2}
     >
       <div className="together2">
-        {/* <HeaderAccount /> */}
         <div className="menu-header">
           <div className="header-top">
-            <div className="top-time"><span>10</span>月<span>5</span>日</div>
-            <div className="top-time">星期<span>日</span></div>
-            <div className="top-time"><span>夜班</span></div>
+            <div className="top-time">
+              {time && <DatePicker style={{ width: '160px' }} defaultValue={moment('2020年' + time, dateFormat)} format={dateFormat} />}            </div>
+            <div className="top-time">{info.week}</div>
+            <div className="top-time">
+              <Select
+                className="pic"
+                showSearch
+                style={{
+                  width: 90,
+                  height: 32,
+                  borderRadius: 3,
+                  backgroundColor: 'rgba(255, 255, 255, 1) ',
+                  marginRight: 15
+                }}
+                placeholder="请选择班次"
+                optionFilterProp="children"
+                onChange={onChange3}
+                onSearch={onSearch}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                value={isLight}
+              >
+                {info.shifts && info.shifts.map(e => <Option key={e.value} value={e.key}>{e.value}</Option>
+                )}
+
+              </Select>
+            </div>
           </div>
           <div className="header_center">
             <div className="center_select line">
@@ -315,19 +367,23 @@ const Together = (props) => {
                 style={{ width: 160, marginRight: 15 }}
                 placeholder="请选择"
                 optionFilterProp="children"
-                onChange={onChange}
-                onFocus={onFocus}
-                onBlur={onBlur}
+                onChange={onChange1}
                 onSearch={onSearch}
                 filterOption={(input, option) =>
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
-              >
-                <Option value="new">新线</Option>
-                <Option value="old">旧线</Option>
+                value={rateLine}
+              >{
+                  console.log(info.complete_rate)
+                }
+                {info.complete_rate && info.complete_rate.map(
+                  (e, index) => <Option key={e.equipment_type_message} value={e.equipment_type_message}>{e.equipment_type_message}</Option>
+                )}
               </Select>
             </div>
-            <div className="center_number line"> 完成率(<span>10</span>%)
+            <div className="center_number line"> 完成率({
+              (rateLine === '旧线') ? info.complete_rate && info.complete_rate[0].rate : info.complete_rate && info.complete_rate[1].rate
+            })
             <Button type='primary' className='btn' onClick={() => setVisible3(true)}>导出为Excel</Button>
             </div>
           </div>
@@ -349,23 +405,18 @@ const Together = (props) => {
                   }}
                   placeholder="请选择生产线"
                   optionFilterProp="children"
-                  onChange={onChange}
-                  onFocus={onFocus}
-                  onBlur={onBlur}
+                  onChange={onChange2}
                   onSearch={onSearch}
                   filterOption={(input, option) =>
                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
                 >
-                  <Option value="C09">C09</Option>
-                  <Option value="C10">C10</Option>
-                  <Option value="C11">C11</Option>
+                  {info.equipment && info.equipment.map(e => <Option key={e.name} value={e.name}>{e.name}</Option>
+                  )}
+
                 </Select>
-                <Button className="pic" type="primary" htmlType="button" style={{ lineHeight: '0' }}
-                  onClick={() => setVisible2(true)}
-                >
-                  切换为下一班
-              </Button>
+                <Search placeholder="请输入客户名或规格型号"
+                />
               </div>
 
             </div>
@@ -376,8 +427,8 @@ const Together = (props) => {
           <div className="showTable_mobile">
             <div className='table'>
               <div className='table_left'>
-                <Input className='line_input' placeholder='请输入维护时间'></Input>
-                <Input className='line_input' placeholder='请输入异常停机时间'></Input>
+                <DatePicker className='line_input' placeholder='请输入维护时间' format={dateFormat} />
+                <DatePicker className='line_input' placeholder='请输入异常停机时间' format={dateFormat} />
                 <div className='product_name line_input'>C09</div>
                 <div className='success_percent line_input'>完成率(<span>10</span>%)</div>
               </div>
