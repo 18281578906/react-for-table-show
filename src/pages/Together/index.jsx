@@ -323,7 +323,29 @@ const Together = (props) => {
     }),
   };
   const dateFormat = 'YYYY年MM月DD日';
+  function timestampToTime(timestamp) {
+    var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+    var Y = date.getFullYear() + '-';
+    var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+    var D = date.getDate() + ' ';
+    var h = date.getHours() + ':';
+    var m = date.getMinutes() + ':';
+    var s = date.getSeconds();
+    return Y+M+D+h+m+s;
+}
+  const changeTime1=(e)=>{
+    const time= e.format('YYYY-MM-DD');
+    console.log(time);
+   const timePicker=new Date(time).getTime(time);
+const mm=   timestampToTime(timePicker);
+console.log(mm);
 
+   handleGetInfo({
+    page: 1,
+    pageSize: 10,
+    date:timePicker
+   })
+  }
   return (
     <Spin
       spinning={loading2}
@@ -332,7 +354,7 @@ const Together = (props) => {
         <div className="menu-header">
           <div className="header-top">
             <div className="top-time">
-              {time && <DatePicker style={{ width: '160px' }} defaultValue={moment('2020年' + time, dateFormat)} format={dateFormat} />}            </div>
+              {time && <DatePicker style={{ width: '160px' }} onChange={changeTime1} defaultValue={moment('2020年' + time, dateFormat)} format={dateFormat} />}            </div>
             <div className="top-time">{info.week}</div>
             <div className="top-time">
               <Select
