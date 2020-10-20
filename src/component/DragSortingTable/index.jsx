@@ -42,21 +42,18 @@ const type = 'DragableBodyRow';
     );
   };
   
-
   const DragSortingTable: React.FC = (props) => {  
     const columns = props.columns;
-  
     const [data, setData] = useState(props.data);
-  
     const components = {
       body: {
         row: DragableBodyRow,
       },
     };
-  
     const moveRow = useCallback(
       (dragIndex, hoverIndex) => {
         const dragRow = data[dragIndex];
+        console.log(dragIndex, hoverIndex);
         setData(
           update(data, {
             $splice: [
@@ -65,17 +62,18 @@ const type = 'DragableBodyRow';
             ],
           }),
         );
+     
       },
       [data],
     );
-  
     const manager = useRef(RNDContext);
-  
+ console.log(props.data)
+
     return (
       <DndProvider manager={manager.current.dragDropManager}>
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={props.data}
           components={components}
           onRow={(record, index) => ({
             index,
@@ -86,6 +84,7 @@ const type = 'DragableBodyRow';
           rowSelection={props.rowSelection}
           scroll={{y:'170px'}}
           // bordered
+          rowKey={(e)=>e.order_id}
         />
       </DndProvider>
     );
