@@ -36,6 +36,8 @@ const [current,setCurrent]=useState(1)
   const [type2, setType2] = useState(null)
   const [type3, setType3] = useState(null)
   const [type4, setType4] = useState(null)
+  const [type5, setType5] = useState(null)
+
   //时间
   const [time, setTime] = useState(null)
 
@@ -77,6 +79,23 @@ const [current,setCurrent]=useState(1)
       setType2(null)
       setType3(null)
       setType4(null)
+    }
+    setLoading(false)
+
+  }
+  //下一班
+
+  const handleGetInfoNext = async (obj) => {
+    const data = await getInfo(obj);
+    const mm = data.list && data.list.list[0] && data.list.list[0].task;
+    if (mm) {
+      mm.forEach(e => {
+        if (Number(e.status) === 1) setType5(e.item)
+      })
+    }
+    else {
+
+      setType5(null)
     }
     setLoading(false)
 
@@ -471,7 +490,7 @@ const [current,setCurrent]=useState(1)
 
         {  status === 3 ? <Button size="small" type="primary" onClick={() => showQC(record)}>QC</Button> : ''}
         {  status === 4 ? <Button size="small" type="primary" onClick={() => showReset(record)}>恢复</Button> : ''}
-        {  status === 1 ? <Button size="small" type="primary" onClick={() => showStart(record)}>开始</Button> : ''}
+        {  status === 1&&!type2 ? <Button size="small" type="primary" onClick={() => showStart(record)}>开始</Button> : ''}
 
         {status === 2 ? <Button size="small" type="primary" onClick={() => showComplete(record)}>完成</Button> : ''}
         { (status === 2) ? <Button size="small" danger onClick={() => showError(record)}>异常</Button> : ''}
@@ -486,8 +505,10 @@ const [current,setCurrent]=useState(1)
   const columns = [
     {
       title: '序号',
+      dataIndex: 'sort',
+      key: 'sort',
       width: 100,
-      render: (text, record, index) => <span>{index + 1}</span>
+      render: (text, record, index) => <span>{text}</span>
     },
     {
       title: '销售订单',
@@ -921,6 +942,18 @@ const [current,setCurrent]=useState(1)
     })
 
   }
+
+  const nextLine=()=>{
+    setVisible2(true);
+    handleGetInfoNext({
+      page: 1,
+      pageSize: 10,
+      day_shift: isLight===1?2:1,
+      date: isLight===1? dateTime:dateTime+24*60*60,
+      equipment_id: lineId,
+    })
+
+  }
   return (
     <Spin
       spinning={loading}
@@ -1026,6 +1059,7 @@ const [current,setCurrent]=useState(1)
                   }}
 
                 />
+                <Button type="primary" style={{marginLeft:50}} onClick={nextLine}>下一班将要生产</Button>
               </div>
             </div>
           </div>
@@ -1169,7 +1203,7 @@ const [current,setCurrent]=useState(1)
           onCancel={() => setVisible2(false)}
           width={1080}
         >
-          <DragSortingTable showHeader={true} columns={columns} data={type1} rowSelection={{
+          <DragSortingTable showHeader={true} columns={columns} data={type5} rowSelection={{
             ...rowSelection,
           }} />
         </Modal>
