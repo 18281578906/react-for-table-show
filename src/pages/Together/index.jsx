@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
-  Button, Input, DatePicker, Spin, Select, Modal, Form, message
+  Button, Input, DatePicker, Spin, Select, Modal, Form, message, Tooltip,Pagination
 } from 'antd';
 import DragSortingTable from '../../component/DragSortingTable'
 import { request } from '../../api/request'
@@ -18,7 +18,8 @@ const Together = (props) => {
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
   const [loading, setLoading] = useState(false);
-
+//分页
+const [current,setCurrent]=useState(1)
   //info过滤
   const [dateTime, setDateTime] = useState(null);
   const [isLight, setIsLight] = useState(null)
@@ -41,11 +42,20 @@ const Together = (props) => {
   //下载时间
   const [changeTime, setChangeTime] = useState(null)
   const [showWeima, setShowWeima] = useState(null)
+  //导出维护时间
+  const [changeTime3,setChangeTime3]=useState({start:null,end:null})
 
+  //导出异常时间
+  const [changeTime4,setChangeTime4]=useState({start:null,end:null})
   //显示二维码
   const [showDislog, showDialog] = useState(false)
   //qc数据
   const [QCData, setQCDate] = useState(null)
+
+  //维护导出
+  const [show3,setShow3]=useState(false)
+   //异常导出
+   const [show4,setShow4]=useState(false)
   const handleGetInfo = async (obj) => {
     setLoading(true)
     const data = await getInfo(obj);
@@ -91,7 +101,7 @@ const Together = (props) => {
     await getComplete(obj);
     message.success('状态更新成功！')
     handleGetInfo({
-      page: 1,
+      page: current,
       pageSize: 10,
       day_shift: isLight,
       date: dateTime,
@@ -110,7 +120,7 @@ const Together = (props) => {
     await getError(obj);
     message.success('状态更新成功！')
     handleGetInfo({
-      page: 1,
+      page: current,
       pageSize: 10,
       day_shift: isLight,
       date: dateTime,
@@ -129,7 +139,7 @@ const Together = (props) => {
     await getStart(obj);
     message.success('状态更新成功！');
     handleGetInfo({
-      page: 1,
+      page: current,
       pageSize: 10,
       day_shift: isLight,
       date: dateTime,
@@ -149,7 +159,7 @@ const Together = (props) => {
     await getRenew(obj);
     message.success('状态更新成功！');
     handleGetInfo({
-      page: 1,
+      page: current,
       pageSize: 10,
       day_shift: isLight,
       date: dateTime,
@@ -243,7 +253,28 @@ const Together = (props) => {
       message.error('当前时间暂无数据')
     }
   }
-
+  //下载 qc
+  const dowloadQc = (params) => {
+    return request({
+      method: 'get',
+      url: ' /task/export/qc',
+      params: params
+    })
+  }
+  const handleDowloadQc = async (obj) => {
+    const data = await dowloadQc(obj);
+    if (Object.keys(data).length > 0) {
+      setLoading(true)
+      const ali = document.createElement('a');
+      ali.download = "qc数据";
+      ali.href = data.file;
+      const event = new MouseEvent('click');
+      ali.dispatchEvent(event);
+      setLoading(false);
+    } else {
+      message.error('当前时间暂无数据')
+    }
+  }
   //维护时间
   const getWeihu = (params) => {
     return request({
@@ -255,7 +286,7 @@ const Together = (props) => {
   const handleGetWeihu = async (obj) => {
     await getWeihu(obj);
     handleGetInfo({
-      page: 1,
+      page: current,
       pageSize: 10,
       day_shift: isLight,
       date: dateTime,
@@ -273,7 +304,7 @@ const Together = (props) => {
   const handleGetQc = async (obj) => {
     await getQc(obj);
     handleGetInfo({
-      page: 1,
+      page: current,
       pageSize: 10,
       day_shift: isLight,
       date: dateTime,
@@ -286,7 +317,7 @@ const Together = (props) => {
 
   useEffect(() => {
     handleGetInfo({
-      page: 1,
+      page: current,
       pageSize: 10,
       day_shift: isLight,
       date: dateTime,
@@ -305,7 +336,7 @@ const Together = (props) => {
     console.log(`selected ${value}`);
     setLineId(value);
     handleGetInfo({
-      page: 1,
+      page: current,
       pageSize: 10,
       day_shift: value,
       date: dateTime,
@@ -317,7 +348,7 @@ const Together = (props) => {
     console.log(`selected ${value}`);
     setIsLight(value)
     handleGetInfo({
-      page: 1,
+      page: current,
       pageSize: 10,
       day_shift: value,
       date: dateTime,
@@ -340,7 +371,7 @@ const Together = (props) => {
     delete values.customer_name;
     delete values.equipment_name;
     delete values.product_model;
-    handleGetQc({...values,order_id:QCData })
+    handleGetQc({ ...values, order_id: QCData })
   };
 
   //选择table项
@@ -357,22 +388,25 @@ const Together = (props) => {
   };
   const dateFormat = 'YYYY年MM月DD日';
   const changeTime1 = (e) => {
-    const time = e.format('YYYY-MM-DD');
-    const timePicker = new Date(time).getTime() / 1000;
-    setDateTime(timePicker)
-    handleGetInfo({
-      page: 1,
-      pageSize: 10,
-      day_shift: isLight,
-      date: timePicker,
-      equipment_id: lineId
-    })
+    if (e) {
+      const time = e.format('YYYY-MM-DD');
+      const timePicker = new Date(time).getTime() / 1000;
+      setDateTime(timePicker)
+      handleGetInfo({
+        page: current,
+        pageSize: 10,
+        day_shift: isLight,
+        date: timePicker,
+        equipment_id: lineId
+      })
+    }
+
   }
   //search for
   const changeSearch = (e) => {
     const val = e.target.value;
     handleGetInfo({
-      page: 1,
+      page: current,
       pageSize: 10,
       day_shift: isLight,
       date: dateTime,
@@ -382,7 +416,7 @@ const Together = (props) => {
   }
   const changeSearch2 = (e) => {
     handleGetInfo({
-      page: 1,
+      page: current,
       pageSize: 10,
       day_shift: isLight,
       date: dateTime,
@@ -452,116 +486,260 @@ const Together = (props) => {
   const columns = [
     {
       title: '序号',
-      width: 200,
+      width: 100,
       render: (text, record, index) => <span>{index + 1}</span>
     },
     {
       title: '销售订单',
       dataIndex: 'order_id',
       key: 'order_id',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: order_id => (
+        <Tooltip placement="topLeft" title={order_id}>
+          {order_id}
+        </Tooltip>
+      ),
     },
     {
       title: '购货单位',
       dataIndex: 'customer_name',
       key: 'customer_name',
-      width: 200,
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: customer_name => (
+        <Tooltip placement="topLeft" title={customer_name}>
+          {customer_name}
+        </Tooltip>
+      ),
     },
     {
       title: '规格型号',
       dataIndex: 'customer_model',
       key: 'customer_model',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: customer_model => (
+        <Tooltip placement="topLeft" title={customer_model}>
+          {customer_model}
+        </Tooltip>
+      ),
     },
     {
       title: '产品规格(厚*宽*长*只)',
       dataIndex: 'product_model',
       key: 'product_model',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: product_model => (
+        <Tooltip placement="topLeft" title={product_model}>
+          {product_model}
+        </Tooltip>
+      ),
     },
     {
       title: '交货日期',
       dataIndex: 'customer_require_date',
       key: 'customer_require_date',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: customer_require_date => (
+        <Tooltip placement="topLeft" title={customer_require_date}>
+          {customer_require_date}
+        </Tooltip>
+      ),
     },
     {
       title: '开始时间',
       dataIndex: 'start',
       key: 'start',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: start => (
+        <Tooltip placement="topLeft" title={start}>
+          {start}
+        </Tooltip>
+      ),
     },
     {
       title: '预计完成时间',
       dataIndex: 'pre_date',
       key: 'pre_date',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: pre_date => (
+        <Tooltip placement="topLeft" title={pre_date}>
+          {pre_date}
+        </Tooltip>
+      ),
     },
     {
       title: '完成时间',
       dataIndex: 'complete_date',
       key: 'complete_date',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: complete_date => (
+        <Tooltip placement="topLeft" title={complete_date}>
+          {complete_date}
+        </Tooltip>
+      ),
     },
     {
       title: '投料单单号',
       dataIndex: 'feed_id',
       key: 'feed_id',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: feed_id => (
+        <Tooltip placement="topLeft" title={feed_id}>
+          {feed_id}
+        </Tooltip>
+      ),
     },
     {
       title: '总平方数',
       dataIndex: 'square',
       key: 'square',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: square => (
+        <Tooltip placement="topLeft" title={square}>
+          {square}
+        </Tooltip>
+      ),
     },
     {
       title: '提供生产批号',
       dataIndex: 'support_create_number',
       key: 'support_create_number',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: support_create_number => (
+        <Tooltip placement="topLeft" title={support_create_number}>
+          {support_create_number}
+        </Tooltip>
+      ),
     },
     {
       title: '是否可接膜',
       dataIndex: 'is_add_membrane',
       key: 'is_add_membrane',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: is_add_membrane => (
+        <Tooltip placement="topLeft" title={is_add_membrane}>
+          {is_add_membrane}
+        </Tooltip>
+      ),
     },
     {
       title: '是否可多米',
       dataIndex: 'is_more_mi',
       key: 'is_more_mi',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: is_more_mi => (
+        <Tooltip placement="topLeft" title={is_more_mi}>
+          {is_more_mi}
+        </Tooltip>
+      ),
     },
     {
       title: '是否可少米',
       dataIndex: 'is_less_mi',
       key: 'is_less_mi',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: is_less_mi => (
+        <Tooltip placement="topLeft" title={is_less_mi}>
+          {is_less_mi}
+        </Tooltip>
+      ),
     },
     {
       title: '是否可彩纹印',
       dataIndex: 'is_color_printing',
       key: 'is_color_printing',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: is_color_printing => (
+        <Tooltip placement="topLeft" title={is_color_printing}>
+          {is_color_printing}
+        </Tooltip>
+      ),
     },
     {
       title: '是否可换规格',
       dataIndex: 'is_change_specification',
       key: 'is_change_specification',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: is_change_specification => (
+        <Tooltip placement="topLeft" title={is_change_specification}>
+          {is_change_specification}
+        </Tooltip>
+      ),
     },
     {
       title: '备注',
       dataIndex: 'comment26',
       key: 'comment26',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: comment26 => (
+        <Tooltip placement="topLeft" title={comment26}>
+          {comment26}
+        </Tooltip>
+      ),
     },
     {
       title: '异常备注',
       dataIndex: 'abnormal_comment',
       key: 'abnormal_comment',
-      width: 200
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: abnormal_comment => (
+        <Tooltip placement="topLeft" title={abnormal_comment}>
+          {abnormal_comment}
+        </Tooltip>
+      ),
     },
     {
       title: '操作',
@@ -585,42 +763,163 @@ const Together = (props) => {
     })
 
   }
+  //qc
+  const handleQc = () => {
+    setVisible3(false)
+    handleDowloadQc({
+      date: changeTime
+    })
+  }
 
   //选择时间
   const handleChangeTime = (e) => {
     console.log(e);
-    const time = e.format('YYYY-MM-DD');
-    const timePicker = new Date(time).getTime() / 1000;
-    setChangeTime(timePicker)
+    if (e) {
+      const time = e.format('YYYY-MM-DD');
+      const timePicker = new Date(time).getTime() / 1000;
+      setChangeTime(timePicker)
+
+    } else {
+      setChangeTime(null)
+
+    }
+
   }
 
+  //选择维护时间
+  const handleChangeTime3 = (e) => {
+    console.log(e);
+    if (e) {
+      const start = e[0].format('YYYY-MM-DD');
+      const end = e[1].format('YYYY-MM-DD');
+
+      setChangeTime3({start,end})
+
+    } else {
+      setChangeTime3({start:null,end:null})
+
+    }
+
+  }
+    //选择异常时间
+    const handleChangeTime4 = (e) => {
+      console.log(e);
+      if (e) {
+        const start = e[0].format('YYYY-MM-DD');
+        const end = e[1].format('YYYY-MM-DD');
+  
+        setChangeTime4({start,end})
+  
+      } else {
+        setChangeTime4({start:null,end:null})
+  
+      }
+  
+    }
   //维护
   const handleChangeWeihu = (e) => {
-    const start = e[0].format('YYYY-MM-DD H:m');
-    const end = e[1].format('YYYY-MM-DD H:m');
-    handleGetWeihu({
-      equipment_id: lineId,
-      start,
-      end
-
-    })
-
-
-
+    if (e) {
+      const start = e[0].format('YYYY-MM-DD H:m');
+      const end = e[1].format('YYYY-MM-DD H:m');
+      handleGetWeihu({
+        equipment_id: lineId,
+        start,
+        end
+      })
+    }
   }
   //异常停机
 
   const handleChangeStop = (e) => {
-    const start = e[0].format('YYYY-MM-DD H:m');
-    const end = e[1].format('YYYY-MM-DD H:m');
+    if (e) {
 
-    console.log(start, end);
+      const start = e[0].format('YYYY-MM-DD H:m');
+      const end = e[1].format('YYYY-MM-DD H:m');
 
+      console.log(start, end);
+    }
   }
 
   const handleOk2 = () => {
     setVisible(false)
     form.submit();
+  }
+  const dowloadWeihu=(params)=>{
+    return request({
+      method: 'get',
+      url: '/task/export/date/maintain',
+      params: params 
+    })
+
+  }
+  const dowloadWeihu4=(params)=>{
+    return request({
+      method: 'get',
+      url: ' /task/export/date/anomaly',
+      params: params 
+    })
+
+  }
+
+  const handledownloadWeihu=async (obj)=>{
+   const data= await dowloadWeihu(obj);
+   if (Object.keys(data).length > 0) {
+    setLoading(true)
+
+    const ali = document.createElement('a');
+    ali.download = "维护时间导出";
+    ali.href = data.file;
+    const event = new MouseEvent('click');
+    ali.dispatchEvent(event);
+    setLoading(false);
+  }
+  
+  else {
+    message.error('当前时间暂无数据')
+  }
+  }
+  const handledownloadWeihu4=async (obj)=>{
+    const data= await dowloadWeihu4(obj);
+    if (Object.keys(data).length > 0) {
+     setLoading(true)
+ 
+     const ali = document.createElement('a');
+     ali.download = "维护时间导出";
+     ali.href = data.file;
+     const event = new MouseEvent('click');
+     ali.dispatchEvent(event);
+     setLoading(false);
+   }
+   
+   else {
+     message.error('当前时间暂无数据')
+   }
+   }
+  const handleOk3 =async () => {
+    setShow3(false);
+     handledownloadWeihu(changeTime3)
+  }
+  const handleOk4 =async () => {
+    setShow4(false);
+     handledownloadWeihu4(changeTime4)
+  }
+  const handleCancel3 = () => {
+    setShow3(false)
+  }
+  const handleCancel4 = () => {
+    setShow4(false)
+  }
+  const changePage=(e)=>{
+    console.log(e);
+    setCurrent(e);
+    handleGetInfo({
+      page: e,
+      pageSize: 10,
+      day_shift: isLight,
+      date: dateTime,
+      equipment_id: lineId,
+    })
+
   }
   return (
     <Spin
@@ -687,7 +986,7 @@ const Together = (props) => {
         <div className="pan">
           <div className="search">
             <div className="line">
-              <p className="pic">生产线</p>
+              <p className="pic">机器号</p>
               <div className='input_wrap'>
                 <Select
                   className="pic"
@@ -712,12 +1011,22 @@ const Together = (props) => {
                   )}
 
                 </Select>
+              </div>
+            </div>
+            <div className="line">
+              <p className="pic">搜索</p>
+              <div className='input_wrap'>
                 <Search placeholder="请输入客户名或规格型号"
                   onChange={changeSearch}
                   onSearch={changeSearch2}
+                  style={{
+                    width: 290,
+                    marginLeft: '10px'
+
+                  }}
+
                 />
               </div>
-
             </div>
           </div>
 
@@ -726,38 +1035,57 @@ const Together = (props) => {
           <div className="showTable_mobile">
             <div className='table'>
               <div className='table_left'>
-                <p style={{margin:'0',position:'absolute',marginLeft:'10px',color:'#4e4b4b'}}>请输入维护时间:</p>
-                <RangePicker showTime className='line_input' onChange={handleChangeWeihu} style={{marginTop:'30px'}}/>
-                <p style={{margin:'0',position:'absolute',marginLeft:'10px',color:'#4e4b4b'}}>请输入异常停机时间:</p>
+                <p style={{ margin: '0', position: 'absolute', marginLeft: '10px', color: '#4e4b4b' }}>请输入维护时间:</p>
+                <RangePicker showTime className='line_input' onChange={handleChangeWeihu} style={{ marginTop: '30px' }} />
+                <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={()=>setShow3(true)}>维护时间导出</Button>
+                <p style={{ margin: '0', position: 'absolute', marginLeft: '10px', color: '#4e4b4b' }}>请输入异常停机时间:</p>
 
-                <RangePicker showTime className='line_input' nChange={handleChangeStop}  style={{marginTop:'30px'}}/>
+                <RangePicker showTime className='line_input' nChange={handleChangeStop} style={{ marginTop: '30px' }} />
+                <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={()=>setShow4(true)}>异常停机导出</Button>
+
                 <div className='product_name line_input'>{task && task.name}</div>
                 {task && <div className='success_percent line_input'>完成率({task.rate})</div>
                 }              </div>
               <div className='table_right'>
+                <div className="table_container_left">
+                  <div className='tabel_type'><p>正在生产</p></div>
+                  <div className='tabel_type'><p>将要生产</p></div>
+                  <div className='tabel_type'><p>已完成生产</p></div>
+                  <div className='tabel_type'><p>生产异常</p></div>
+
+                </div>
                 <div className="table_container">
                   <div className='table_line'>
-                    <div className='tabel_type'><p>正在生产</p></div>
+                    {/* <div className='tabel_type'><p>正在生产</p></div> */}
                     <div className="type_table"> <DragSortingTable showHeader={true} data={type2} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line'>
-                    <div className='tabel_type'><p>将要生产</p></div>
+                    {/* <div className='tabel_type'><p>将要生产</p></div> */}
                     <div className="type_table"> <DragSortingTable showHeader={false} data={type1} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line'>
-                    <div className='tabel_type'><p>已完成生产</p></div>
+                    {/* <div className='tabel_type'><p>已完成生产</p></div> */}
                     <div className="type_table"> <DragSortingTable showHeader={false} data={type3} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line'>
-                    <div className='tabel_type'><p>生产异常</p></div>
+                    {/* <div className='tabel_type'><p>生产异常</p></div> */}
                     <div className="type_table"> <DragSortingTable showHeader={false} data={type4} columns={columns} /></div>
                   </div>
                 </div>
               </div>
+
             </div>
+            <Pagination 
+            defaultCurrent={current}
+            // total={info.list&&info.list.total} 
+            total={25}
+            pageSize={10}
+            onChange={changePage} />
+
           </div>
 
         </div>
+
         <Modal title={'qc数据'}
           visible={visible}
           okText='确认'
@@ -849,9 +1177,15 @@ const Together = (props) => {
           visible={visible3}
           okText='下载异常清单'
           cancelText="下载已完成清单"
-          onOk={handleOk}
-          onCancel={handleCancel}
-          width={400}
+          // onOk={handleOk}
+          onCancel={() => setVisible3(false)}
+          width={500}
+          footer={<div>
+            <Button onClick={handleOk}>下载异常清单</Button>
+            <Button onClick={handleCancel}>下载已完成清单</Button>
+            <Button onClick={handleQc}>下载qc数据</Button>
+            <Button onClick={() => setVisible3(false)}>取消</Button>
+          </div>}
         >
           <DatePicker placeholder='请选择时间' style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime} format={dateFormat} />
         </Modal>
@@ -870,6 +1204,28 @@ const Together = (props) => {
           footer={null}
         >
           <QRCode value={showWeima} size={200} onClick={() => showDialog(true)} />
+        </Modal>
+
+        <Modal title='异常停机导出'
+          visible={show4}
+          okText='导出'
+          cancelText="取消"
+          onOk={handleOk4}
+          onCancel={handleCancel4}
+          width={500}
+        >
+          <RangePicker style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime4} format={"YYYY-MM-DD"} />
+        </Modal>
+
+        <Modal title='请选择导出维护时间'
+          visible={show3}
+          okText='导出'
+          cancelText="取消"
+          onOk={handleOk3}
+          onCancel={handleCancel3}
+          width={500}
+        >
+          <RangePicker style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime3} format={"YYYY-MM-DD"} />
         </Modal>
       </div>
 

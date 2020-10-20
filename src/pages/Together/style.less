@@ -1,3 +1,21 @@
+   //time
+   .ant-picker-content{
+    .ant-picker-time-panel-column:nth-child(3){
+      display: none;
+    }
+  }
+  //table
+  .ant-empty-normal{
+    visibility: hidden;
+  }
+  //分页
+  .ant-pagination{
+    height: 100px !important;
+    margin-top:0 !important;
+    position: relative;
+    left:70%;
+  }
+
 .together2{
   width: 100%;
   background-color: #D6e9fe;
@@ -8,11 +26,11 @@
   }
   .menu-header{
     width: 100%;
-    padding: 30px;
+    padding:15px;
     background-color: #ffffff;
     display: flex;
     position: relative;
-    padding-top: 35px;
+    padding-top:15px;
     font-size: 15px;
     .img{
       width: 150px;
@@ -35,6 +53,9 @@
       }
 
     }
+
+ 
+
     .header_center{
       width:45%;
       .line{
@@ -53,8 +74,8 @@
   .pan{
       position: relative;
       background-color: #fff;
-    height: 100px;
-    margin: 20px 0;
+      height: 93px;
+      margin: 5px 0;
       .ant-tabs-nav{
         margin-bottom: 0!important;
         padding-left: 60px;
@@ -70,17 +91,17 @@
     font-size: 14px;
     font-family: Roboto;
     box-sizing: border-box;
-    margin: 0;
-    margin-top: 14px;
+    // margin: 0;
+    // margin-top: 14px;
     // padding: 0;
     .line{
-      padding: 30px;
-      border-bottom: 1px dotted  rgba(233, 233, 233, 1);
+      padding:10px 30px;
+      // border-bottom: 1px dotted  rgba(233, 233, 233, 1);
       text-align: left;
       position: relative;
       display: flex;
 
-    float: left;
+    // float: left;
       span{
       display: inline-flex;
       margin-left: 0;
@@ -170,9 +191,9 @@
 .table_left{
   // width: 10%;
   flex: 1;
-  padding:0 20px 20px 0;
+  // padding:0 20px 20px 0;
   background-color: #eae9e966;
-  min-width: 200px;
+  // min-width: 200px;
   padding-top: 20px;
   .line_input{
     margin:20px 10px;
@@ -182,13 +203,38 @@
   }
 }
 .table_right{
-  width: 80%;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  margin-left: 20px;
+  width: 85%;
+ 
+  margin-left: 5px;
   // border: 1px solid grey;
   background-color: #eae9e966;
+flex-wrap: wrap;
+display: flex;
 
+.table_container_left{
+  width:90px;
+  min-width: 90px;
+  max-width: 90px;
+  flex: 1;
+  .tabel_type{
+    width:90px;
+    line-height: 180px;
+    top:0px;
+    left:0px;
+
+    text-align: center;
+    font-size: 16px;
+    p{
+      margin-bottom: 0em;
+    }
+  }
+}
+.table_container{
+  overflow-x: scroll;
+  overflow-y: hidden;
+  flex: 10;
+
+}
   .table_head{
     height: 80px;
     // line-height: 80px;
@@ -228,7 +274,7 @@
     font-size: 16px;
   }
   .type_table{
-    margin-left:150px;
+    // margin-left:150px;
     display: inline-block;
 
   }
@@ -254,7 +300,7 @@
     font-size: 16px;
   }
   .type_table{
-    margin-left:150px;
+    // margin-left:150px;
     display: inline-block;
   }
 }
