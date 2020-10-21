@@ -1,8 +1,9 @@
-import React, { useState , useCallback, useRef} from 'react';
+import React, {useCallback, useRef} from 'react';
 import { DndProvider, useDrag, useDrop, createDndContext } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import {Table} from 'antd';
-import update from 'immutability-helper';
+// import update from 'immutability-helper';
+// import { request } from '../../api/request'
 
 const RNDContext = createDndContext(HTML5Backend);
 
@@ -44,36 +45,43 @@ const type = 'DragableBodyRow';
   
   const DragSortingTable: React.FC = (props) => {  
     const columns = props.columns;
-    const [data, setData] = useState(props.data);
+    // const [data, setData] = useState(props.data);
+    const data=props.data;
     const components = {
       body: {
         row: DragableBodyRow,
       },
     };
+
+
     const moveRow = useCallback(
       (dragIndex, hoverIndex) => {
-        const dragRow = data[dragIndex];
-        console.log(dragIndex, hoverIndex);
-        setData(
-          update(data, {
-            $splice: [
-              [dragIndex, 1],
-              [hoverIndex, 0, dragRow],
-            ],
-          }),
-        );
+        console.log(dragIndex, hoverIndex,data);
+        // const dragRow = data[dragIndex];
+        props.moveLine({
+          start:data[dragIndex].order_id,
+          end:data[hoverIndex].order_id,
+        })
+        // setData(
+          // update(data, {
+          //   $splice: [
+          //     [dragIndex, 1],
+          //     [hoverIndex, 0, dragRow],
+          //   ],
+          // })
+        // );
      
       },
-      [data],
+      [data, props],
     );
     const manager = useRef(RNDContext);
- console.log(props.data)
+//  console.log(props.data)
 
     return (
       <DndProvider manager={manager.current.dragDropManager}>
         <Table
           columns={columns}
-          dataSource={props.data}
+          dataSource={data}
           components={components}
           onRow={(record, index) => ({
             index,

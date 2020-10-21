@@ -1,15 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
-  Button, Input, DatePicker, Spin, Select, Modal, Form, message, Tooltip,Pagination
+  Button, Input, DatePicker, Spin, Select, Modal, Form, message, Tooltip, Pagination, Table
 } from 'antd';
 import DragSortingTable from '../../component/DragSortingTable'
+import DragSortingTableMobile from '../../component/DragSortingTableMobile'
+import { mapStateToProps, mapDispatchToProps } from '../../redux/actionCreator'
+import { connect } from 'react-redux'
+import { sortableHandle } from 'react-sortable-hoc';
+import { MenuOutlined } from '@ant-design/icons';
+
 import { request } from '../../api/request'
 import moment from 'moment'
+
 import './style.less';
 //二维码
 const QRCode = require('qrcode.react');
 
+const DragHandle = sortableHandle(() => (
+  <MenuOutlined style={{ cursor: 'pointer', color: '#999' }} />
+));
 const { Search } = Input;
 const { RangePicker } = DatePicker;
 
@@ -18,8 +28,8 @@ const Together = (props) => {
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
   const [loading, setLoading] = useState(false);
-//分页
-const [current,setCurrent]=useState(1)
+  //分页
+  const [current, setCurrent] = useState(1)
   //info过滤
   const [dateTime, setDateTime] = useState(null);
   const [isLight, setIsLight] = useState(null)
@@ -45,34 +55,63 @@ const [current,setCurrent]=useState(1)
   const [changeTime, setChangeTime] = useState(null)
   const [showWeima, setShowWeima] = useState(null)
   //导出维护时间
-  const [changeTime3,setChangeTime3]=useState({start:null,end:null})
+  const [changeTime3, setChangeTime3] = useState({ start: null, end: null })
 
   //导出异常时间
-  const [changeTime4,setChangeTime4]=useState({start:null,end:null})
+  const [changeTime4, setChangeTime4] = useState({ start: null, end: null })
   //显示二维码
   const [showDislog, showDialog] = useState(false)
   //qc数据
   const [QCData, setQCDate] = useState(null)
 
   //维护导出
-  const [show3,setShow3]=useState(false)
-   //异常导出
-   const [show4,setShow4]=useState(false)
+  const [show3, setShow3] = useState(false)
+  //异常导出
+  const [show4, setShow4] = useState(false)
+  //下一班的将要生产
+  const [nextPre, setNextPre] = useState(null)
   const handleGetInfo = async (obj) => {
     setLoading(true)
     const data = await getInfo(obj);
     setInfo(data);
+    setType1(null)
+    setType2(null)
+    setType3(null)
+    setType4(null)
+
     setIsLight(data.shift === '白班' ? 1 : 2)
     setTime(data.date);
     const mm = data.list && data.list.list[0] && data.list.list[0].task;
     setTask(data.list && data.list.list[0] && data.list.list[0])
     if (mm) {
-      mm.forEach(e => {
-        if (Number(e.status) === 1) setType1(e.item)
-        if (Number(e.status) === 2) setType2(e.item)
-        if (Number(e.status) === 3) setType3(e.item)
-        if (Number(e.status) === 4) setType4(e.item)
+      mm.forEach((e,index) => {
+
+        if (Number(e.status) === 1) {
+          e.item.forEach((item,index)=>{
+            item.index=index;
+          })
+          setType1(e.item)
+        }
+        if (Number(e.status) === 2) {
+          e.item.forEach((item,index)=>{
+            item.index=index;
+          })
+          setType2(e.item)
+        }
+        if (Number(e.status) === 3) {
+          e.item.forEach((item,index)=>{
+            item.index=index;
+          })
+          setType3(e.item)
+        }
+        if (Number(e.status) === 4) {
+          e.item.forEach((item,index)=>{
+            item.index=index;
+          })
+          setType4(e.item)
+        }
       })
+      console.log(mm);
     }
     else {
       setType1(null);
@@ -87,6 +126,7 @@ const [current,setCurrent]=useState(1)
 
   const handleGetInfoNext = async (obj) => {
     const data = await getInfo(obj);
+    setType5(null)
     const mm = data.list && data.list.list[0] && data.list.list[0].task;
     if (mm) {
       mm.forEach(e => {
@@ -94,7 +134,6 @@ const [current,setCurrent]=useState(1)
       })
     }
     else {
-
       setType5(null)
     }
     setLoading(false)
@@ -116,6 +155,7 @@ const [current,setCurrent]=useState(1)
       params: params  //post data:
     })
   }
+
   const handleCOmplete = async (obj) => {
     await getComplete(obj);
     message.success('状态更新成功！')
@@ -135,6 +175,7 @@ const [current,setCurrent]=useState(1)
       params: params  //post data:
     })
   }
+
   const handleError = async (obj) => {
     await getError(obj);
     message.success('状态更新成功！')
@@ -145,8 +186,8 @@ const [current,setCurrent]=useState(1)
       date: dateTime,
       equipment_id: lineId,
     })
-
   }
+
   const getStart = (params) => {
     return request({
       method: 'get',
@@ -154,6 +195,7 @@ const [current,setCurrent]=useState(1)
       params: params  //post data:
     })
   }
+
   const handleStart = async (obj) => {
     await getStart(obj);
     message.success('状态更新成功！');
@@ -164,7 +206,6 @@ const [current,setCurrent]=useState(1)
       date: dateTime,
       equipment_id: lineId,
     })
-
   }
 
   const getRenew = (params) => {
@@ -174,6 +215,7 @@ const [current,setCurrent]=useState(1)
       params: params  //post data:
     })
   }
+
   const handleRenew = async (obj) => {
     await getRenew(obj);
     message.success('状态更新成功！');
@@ -186,6 +228,7 @@ const [current,setCurrent]=useState(1)
     })
 
   }
+
   //QC
   const getQC = (params) => {
     return request({
@@ -194,6 +237,7 @@ const [current,setCurrent]=useState(1)
       params: params  //post data:
     })
   }
+
   const handleGetQC = async (obj) => {
     const data = await getQC(obj);
     if (data) {
@@ -232,6 +276,7 @@ const [current,setCurrent]=useState(1)
       params: params  //post data:
     })
   }
+
   const handleGetHadComplete = async (obj) => {
     const data = await getHadComplete(obj);
     if (Object.keys(data).length > 0) {
@@ -257,11 +302,11 @@ const [current,setCurrent]=useState(1)
       params: params  //post data:
     })
   }
+
   const handleGetHadError = async (obj) => {
     const data = await getHadError(obj);
     if (Object.keys(data).length > 0) {
       setLoading(true)
-
       const ali = document.createElement('a');
       ali.download = "异常清单";
       ali.href = data.file;
@@ -272,14 +317,16 @@ const [current,setCurrent]=useState(1)
       message.error('当前时间暂无数据')
     }
   }
+
   //下载 qc
   const dowloadQc = (params) => {
     return request({
       method: 'get',
-      url: ' /task/export/qc',
+      url: '/task/export/qc',
       params: params
     })
   }
+
   const handleDowloadQc = async (obj) => {
     const data = await dowloadQc(obj);
     if (Object.keys(data).length > 0) {
@@ -294,6 +341,7 @@ const [current,setCurrent]=useState(1)
       message.error('当前时间暂无数据')
     }
   }
+
   //维护时间
   const getWeihu = (params) => {
     return request({
@@ -302,6 +350,7 @@ const [current,setCurrent]=useState(1)
       params: params  //post data:
     })
   }
+
   const handleGetWeihu = async (obj) => {
     await getWeihu(obj);
     handleGetInfo({
@@ -312,6 +361,7 @@ const [current,setCurrent]=useState(1)
       equipment_id: lineId,
     })
   }
+
   //qc更新
   const getQc = (params) => {
     return request({
@@ -320,6 +370,7 @@ const [current,setCurrent]=useState(1)
       params: params  //post data:
     })
   }
+
   const handleGetQc = async (obj) => {
     await getQc(obj);
     handleGetInfo({
@@ -347,12 +398,10 @@ const [current,setCurrent]=useState(1)
   const { Option } = Select;
 
   function onChange1(value) {
-    console.log(`selected ${value}`);
     setRateLine(value)
   }
 
   function onChange2(value) {
-    console.log(`selected ${value}`);
     setLineId(value);
     handleGetInfo({
       page: current,
@@ -364,7 +413,6 @@ const [current,setCurrent]=useState(1)
   }
 
   function onChange3(value) {
-    console.log(`selected ${value}`);
     setIsLight(value)
     handleGetInfo({
       page: current,
@@ -376,7 +424,6 @@ const [current,setCurrent]=useState(1)
   }
 
   function onSearch(val) {
-    console.log('search:', val);
   }
 
   const layout = {
@@ -395,9 +442,14 @@ const [current,setCurrent]=useState(1)
 
   //选择table项
   const rowSelection = {
-
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      const arr = [];
+      selectedRows.forEach(e => {
+        arr.push(e.order_id);
+      }
+      )
+      setNextPre(arr.join('|'))
     },
 
     getCheckboxProps: record => ({
@@ -405,7 +457,9 @@ const [current,setCurrent]=useState(1)
       name: record.name,
     }),
   };
+
   const dateFormat = 'YYYY年MM月DD日';
+
   const changeTime1 = (e) => {
     if (e) {
       const time = e.format('YYYY-MM-DD');
@@ -421,6 +475,7 @@ const [current,setCurrent]=useState(1)
     }
 
   }
+
   //search for
   const changeSearch = (e) => {
     const val = e.target.value;
@@ -433,6 +488,7 @@ const [current,setCurrent]=useState(1)
       search: val
     })
   }
+
   const changeSearch2 = (e) => {
     handleGetInfo({
       page: current,
@@ -451,38 +507,41 @@ const [current,setCurrent]=useState(1)
     })
     setQCDate(record.order_id)
   }
+
   const showReset = (record) => {
     handleRenew({
       order_id: record.order_id,
-
     })
   }
+
   const showComplete = (record) => {
     handleCOmplete({
       order_id: record.order_id
     })
   }
+
   const showError = (record) => {
     handleError({
       order_id: record.order_id,
       abnormal_comment: record.abnormal_comment
-
     })
   }
+
   const showCard = (record) => {
-    console.log(record);
     setShowWeima(record.feed_id)
     showDialog(true)
-
   }
+
   const showStart = (record) => {
     handleStart({
       order_id: record.order_id,
     })
   }
+
   //删除
   // const showDelete = (record) => {
   // }
+
   const ActionRender = (text, record) => {
     const status = record.status;
     return (
@@ -490,7 +549,7 @@ const [current,setCurrent]=useState(1)
 
         {  status === 3 ? <Button size="small" type="primary" onClick={() => showQC(record)}>QC</Button> : ''}
         {  status === 4 ? <Button size="small" type="primary" onClick={() => showReset(record)}>恢复</Button> : ''}
-        {  status === 1&&!type2 ? <Button size="small" type="primary" onClick={() => showStart(record)}>开始</Button> : ''}
+        {  status === 1 && !type2 ? <Button size="small" type="primary" onClick={() => showStart(record)}>开始</Button> : ''}
 
         {status === 2 ? <Button size="small" type="primary" onClick={() => showComplete(record)}>完成</Button> : ''}
         { (status === 2) ? <Button size="small" danger onClick={() => showError(record)}>异常</Button> : ''}
@@ -508,7 +567,9 @@ const [current,setCurrent]=useState(1)
       dataIndex: 'sort',
       key: 'sort',
       width: 100,
-      render: (text, record, index) => <span>{text}</span>
+      className: 'drag-visible',
+      render: (text, record, index) => <span> <DragHandle /> {text}</span>
+
     },
     {
       title: '销售订单',
@@ -622,20 +683,20 @@ const [current,setCurrent]=useState(1)
         </Tooltip>
       ),
     },
-    {
-      title: '投料单单号',
-      dataIndex: 'feed_id',
-      key: 'feed_id',
-      width: 100,
-      ellipsis: {
-        showTitle: false,
-      },
-      render: feed_id => (
-        <Tooltip placement="topLeft" title={feed_id}>
-          {feed_id}
-        </Tooltip>
-      ),
-    },
+    // {
+    //   title: '投料单单号',
+    //   dataIndex: 'feed_id',
+    //   key: 'feed_id',
+    //   width: 100,
+    //   ellipsis: {
+    //     showTitle: false,
+    //   },
+    //   render: feed_id => (
+    //     <Tooltip placement="topLeft" title={feed_id}>
+    //       {feed_id}
+    //     </Tooltip>
+    //   ),
+    // },
     {
       title: '总平方数',
       dataIndex: 'square',
@@ -765,25 +826,24 @@ const [current,setCurrent]=useState(1)
     {
       title: '操作',
       width: 300,
-      fixed: 'right',
       render: (text, record) => ActionRender(text, record)
     },
   ];
+
   const handleOk = () => {
     setVisible3(false)
     handleGetHadError({
       date: changeTime
     })
-
-
   }
+
   const handleCancel = () => {
     setVisible3(false)
     handleGetHadComplete({
       date: changeTime
     })
-
   }
+
   //qc
   const handleQc = () => {
     setVisible3(false)
@@ -794,49 +854,38 @@ const [current,setCurrent]=useState(1)
 
   //选择时间
   const handleChangeTime = (e) => {
-    console.log(e);
     if (e) {
       const time = e.format('YYYY-MM-DD');
       const timePicker = new Date(time).getTime() / 1000;
       setChangeTime(timePicker)
-
     } else {
       setChangeTime(null)
 
     }
-
   }
 
   //选择维护时间
   const handleChangeTime3 = (e) => {
-    console.log(e);
     if (e) {
       const start = e[0].format('YYYY-MM-DD');
       const end = e[1].format('YYYY-MM-DD');
-
-      setChangeTime3({start,end})
-
+      setChangeTime3({ start, end })
     } else {
-      setChangeTime3({start:null,end:null})
-
+      setChangeTime3({ start: null, end: null })
     }
 
   }
-    //选择异常时间
-    const handleChangeTime4 = (e) => {
-      console.log(e);
-      if (e) {
-        const start = e[0].format('YYYY-MM-DD');
-        const end = e[1].format('YYYY-MM-DD');
-  
-        setChangeTime4({start,end})
-  
-      } else {
-        setChangeTime4({start:null,end:null})
-  
-      }
-  
+  //选择异常时间
+  const handleChangeTime4 = (e) => {
+    if (e) {
+      const start = e[0].format('YYYY-MM-DD');
+      const end = e[1].format('YYYY-MM-DD');
+      setChangeTime4({ start, end })
+    } else {
+      setChangeTime4({ start: null, end: null })
     }
+
+  }
   //维护
   const handleChangeWeihu = (e) => {
     if (e) {
@@ -853,10 +902,8 @@ const [current,setCurrent]=useState(1)
 
   const handleChangeStop = (e) => {
     if (e) {
-
       const start = e[0].format('YYYY-MM-DD H:m');
       const end = e[1].format('YYYY-MM-DD H:m');
-
       console.log(start, end);
     }
   }
@@ -865,64 +912,64 @@ const [current,setCurrent]=useState(1)
     setVisible(false)
     form.submit();
   }
-  const dowloadWeihu=(params)=>{
+  const dowloadWeihu = (params) => {
     return request({
       method: 'get',
       url: '/task/export/date/maintain',
-      params: params 
+      params: params
     })
 
   }
-  const dowloadWeihu4=(params)=>{
+  const dowloadWeihu4 = (params) => {
     return request({
       method: 'get',
       url: ' /task/export/date/anomaly',
-      params: params 
+      params: params
     })
 
   }
 
-  const handledownloadWeihu=async (obj)=>{
-   const data= await dowloadWeihu(obj);
-   if (Object.keys(data).length > 0) {
-    setLoading(true)
-
-    const ali = document.createElement('a');
-    ali.download = "维护时间导出";
-    ali.href = data.file;
-    const event = new MouseEvent('click');
-    ali.dispatchEvent(event);
-    setLoading(false);
-  }
-  
-  else {
-    message.error('当前时间暂无数据')
-  }
-  }
-  const handledownloadWeihu4=async (obj)=>{
-    const data= await dowloadWeihu4(obj);
+  const handledownloadWeihu = async (obj) => {
+    const data = await dowloadWeihu(obj);
     if (Object.keys(data).length > 0) {
-     setLoading(true)
- 
-     const ali = document.createElement('a');
-     ali.download = "维护时间导出";
-     ali.href = data.file;
-     const event = new MouseEvent('click');
-     ali.dispatchEvent(event);
-     setLoading(false);
-   }
-   
-   else {
-     message.error('当前时间暂无数据')
-   }
-   }
-  const handleOk3 =async () => {
-    setShow3(false);
-     handledownloadWeihu(changeTime3)
+      setLoading(true)
+
+      const ali = document.createElement('a');
+      ali.download = "维护时间导出";
+      ali.href = data.file;
+      const event = new MouseEvent('click');
+      ali.dispatchEvent(event);
+      setLoading(false);
+    }
+
+    else {
+      message.error('当前时间暂无数据')
+    }
   }
-  const handleOk4 =async () => {
+  const handledownloadWeihu4 = async (obj) => {
+    const data = await dowloadWeihu4(obj);
+    if (Object.keys(data).length > 0) {
+      setLoading(true)
+
+      const ali = document.createElement('a');
+      ali.download = "维护时间导出";
+      ali.href = data.file;
+      const event = new MouseEvent('click');
+      ali.dispatchEvent(event);
+      setLoading(false);
+    }
+
+    else {
+      message.error('当前时间暂无数据')
+    }
+  }
+  const handleOk3 = async () => {
+    setShow3(false);
+    handledownloadWeihu(changeTime3)
+  }
+  const handleOk4 = async () => {
     setShow4(false);
-     handledownloadWeihu4(changeTime4)
+    handledownloadWeihu4(changeTime4)
   }
   const handleCancel3 = () => {
     setShow3(false)
@@ -930,8 +977,7 @@ const [current,setCurrent]=useState(1)
   const handleCancel4 = () => {
     setShow4(false)
   }
-  const changePage=(e)=>{
-    console.log(e);
+  const changePage = (e) => {
     setCurrent(e);
     handleGetInfo({
       page: e,
@@ -943,17 +989,65 @@ const [current,setCurrent]=useState(1)
 
   }
 
-  const nextLine=()=>{
+  const nextLine = () => {
     setVisible2(true);
     handleGetInfoNext({
       page: 1,
       pageSize: 10,
-      day_shift: isLight===1?2:1,
-      date: isLight===1? dateTime:dateTime+24*60*60,
+      day_shift: isLight === 1 ? 2 : 1,
+      date: isLight === 1 ? dateTime : dateTime + 24 * 60 * 60,
       equipment_id: lineId,
     })
 
   }
+  const addNext = (params) => {
+    return request({
+      method: 'post',
+      url: '/task/add',
+      params: params  //post data:
+    })
+  }
+  const handleAddNext = async (obj) => {
+    await addNext(obj);
+    handleGetInfo({
+      page: current,
+      pageSize: 10,
+      day_shift: isLight,
+      date: dateTime,
+      equipment_id: lineId,
+    })
+
+  }
+  //下一班
+  const handleOkNext = () => {
+    setVisible2(false);
+    handleAddNext({
+      order_id: nextPre,
+      date: dateTime,
+      day_shift: isLight
+    })
+  }
+
+  //拖拽
+  const moveLine = (params) => {
+    return request({
+      method: 'get',
+      url: '/task/move',
+      params: params  //post data:
+    })
+  }
+
+  const handleMove = async (obj) => {
+    await moveLine(obj);
+    handleGetInfo({
+      page: current,
+      pageSize: 10,
+      day_shift: isLight,
+      date: dateTime,
+      equipment_id: lineId,
+    })
+  }
+
   return (
     <Spin
       spinning={loading}
@@ -1059,7 +1153,7 @@ const [current,setCurrent]=useState(1)
                   }}
 
                 />
-                <Button type="primary" style={{marginLeft:50}} onClick={nextLine}>下一班将要生产</Button>
+                <Button type="primary" style={{ marginLeft: 50 }} onClick={nextLine}>下一班将要生产</Button>
               </div>
             </div>
           </div>
@@ -1071,11 +1165,11 @@ const [current,setCurrent]=useState(1)
               <div className='table_left'>
                 <p style={{ margin: '0', position: 'absolute', marginLeft: '10px', color: '#4e4b4b' }}>请输入维护时间:</p>
                 <RangePicker showTime className='line_input' onChange={handleChangeWeihu} style={{ marginTop: '30px' }} />
-                <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={()=>setShow3(true)}>维护时间导出</Button>
+                <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={() => setShow3(true)}>维护时间导出</Button>
                 <p style={{ margin: '0', position: 'absolute', marginLeft: '10px', color: '#4e4b4b' }}>请输入异常停机时间:</p>
 
                 <RangePicker showTime className='line_input' nChange={handleChangeStop} style={{ marginTop: '30px' }} />
-                <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={()=>setShow4(true)}>异常停机导出</Button>
+                <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={() => setShow4(true)}>异常停机导出</Button>
 
                 <div className='product_name line_input'>{task && task.name}</div>
                 {task && <div className='success_percent line_input'>完成率({task.rate})</div>
@@ -1088,33 +1182,57 @@ const [current,setCurrent]=useState(1)
                   <div className='tabel_type'><p>生产异常</p></div>
 
                 </div>
-                <div className="table_container">
+                {props.isPc ? <div className="table_container">
                   <div className='table_line'>
                     {/* <div className='tabel_type'><p>正在生产</p></div> */}
-                    <div className="type_table"> <DragSortingTable showHeader={true} data={type2} columns={columns} pagination={false} /></div>
+                    <div className="type_table"> <DragSortingTable moveLine={handleMove} showHeader={true} data={type2} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line'>
                     {/* <div className='tabel_type'><p>将要生产</p></div> */}
-                    <div className="type_table"> <DragSortingTable showHeader={false} data={type1} columns={columns} pagination={false} /></div>
+                    <div className="type_table"> <DragSortingTable moveLine={handleMove} showHeader={false} data={type1} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line'>
                     {/* <div className='tabel_type'><p>已完成生产</p></div> */}
-                    <div className="type_table"> <DragSortingTable showHeader={false} data={type3} columns={columns} pagination={false} /></div>
+                    <div className="type_table"> <DragSortingTable moveLine={handleMove} showHeader={false} data={type3} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line'>
                     {/* <div className='tabel_type'><p>生产异常</p></div> */}
-                    <div className="type_table"> <DragSortingTable showHeader={false} data={type4} columns={columns} /></div>
+                    <div className="type_table"> <DragSortingTable moveLine={handleMove} showHeader={false} data={type4} columns={columns} /></div>
                   </div>
-                </div>
+                </div> :
+                  <div className="table_container">
+                    <div className='table_line'>
+                      {/* <div className='tabel_type'><p>正在生产</p></div> */}
+                      <div className="type_table">
+                        <DragSortingTableMobile
+                          moveLine={handleMove}
+                          showHeader={true} data={type2}
+                          columns={columns} pagination={false} />
+                      </div>
+                    </div>
+                    <div className='table_line'>
+                      {/* <div className='tabel_type'><p>将要生产</p></div> */}
+                      <div className="type_table"> <DragSortingTableMobile moveLine={handleMove} showHeader={false} data={type1} columns={columns} pagination={false} /></div>
+                    </div>
+                    <div className='table_line'>
+                      {/* <div className='tabel_type'><p>已完成生产</p></div> */}
+                      <div className="type_table"> <DragSortingTableMobile moveLine={handleMove} showHeader={false} data={type3} columns={columns} pagination={false} /></div>
+                    </div>
+                    <div className='table_line'>
+                      {/* <div className='tabel_type'><p>生产异常</p></div> */}
+                      <div className="type_table"> <DragSortingTableMobile moveLine={handleMove} showHeader={false} data={type4} columns={columns} /></div>
+                    </div>
+                  </div>
+                }
               </div>
 
             </div>
-            <Pagination 
-            defaultCurrent={current}
-            // total={info.list&&info.list.total} 
-            total={25}
-            pageSize={10}
-            onChange={changePage} />
+            <Pagination
+              defaultCurrent={current}
+              total={info.list && info.list.total}
+              // total={25}
+              pageSize={10}
+              onChange={changePage} />
 
           </div>
 
@@ -1199,13 +1317,25 @@ const [current,setCurrent]=useState(1)
           visible={visible2}
           okText='确认'
           cancelText="取消"
-          onOk={() => setVisible2(false)}
+          onOk={handleOkNext}
           onCancel={() => setVisible2(false)}
           width={1080}
+          bodyStyle={{
+            height: '300px',
+            overflowY: 'scroll',
+          }}
         >
-          <DragSortingTable showHeader={true} columns={columns} data={type5} rowSelection={{
-            ...rowSelection,
-          }} />
+          <Table
+            columns={columns}
+            dataSource={type5}
+            rowSelection={{
+              ...rowSelection,
+            }}
+
+            // scroll={{y:'300px'}}
+            rowKey={(e) => e.order_id}
+          />
+
         </Modal>
         <Modal title='请选择日期'
           visible={visible3}
@@ -1268,4 +1398,5 @@ const [current,setCurrent]=useState(1)
 
   );
 };
-export default Together;
+export default connect(mapStateToProps, mapDispatchToProps)(Together)
+
