@@ -796,6 +796,104 @@ const Together = (props) => {
       ),
     },
     {
+      title: '长',
+      dataIndex: 'length',
+      key: 'length',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: length => (
+        <Tooltip placement="topLeft" title={length}>
+          {length}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '宽',
+      dataIndex: 'width',
+      key: 'width',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: width => (
+        <Tooltip placement="topLeft" title={width}>
+          {width}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '扣减数',
+      dataIndex: 'decuction_number',
+      key: 'decuction_number',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: decuction_number => (
+        <Tooltip placement="topLeft" title={decuction_number}>
+          {decuction_number}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '仓库',
+      dataIndex: 'store',
+      key: 'store',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: store => (
+        <Tooltip placement="topLeft" title={store}>
+          {store}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '是否抵消',
+      dataIndex: 'is_offset',
+      key: 'is_offset',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: is_offset => (
+        <Tooltip placement="topLeft" title={is_offset}>
+          {is_offset}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '线别名称',
+      dataIndex: 'code_materials',
+      key: 'code_materials',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: code_materials => (
+        <Tooltip placement="topLeft" title={code_materials}>
+          {code_materials}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '预计入库时间',
+      dataIndex: 'code_materials_befor',
+      key: 'code_materials_befor',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: code_materials_befor => (
+        <Tooltip placement="topLeft" title={code_materials_befor}>
+          {code_materials_befor}
+        </Tooltip>
+      ),
+    },
+    {
       title: '备注',
       dataIndex: 'comment26',
       key: 'comment26',
@@ -1016,6 +1114,7 @@ const Together = (props) => {
       date: dateTime,
       equipment_id: lineId,
     })
+    message.success("切换至本班成功！")
 
   }
   //下一班
@@ -1125,7 +1224,7 @@ const Together = (props) => {
                     backgroundColor: 'rgba(255, 255, 255, 1) ',
                     marginRight: 15
                   }}
-                  placeholder="请选择生产线"
+                  placeholder="请选择机器号"
                   optionFilterProp="children"
                   onChange={onChange2}
                   onSearch={onSearch}
@@ -1202,7 +1301,6 @@ const Together = (props) => {
                 </div> :
                   <div className="table_container">
                     <div className='table_line'>
-                      {/* <div className='tabel_type'><p>正在生产</p></div> */}
                       <div className="type_table">
                         <DragSortingTableMobile
                           moveLine={handleMove}
@@ -1211,15 +1309,12 @@ const Together = (props) => {
                       </div>
                     </div>
                     <div className='table_line'>
-                      {/* <div className='tabel_type'><p>将要生产</p></div> */}
                       <div className="type_table"> <DragSortingTableMobile moveLine={handleMove} showHeader={false} data={type1} columns={columns} pagination={false} /></div>
                     </div>
                     <div className='table_line'>
-                      {/* <div className='tabel_type'><p>已完成生产</p></div> */}
                       <div className="type_table"> <DragSortingTableMobile moveLine={handleMove} showHeader={false} data={type3} columns={columns} pagination={false} /></div>
                     </div>
                     <div className='table_line'>
-                      {/* <div className='tabel_type'><p>生产异常</p></div> */}
                       <div className="type_table"> <DragSortingTableMobile moveLine={handleMove} showHeader={false} data={type4} columns={columns} /></div>
                     </div>
                   </div>
