@@ -639,7 +639,20 @@ const clickColumn=(record)=>{
         </Tooltip>
       ),
     },
-
+    {
+      title: '交货方式',
+      dataIndex: 'delivery_type',
+      key: 'delivery_type',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: delivery_type => (
+        <Tooltip placement="topLeft" title={delivery_type}>
+          {delivery_type}
+        </Tooltip>
+      ),
+    },
     {
       title: '开始时间',
       dataIndex: 'start',
@@ -679,6 +692,20 @@ const clickColumn=(record)=>{
       render: complete_date => (
         <Tooltip placement="topLeft" title={complete_date}>
           {complete_date}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '条码物料名称',
+      dataIndex: 'code_materials_name',
+      key: 'code_materials_name',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: code_materials_name => (
+        <Tooltip placement="topLeft" title={code_materials_name}>
+          {code_materials_name}
         </Tooltip>
       ),
     },
@@ -906,20 +933,7 @@ const clickColumn=(record)=>{
         </Tooltip>
       ),
     },
-    {
-      title: '交货方式',
-      dataIndex: 'delivery_type',
-      key: 'delivery_type',
-      width: 100,
-      ellipsis: {
-        showTitle: false,
-      },
-      render: delivery_type => (
-        <Tooltip placement="topLeft" title={delivery_type}>
-          {delivery_type}
-        </Tooltip>
-      ),
-    },
+
     {
       title: '管材类型',
       dataIndex: 'pipe_type',
@@ -935,7 +949,7 @@ const clickColumn=(record)=>{
       ),
     },
     {
-      title: '行业（对应客户使用行业）',
+      title: '行业',
       dataIndex: 'customer_use_industry',
       key: 'customer_use_industry',
       width: 100,
@@ -948,20 +962,7 @@ const clickColumn=(record)=>{
         </Tooltip>
       ),
     },
-    {
-      title: '条码物料名称',
-      dataIndex: 'code_materials_name',
-      key: 'code_materials_name',
-      width: 100,
-      ellipsis: {
-        showTitle: false,
-      },
-      render: code_materials_name => (
-        <Tooltip placement="topLeft" title={code_materials_name}>
-          {code_materials_name}
-        </Tooltip>
-      ),
-    },
+
     {
       title: '备注',
       dataIndex: 'comment26',

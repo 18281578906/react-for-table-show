@@ -41,10 +41,13 @@ const FormModal = (props) => {
             {data.customer_name}
           </Form.Item>
           <Form.Item label="规格型号">
-            {data.sort}
+            {data.customer_model}
           </Form.Item>
           <Form.Item label="产品规格(厚*宽*长*只)">
             {data.product_model}
+          </Form.Item>
+          <Form.Item label="交货方式">
+            {data.delivery_type}
           </Form.Item>
           <Form.Item label="开始时间">
             {data.start}
@@ -54,6 +57,9 @@ const FormModal = (props) => {
           </Form.Item>
           <Form.Item label="完成时间">
             {data.complete_date}
+          </Form.Item>
+          <Form.Item label="条码物料名称">
+            {data.code_materials_name}
           </Form.Item>
           <Form.Item label="总平方数">
             {data.square}
@@ -101,20 +107,16 @@ const FormModal = (props) => {
           <Form.Item label="预计入库时间">
             {data.code_materials_befor}
           </Form.Item>
-          <Form.Item label="交货方式">
-            {data.delivery_type}
-          </Form.Item>
+
           <Form.Item label="管材类型">
             {data.pipe_type}
           </Form.Item>
 
-          <Form.Item label="行业（对应客户使用行业）">
+          <Form.Item label="行业">
             {data.customer_use_industry}
           </Form.Item>
 
-          <Form.Item label="条码物料名称">
-            {data.code_materials_name}
-          </Form.Item>
+       
           <Form.Item label="备注">
             {data.comment26}
           </Form.Item>
