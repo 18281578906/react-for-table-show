@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
-import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
+import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 // import { MenuOutlined } from '@ant-design/icons';
 import arrayMove from 'array-move';
 
@@ -32,6 +32,33 @@ const DragSortingTableMobile=(props)=>{
     return <SortableItem index={sort} {...restProps} />;
   };
 
+  //*******************判断双击的事件 */
+  //双击
+  let isClick = false;
+  // 点击次数
+  let clickNum = 0;
+
+  // 判断点击类型
+ const getClickCount = (params) => {
+   const doubleClick=props.clickColumn;
+    clickNum++;
+
+    // 毫秒内点击过后阻止执行定时器
+    if (isClick) {
+      return;
+    }
+    // 毫秒内第一次点击
+    isClick = true;
+    setTimeout(() => {
+      // 超过1次都属于双击
+      if (clickNum > 1) {
+        doubleClick && doubleClick(params);
+      }
+     clickNum = 0;
+     isClick = false;
+    }, 300);
+  };
+
     // const { dataSource } = this.state;
     const DraggableContainer = propsr => (
       <SortableContainer
@@ -55,7 +82,14 @@ const DragSortingTableMobile=(props)=>{
           },
         }}
         scroll={{y:'170px'}}
-
+        onRow={(record, index) => ({
+          index,
+          onClick:()=>getClickCount(record),
+        })}
+        rowClassName={'jijijfiodhfidhnvgidnhvijfnhjvfnfc'}
+      //   rowClassName={record => {
+      //     if (record.tag !== null&&record.status===1){ return 'table-color-dust';}
+      //  }}
       />
     );
 

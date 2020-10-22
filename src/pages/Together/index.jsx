@@ -9,6 +9,7 @@ import { mapStateToProps, mapDispatchToProps } from '../../redux/actionCreator'
 import { connect } from 'react-redux'
 import { sortableHandle } from 'react-sortable-hoc';
 import { MenuOutlined } from '@ant-design/icons';
+import FormModal from '../../component/FormModal';
 
 import { request } from '../../api/request'
 import moment from 'moment'
@@ -542,17 +543,28 @@ const Together = (props) => {
   // const showDelete = (record) => {
   // }
 
+
+  //点击行
+const [clickData,setClickedData]=useState({});
+const [visibleColumn,setVisibleColumn] =useState(false);
+const clickColumn=(record)=>{
+  setVisibleColumn(true);
+  setClickedData(record)
+  console.log(record);
+
+}
+
   const ActionRender = (text, record) => {
     const status = record.status;
     return (
       <div>
 
-        {  status === 3 ? <Button size="small" type="primary" onClick={() => showQC(record)}>QC</Button> : ''}
+        {  (status === 3||status === 2) ? <Button size="small" type="primary" onClick={() => showQC(record)}>QC</Button> : ''}
         {  status === 4 ? <Button size="small" type="primary" onClick={() => showReset(record)}>恢复</Button> : ''}
         {  status === 1 && !type2 ? <Button size="small" type="primary" onClick={() => showStart(record)}>开始</Button> : ''}
 
         {status === 2 ? <Button size="small" type="primary" onClick={() => showComplete(record)}>完成</Button> : ''}
-        { (status === 2) ? <Button size="small" danger onClick={() => showError(record)}>异常</Button> : ''}
+        { (status === 2||status === 1) ? <Button size="small" danger onClick={() => showError(record)}>异常</Button> : ''}
         { (status === 1 || status === 2 || status === 3) ? <Button size="small" danger onClick={() => showCard(record)}>二维码</Button> : ''}
         {/* {  status === 2 ? <Button size="small" type="primary" onClick={() => showDelete(record)}>删除</Button> : ''} */}
 
@@ -627,20 +639,7 @@ const Together = (props) => {
         </Tooltip>
       ),
     },
-    {
-      title: '交货日期',
-      dataIndex: 'customer_require_date',
-      key: 'customer_require_date',
-      width: 100,
-      ellipsis: {
-        showTitle: false,
-      },
-      render: customer_require_date => (
-        <Tooltip placement="topLeft" title={customer_require_date}>
-          {customer_require_date}
-        </Tooltip>
-      ),
-    },
+
     {
       title: '开始时间',
       dataIndex: 'start',
@@ -708,6 +707,20 @@ const Together = (props) => {
       render: square => (
         <Tooltip placement="topLeft" title={square}>
           {square}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '交货日期',
+      dataIndex: 'customer_require_date',
+      key: 'customer_require_date',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: customer_require_date => (
+        <Tooltip placement="topLeft" title={customer_require_date}>
+          {customer_require_date}
         </Tooltip>
       ),
     },
@@ -890,6 +903,62 @@ const Together = (props) => {
       render: code_materials_befor => (
         <Tooltip placement="topLeft" title={code_materials_befor}>
           {code_materials_befor}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '交货方式',
+      dataIndex: 'delivery_type',
+      key: 'delivery_type',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: delivery_type => (
+        <Tooltip placement="topLeft" title={delivery_type}>
+          {delivery_type}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '管材类型',
+      dataIndex: 'pipe_type',
+      key: 'pipe_type',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: pipe_type => (
+        <Tooltip placement="topLeft" title={pipe_type}>
+          {pipe_type}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '行业（对应客户使用行业）',
+      dataIndex: 'customer_use_industry',
+      key: 'customer_use_industry',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: customer_use_industry => (
+        <Tooltip placement="topLeft" title={customer_use_industry}>
+          {customer_use_industry}
+        </Tooltip>
+      ),
+    },
+    {
+      title: '条码物料名称',
+      dataIndex: 'code_materials_name',
+      key: 'code_materials_name',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: code_materials_name => (
+        <Tooltip placement="topLeft" title={code_materials_name}>
+          {code_materials_name}
         </Tooltip>
       ),
     },
@@ -1146,7 +1215,6 @@ const Together = (props) => {
       equipment_id: lineId,
     })
   }
-
   return (
     <Spin
       spinning={loading}
@@ -1284,38 +1352,33 @@ const Together = (props) => {
                 {props.isPc ? <div className="table_container">
                   <div className='table_line'>
                     {/* <div className='tabel_type'><p>正在生产</p></div> */}
-                    <div className="type_table"> <DragSortingTable moveLine={handleMove} showHeader={true} data={type2} columns={columns} pagination={false} /></div>
+                    <div className="type_table"> <DragSortingTable clickColumn={clickColumn} moveLine={handleMove} showHeader={true} data={type2} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line'>
                     {/* <div className='tabel_type'><p>将要生产</p></div> */}
-                    <div className="type_table"> <DragSortingTable moveLine={handleMove} showHeader={false} data={type1} columns={columns} pagination={false} /></div>
+                    <div className="type_table"> <DragSortingTable clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type1} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line'>
                     {/* <div className='tabel_type'><p>已完成生产</p></div> */}
-                    <div className="type_table"> <DragSortingTable moveLine={handleMove} showHeader={false} data={type3} columns={columns} pagination={false} /></div>
+                    <div className="type_table"> <DragSortingTable clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type3} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line'>
                     {/* <div className='tabel_type'><p>生产异常</p></div> */}
-                    <div className="type_table"> <DragSortingTable moveLine={handleMove} showHeader={false} data={type4} columns={columns} /></div>
+                    <div className="type_table"> <DragSortingTable clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type4} columns={columns} /></div>
                   </div>
                 </div> :
                   <div className="table_container">
                     <div className='table_line'>
-                      <div className="type_table">
-                        <DragSortingTableMobile
-                          moveLine={handleMove}
-                          showHeader={true} data={type2}
-                          columns={columns} pagination={false} />
-                      </div>
+                      <div className="type_table"> <DragSortingTableMobile clickColumn={clickColumn} moveLine={handleMove} showHeader={true} data={type2} columns={columns} pagination={false}/> </div>
                     </div>
                     <div className='table_line'>
-                      <div className="type_table"> <DragSortingTableMobile moveLine={handleMove} showHeader={false} data={type1} columns={columns} pagination={false} /></div>
+                      <div className="type_table"> <DragSortingTableMobile clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type1} columns={columns} pagination={false} /></div>
                     </div>
                     <div className='table_line'>
-                      <div className="type_table"> <DragSortingTableMobile moveLine={handleMove} showHeader={false} data={type3} columns={columns} pagination={false} /></div>
+                      <div className="type_table"> <DragSortingTableMobile  clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type3} columns={columns} pagination={false} /></div>
                     </div>
                     <div className='table_line'>
-                      <div className="type_table"> <DragSortingTableMobile moveLine={handleMove} showHeader={false} data={type4} columns={columns} /></div>
+                      <div className="type_table"> <DragSortingTableMobile clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type4} columns={columns} /></div>
                     </div>
                   </div>
                 }
@@ -1486,6 +1549,21 @@ const Together = (props) => {
         >
           <RangePicker style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime3} format={"YYYY-MM-DD"} />
         </Modal>
+
+
+     
+        <FormModal 
+        clickData={clickData}
+        type2={type2}
+        showQC={showQC}
+        showReset={showReset}
+        showStart={showStart}
+        showComplete={showComplete}
+        showError={showError}
+        showCard={showCard}
+        visibleColumn={visibleColumn}
+        setVisibleColumn={setVisibleColumn}
+        />
       </div>
 
     </Spin>

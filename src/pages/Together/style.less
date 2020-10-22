@@ -219,14 +219,18 @@ display: flex;
   .tabel_type{
     width:90px;
     line-height: 180px;
+    position: relative;
     top:0px;
     left:0px;
-
     text-align: center;
     font-size: 16px;
     p{
       margin-bottom: 0em;
     }
+  }
+  .tabel_type:nth-child(2), .tabel_type:nth-child(3), .tabel_type:nth-child(4) p{
+    position: relative;
+    top: -55px;
   }
 }
 .table_container{
@@ -331,3 +335,7 @@ display: flex;
     margin-left: 0;
 }
 
+//标记
+.table-color-dust {
+  background-color: #f5222db7;
+}

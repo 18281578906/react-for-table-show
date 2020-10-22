@@ -78,6 +78,7 @@ const type = 'DragableBodyRow';
 //  console.log(props.data)
 
     return (
+      <>
       <DndProvider manager={manager.current.dragDropManager}>
         <Table
           columns={columns}
@@ -86,6 +87,7 @@ const type = 'DragableBodyRow';
           onRow={(record, index) => ({
             index,
             moveRow,
+            onDoubleClick:()=>props.clickColumn(record),
           })}
           showHeader={props.showHeader}
           pagination={props.pagination}
@@ -93,8 +95,14 @@ const type = 'DragableBodyRow';
           scroll={{y:'170px'}}
           // bordered
           rowKey={(e)=>e.order_id}
+
+          rowClassName={record => {
+            if (record.tag !== null&&record.status===1) return 'table-color-dust';
+         }}
         />
       </DndProvider>
+
+      </>
     );
   };
   export default DragSortingTable;
