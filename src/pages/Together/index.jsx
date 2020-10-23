@@ -507,18 +507,23 @@ const Together = (props) => {
       order_id: record.order_id
     })
     setQCDate(record.order_id)
+    setVisibleColumn(false)
   }
 
   const showReset = (record) => {
     handleRenew({
       order_id: record.order_id,
     })
+    setVisibleColumn(false)
+
   }
 
   const showComplete = (record) => {
     handleCOmplete({
       order_id: record.order_id
     })
+    setVisibleColumn(false)
+
   }
 
   const showError = (record) => {
@@ -526,17 +531,23 @@ const Together = (props) => {
       order_id: record.order_id,
       abnormal_comment: record.abnormal_comment
     })
+    setVisibleColumn(false)
+
   }
 
   const showCard = (record) => {
     setShowWeima(record.feed_id)
-    showDialog(true)
+    setVisibleColumn(false)
+    showDialog(true);
+
   }
 
   const showStart = (record) => {
     handleStart({
       order_id: record.order_id,
     })
+    setVisibleColumn(false)
+
   }
 
   //删除
