@@ -82,6 +82,9 @@ const Together = (props) => {
 
     setIsLight(data.shift === '白班' ? 1 : 2)
     setTime(data.date);
+    const ee=new Date().getFullYear()+'/'+data.date.split('月')[0]+'/'+data.date.split('月')[1].split('日')[0];
+    console.log(new Date(ee).getTime()/1000);
+    setDateTime(new Date(ee).getTime()/1000)
     const mm = data.list && data.list.list[0] && data.list.list[0].task;
     setTask(data.list && data.list.list[0] && data.list.list[0])
     if (mm) {
