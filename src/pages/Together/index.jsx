@@ -85,29 +85,29 @@ const Together = (props) => {
     const mm = data.list && data.list.list[0] && data.list.list[0].task;
     setTask(data.list && data.list.list[0] && data.list.list[0])
     if (mm) {
-      mm.forEach((e,index) => {
+      mm.forEach((e, index) => {
 
         if (Number(e.status) === 1) {
-          e.item.forEach((item,index)=>{
-            item.index=index;
+          e.item.forEach((item, index) => {
+            item.index = index;
           })
           setType1(e.item)
         }
         if (Number(e.status) === 2) {
-          e.item.forEach((item,index)=>{
-            item.index=index;
+          e.item.forEach((item, index) => {
+            item.index = index;
           })
           setType2(e.item)
         }
         if (Number(e.status) === 3) {
-          e.item.forEach((item,index)=>{
-            item.index=index;
+          e.item.forEach((item, index) => {
+            item.index = index;
           })
           setType3(e.item)
         }
         if (Number(e.status) === 4) {
-          e.item.forEach((item,index)=>{
-            item.index=index;
+          e.item.forEach((item, index) => {
+            item.index = index;
           })
           setType4(e.item)
         }
@@ -556,26 +556,26 @@ const Together = (props) => {
 
 
   //点击行
-const [clickData,setClickedData]=useState({});
-const [visibleColumn,setVisibleColumn] =useState(false);
-const clickColumn=(record)=>{
-  setVisibleColumn(true);
-  setClickedData(record)
-  console.log(record);
+  const [clickData, setClickedData] = useState({});
+  const [visibleColumn, setVisibleColumn] = useState(false);
+  const clickColumn = (record) => {
+    setVisibleColumn(true);
+    setClickedData(record)
+    console.log(record);
 
-}
+  }
 
   const ActionRender = (text, record) => {
     const status = record.status;
     return (
       <div>
 
-        {  (status === 3||status === 2) ? <Button size="small" type="primary" onClick={() => showQC(record)}>QC</Button> : ''}
+        {  (status === 3 || status === 2) ? <Button size="small" type="primary" onClick={() => showQC(record)}>QC</Button> : ''}
         {  status === 4 ? <Button size="small" type="primary" onClick={() => showReset(record)}>恢复</Button> : ''}
         {  status === 1 && !type2 ? <Button size="small" type="primary" onClick={() => showStart(record)}>开始</Button> : ''}
 
         {status === 2 ? <Button size="small" type="primary" onClick={() => showComplete(record)}>完成</Button> : ''}
-        { (status === 2||status === 1) ? <Button size="small" danger onClick={() => showError(record)}>异常</Button> : ''}
+        { (status === 2 || status === 1) ? <Button size="small" danger onClick={() => showError(record)}>异常</Button> : ''}
         { (status === 1 || status === 2 || status === 3) ? <Button size="small" danger onClick={() => showCard(record)}>二维码</Button> : ''}
         {/* {  status === 2 ? <Button size="small" type="primary" onClick={() => showDelete(record)}>删除</Button> : ''} */}
 
@@ -1234,6 +1234,7 @@ const clickColumn=(record)=>{
       <div className="together2">
         <div className="menu-header">
           <div className="header-top">
+
             <div className="top-time">
               {time && <DatePicker style={{ width: '160px' }} onChange={changeTime1} defaultValue={moment('2020年' + time, dateFormat)} format={dateFormat} />}            </div>
             <div className="top-time">{info.week}</div>
@@ -1262,8 +1263,18 @@ const clickColumn=(record)=>{
 
               </Select>
             </div>
+            <div className="top-time" style={{
+              width: ' 45%',
+              textAlign: 'right'
+            }}>
+              生产二部分条实时显示
+            </div>
+          </div>
+          <div>
+
           </div>
           <div className="header_center">
+
             <div className="center_select line">
               <Select
                 showSearch
@@ -1282,9 +1293,10 @@ const clickColumn=(record)=>{
                 )}
               </Select>
             </div>
-            <div className="center_number line"> 完成率({
-              (rateLine === '旧线') ? info.complete_rate && info.complete_rate[0].rate : info.complete_rate && info.complete_rate[1].rate
-            })
+            <div className="center_number line">
+              完成率({
+                (rateLine === '旧线') ? info.complete_rate && info.complete_rate[0].rate : info.complete_rate && info.complete_rate[1].rate
+              })
             <Button type='primary' className='btn' onClick={() => setVisible3(true)}>导出为Excel</Button>
             </div>
           </div>
@@ -1381,13 +1393,13 @@ const clickColumn=(record)=>{
                 </div> :
                   <div className="table_container">
                     <div className='table_line'>
-                      <div className="type_table"> <DragSortingTableMobile clickColumn={clickColumn} moveLine={handleMove} showHeader={true} data={type2} columns={columns} pagination={false}/> </div>
+                      <div className="type_table"> <DragSortingTableMobile clickColumn={clickColumn} moveLine={handleMove} showHeader={true} data={type2} columns={columns} pagination={false} /> </div>
                     </div>
                     <div className='table_line'>
                       <div className="type_table"> <DragSortingTableMobile clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type1} columns={columns} pagination={false} /></div>
                     </div>
                     <div className='table_line'>
-                      <div className="type_table"> <DragSortingTableMobile  clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type3} columns={columns} pagination={false} /></div>
+                      <div className="type_table"> <DragSortingTableMobile clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type3} columns={columns} pagination={false} /></div>
                     </div>
                     <div className='table_line'>
                       <div className="type_table"> <DragSortingTableMobile clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type4} columns={columns} /></div>
@@ -1509,14 +1521,14 @@ const clickColumn=(record)=>{
         </Modal>
         <Modal title='请选择日期'
           visible={visible3}
-          okText='下载异常清单'
-          cancelText="下载已完成清单"
+          // okText='下载生产异常清单'
+          // cancelText="下载生产已完成清单"
           // onOk={handleOk}
           onCancel={() => setVisible3(false)}
-          width={500}
+          width={600}
           footer={<div>
-            <Button onClick={handleOk}>下载异常清单</Button>
-            <Button onClick={handleCancel}>下载已完成清单</Button>
+            <Button onClick={handleOk}>下载生产异常清单</Button>
+            <Button onClick={handleCancel}>下载生产已完成清单</Button>
             <Button onClick={handleQc}>下载qc数据</Button>
             <Button onClick={() => setVisible3(false)}>取消</Button>
           </div>}
@@ -1563,18 +1575,18 @@ const clickColumn=(record)=>{
         </Modal>
 
 
-     
-        <FormModal 
-        clickData={clickData}
-        type2={type2}
-        showQC={showQC}
-        showReset={showReset}
-        showStart={showStart}
-        showComplete={showComplete}
-        showError={showError}
-        showCard={showCard}
-        visibleColumn={visibleColumn}
-        setVisibleColumn={setVisibleColumn}
+
+        <FormModal
+          clickData={clickData}
+          type2={type2}
+          showQC={showQC}
+          showReset={showReset}
+          showStart={showStart}
+          showComplete={showComplete}
+          showError={showError}
+          showCard={showCard}
+          visibleColumn={visibleColumn}
+          setVisibleColumn={setVisibleColumn}
         />
       </div>
 
