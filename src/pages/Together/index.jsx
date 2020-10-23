@@ -55,7 +55,7 @@ const Together = (props) => {
   //下载时间
   const [changeTime, setChangeTime] = useState(null)
   const [showWeima, setShowWeima] = useState(null)
-  //导出维护时间
+  //导出维护时间xua
   const [changeTime3, setChangeTime3] = useState({ start: null, end: null })
 
   //导出异常时间
@@ -83,8 +83,8 @@ const Together = (props) => {
     setIsLight(data.shift === '白班' ? 1 : 2)
     setTime(data.date);
     const ee=new Date().getFullYear()+'/'+data.date.split('月')[0]+'/'+data.date.split('月')[1].split('日')[0];
-    console.log(new Date(ee).getTime()/1000);
     setDateTime(new Date(ee).getTime()/1000)
+    setLineId(data.equipment[0].id)
     const mm = data.list && data.list.list[0] && data.list.list[0].task;
     setTask(data.list && data.list.list[0] && data.list.list[0])
     if (mm) {
@@ -165,7 +165,7 @@ const Together = (props) => {
     message.success('状态更新成功！')
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId,
@@ -185,7 +185,7 @@ const Together = (props) => {
     message.success('状态更新成功！')
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId,
@@ -205,7 +205,7 @@ const Together = (props) => {
     message.success('状态更新成功！');
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId,
@@ -225,7 +225,7 @@ const Together = (props) => {
     message.success('状态更新成功！');
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId,
@@ -359,7 +359,7 @@ const Together = (props) => {
     await getWeihu(obj);
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId,
@@ -379,7 +379,7 @@ const Together = (props) => {
     await getQc(obj);
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId,
@@ -392,7 +392,7 @@ const Together = (props) => {
   useEffect(() => {
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId
@@ -409,7 +409,7 @@ const Together = (props) => {
     setLineId(value);
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: value,
       date: dateTime,
       equipment_id: value
@@ -420,7 +420,7 @@ const Together = (props) => {
     setIsLight(value)
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: value,
       date: dateTime,
       equipment_id: lineId
@@ -471,7 +471,7 @@ const Together = (props) => {
       setDateTime(timePicker)
       handleGetInfo({
         page: current,
-        pageSize: 10,
+        pageSize: 1,
         day_shift: isLight,
         date: timePicker,
         equipment_id: lineId
@@ -485,7 +485,7 @@ const Together = (props) => {
     const val = e.target.value;
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId,
@@ -496,7 +496,7 @@ const Together = (props) => {
   const changeSearch2 = (e) => {
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId,
@@ -1163,7 +1163,7 @@ const Together = (props) => {
     setCurrent(e);
     handleGetInfo({
       page: e,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId,
@@ -1175,7 +1175,7 @@ const Together = (props) => {
     setVisible2(true);
     handleGetInfoNext({
       page: 1,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight === 1 ? 2 : 1,
       date: isLight === 1 ? dateTime : dateTime + 24 * 60 * 60,
       equipment_id: lineId,
@@ -1193,7 +1193,7 @@ const Together = (props) => {
     await addNext(obj);
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId,
@@ -1207,7 +1207,8 @@ const Together = (props) => {
     handleAddNext({
       order_id: nextPre,
       date: dateTime,
-      day_shift: isLight
+      day_shift: isLight,
+      equment_id:lineId
     })
   }
 
@@ -1224,7 +1225,7 @@ const Together = (props) => {
     await moveLine(obj);
     handleGetInfo({
       page: current,
-      pageSize: 10,
+      pageSize: 1,
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId,
@@ -1416,7 +1417,7 @@ const Together = (props) => {
               defaultCurrent={current}
               total={info.list && info.list.total}
               // total={25}
-              pageSize={10}
+              pageSize={1}
               onChange={changePage} />
 
           </div>
