@@ -1264,7 +1264,7 @@ const Together = (props) => {
               </Select>
             </div>
             <div className="top-time" style={{
-              width: ' 45%',
+              width: '30%',
               textAlign: 'right'
             }}>
               生产二部分条实时显示
@@ -1297,7 +1297,7 @@ const Together = (props) => {
               完成率({
                 (rateLine === '旧线') ? info.complete_rate && info.complete_rate[0].rate : info.complete_rate && info.complete_rate[1].rate
               })
-            <Button type='primary' className='btn' onClick={() => setVisible3(true)}>导出为Excel</Button>
+            <Button type='primary' className='btn' onClick={() => setVisible3(true)}>导出生产数据</Button>
             </div>
           </div>
         </div>
