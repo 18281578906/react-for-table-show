@@ -71,6 +71,8 @@ const Together = (props) => {
   const [show4, setShow4] = useState(false)
   //下一班的将要生产
   const [nextPre, setNextPre] = useState(null)
+  //数据
+  const [dataSource,setDataSource]=useState(null)
   const handleGetInfo = async (obj) => {
     setLoading(true)
     const data = await getInfo(obj);
@@ -79,12 +81,11 @@ const Together = (props) => {
     setType2(null)
     setType3(null)
     setType4(null)
-
+    setDataSource(data)
     setIsLight(data.shift === '白班' ? 1 : 2)
     setTime(data.date);
     const ee=new Date().getFullYear()+'/'+data.date.split('月')[0]+'/'+data.date.split('月')[1].split('日')[0];
     setDateTime(new Date(ee).getTime()/1000)
-    setLineId(data.equipment[0].id)
     const mm = data.list && data.list.list[0] && data.list.list[0].task;
     setTask(data.list && data.list.list[0] && data.list.list[0])
     if (mm) {
@@ -168,7 +169,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: lineId,
+      // equipment_id: lineId,
     })
   }
 
@@ -188,7 +189,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: lineId,
+      // equipment_id: lineId,
     })
   }
 
@@ -208,7 +209,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: lineId,
+      // equipment_id: lineId,
     })
   }
 
@@ -228,7 +229,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: lineId,
+      // equipment_id: lineId,
     })
 
   }
@@ -362,7 +363,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: lineId,
+      // equipment_id: lineId,
     })
   }
 
@@ -382,7 +383,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: lineId,
+      // equipment_id: lineId,
     })
     message.success('更新成功！')
   }
@@ -395,7 +396,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: lineId
+      // equipment_id: lineId
     });
   }, [])
 
@@ -405,7 +406,8 @@ const Together = (props) => {
     setRateLine(value)
   }
 
-  function onChange2(value) {
+  const onChange2=(value)=> {
+    console.log(value)
     setLineId(value);
     handleGetInfo({
       page: current,
@@ -423,7 +425,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: value,
       date: dateTime,
-      equipment_id: lineId
+      // equipment_id: lineId
     })
   }
 
@@ -474,7 +476,7 @@ const Together = (props) => {
         pageSize: 1,
         day_shift: isLight,
         date: timePicker,
-        equipment_id: lineId
+        // equipment_id: lineId
       })
     }
 
@@ -488,7 +490,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: lineId,
+      // equipment_id: lineId,
       search: val
     })
   }
@@ -499,7 +501,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: lineId,
+      // equipment_id: lineId,
       search: e
     })
   }
@@ -1166,7 +1168,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: lineId,
+      // equipment_id: lineId,
     })
 
   }
@@ -1178,7 +1180,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight === 1 ? 2 : 1,
       date: isLight === 1 ? dateTime : dateTime + 24 * 60 * 60,
-      equipment_id: lineId,
+      equipment_id: lineId||dataSource.list&&dataSource.list.list[0]&&dataSource.list.list[0].id,
     })
 
   }
@@ -1196,7 +1198,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: lineId,
+      // equipment_id: lineId,
     })
     message.success("切换至本班成功！")
 
@@ -1228,7 +1230,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: lineId,
+      // equipment_id: lineId,
     })
   }
   return (
@@ -1327,7 +1329,7 @@ const Together = (props) => {
                   filterOption={(input, option) =>
                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
-                  value={lineId}
+                  // value={lineId}
                 >
                   {info.equipment && info.equipment.map(e => <Option key={e.name} value={e.id}>{e.name}</Option>
                   )}
