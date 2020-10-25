@@ -97,7 +97,7 @@ const type = 'DragableBodyRow';
           rowKey={(e)=>e.order_id}
 
           rowClassName={record => {
-            if (record.tag !== null&&record.status===1) return 'table-color-dust';
+            if (record.tag!==''&&record.status===1) return 'table-color-dust';
          }}
         />
       </DndProvider>

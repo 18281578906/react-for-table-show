@@ -486,7 +486,7 @@ const Together = (props) => {
   const changeSearch = (e) => {
     const val = e.target.value;
     handleGetInfo({
-      page: current,
+      page: 1,
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
@@ -497,7 +497,7 @@ const Together = (props) => {
 
   const changeSearch2 = (e) => {
     handleGetInfo({
-      page: current,
+      page: 1,
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
@@ -1415,12 +1415,15 @@ const Together = (props) => {
               </div>
 
             </div>
-            <Pagination
+            {
+              info.list && info.list.total&&  <Pagination
               defaultCurrent={current}
               total={info.list && info.list.total}
               // total={25}
               pageSize={1}
               onChange={changePage} />
+            }
+          
 
           </div>
 
