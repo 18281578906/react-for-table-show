@@ -72,7 +72,7 @@ const Together = (props) => {
   //下一班的将要生产
   const [nextPre, setNextPre] = useState(null)
   //数据
-  const [dataSource,setDataSource]=useState(null)
+  const [dataSource, setDataSource] = useState(null)
   const handleGetInfo = async (obj) => {
     setLoading(true)
     const data = await getInfo(obj);
@@ -84,8 +84,8 @@ const Together = (props) => {
     setDataSource(data)
     setIsLight(data.shift === '白班' ? 1 : 2)
     setTime(data.date);
-    const ee=new Date().getFullYear()+'/'+data.date.split('月')[0]+'/'+data.date.split('月')[1].split('日')[0];
-    setDateTime(new Date(ee).getTime()/1000)
+    const ee = new Date().getFullYear() + '/' + data.date.split('月')[0] + '/' + data.date.split('月')[1].split('日')[0];
+    setDateTime(new Date(ee).getTime() / 1000)
     const mm = data.list && data.list.list[0] && data.list.list[0].task;
     setTask(data.list && data.list.list[0] && data.list.list[0])
     if (mm) {
@@ -299,6 +299,22 @@ const Together = (props) => {
     }
   }
 
+  const handleGetHadCompletem = async (obj) => {
+    const data = await getHadComplete(obj);
+    if (Object.keys(data).length > 0) {
+      setLoading(true)
+
+      const ali = document.createElement('a');
+      ali.download = "机器生产数据导出";
+      ali.href = data.file;
+      const event = new MouseEvent('click');
+      ali.dispatchEvent(event);
+      setLoading(false);
+    }
+    else {
+      message.error('当前时间暂无数据')
+    }
+  }
   //下载 异常清单
   const getHadError = (params) => {
     return request({
@@ -406,7 +422,7 @@ const Together = (props) => {
     setRateLine(value)
   }
 
-  const onChange2=(value)=> {
+  const onChange2 = (value) => {
     console.log(value)
     setLineId(value);
     handleGetInfo({
@@ -1024,7 +1040,16 @@ const Together = (props) => {
   const handleCancel = () => {
     setVisible3(false)
     handleGetHadComplete({
-      date: changeTime
+      date: changeTime,
+
+    })
+  }
+  const handleCancelm = () => {
+    setVisible3(false)
+    handleGetHadCompletem({
+      date: dateTime,
+      day_shift: isLight,
+      equment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id)
     })
   }
 
@@ -1180,7 +1205,7 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight === 1 ? 2 : 1,
       date: isLight === 1 ? dateTime : dateTime + 24 * 60 * 60,
-      equipment_id: lineId||dataSource.list&&dataSource.list.list[0]&&dataSource.list.list[0].id,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
     })
 
   }
@@ -1210,7 +1235,7 @@ const Together = (props) => {
       order_id: nextPre,
       date: dateTime,
       day_shift: isLight,
-      equment_id:lineId
+      equment_id: lineId
     })
   }
 
@@ -1329,7 +1354,7 @@ const Together = (props) => {
                   filterOption={(input, option) =>
                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
-                  // value={lineId}
+                // value={lineId}
                 >
                   {info.equipment && info.equipment.map(e => <Option key={e.name} value={e.id}>{e.name}</Option>
                   )}
@@ -1370,7 +1395,9 @@ const Together = (props) => {
 
                 <div className='product_name line_input'>{task && task.name}</div>
                 {task && <div className='success_percent line_input'>完成率({task.rate})</div>
-                }              </div>
+                }
+                <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={handleCancelm}>本机器生产数据导出</Button>
+              </div>
               <div className='table_right'>
                 <div className="table_container_left">
                   <div className='tabel_type'><p>正在生产</p></div>
@@ -1416,14 +1443,14 @@ const Together = (props) => {
 
             </div>
             {
-              info.list && info.list.total&&  <Pagination
-              defaultCurrent={current}
-              total={info.list && info.list.total}
-              // total={25}
-              pageSize={1}
-              onChange={changePage} />
+              info.list && info.list.total && <Pagination
+                defaultCurrent={current}
+                total={info.list && info.list.total}
+                // total={25}
+                pageSize={1}
+                onChange={changePage} />
             }
-          
+
 
           </div>
 
@@ -1497,6 +1524,12 @@ const Together = (props) => {
               <Input />
             </Form.Item>
             <Form.Item name="user" label="检验员">
+              <Input />
+            </Form.Item>
+            <Form.Item name="scrap" label="正常报废（平方米）">
+              <Input />
+            </Form.Item>
+            <Form.Item name="scrap_anomaly" label="异常报废（平方米）">
               <Input />
             </Form.Item>
             <Form.Item name="comment" label="备注" >
