@@ -90,6 +90,8 @@ const DragSortingTableMobile = (props) => {
       })}
       rowClassName={record => {
         if (record.tag !== '' && record.status === 1) { return 'table-color-dust'; }
+        if (record.tag !== '' && record.status === 1) return 'table-yellow-dust';
+
       }}
     />
   );

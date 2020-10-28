@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import { sortableHandle } from 'react-sortable-hoc';
 import { MenuOutlined } from '@ant-design/icons';
 import FormModal from '../../component/FormModal';
-
+import HeaderAccount from '../../component/HeaderAccount'
 import { request } from '../../api/request'
 import moment from 'moment'
 
@@ -25,6 +25,7 @@ const { Search } = Input;
 const { RangePicker } = DatePicker;
 
 const Together = (props) => {
+  //登录人员  密码88888为管理员 密码123456为基本用户
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
@@ -60,6 +61,8 @@ const Together = (props) => {
 
   //导出异常时间
   const [changeTime4, setChangeTime4] = useState({ start: null, end: null })
+  const [changeTime5, setChangeTime5] = useState({ start: null, end: null })
+
   //显示二维码
   const [showDislog, showDialog] = useState(false)
   //qc数据
@@ -69,6 +72,9 @@ const Together = (props) => {
   const [show3, setShow3] = useState(false)
   //异常导出
   const [show4, setShow4] = useState(false)
+  //本机器
+  const [show5, setShow5] = useState(false)
+
   //下一班的将要生产
   const [nextPre, setNextPre] = useState(null)
   //数据
@@ -314,7 +320,7 @@ const Together = (props) => {
       setLoading(true)
 
       const ali = document.createElement('a');
-      ali.download =actionName;
+      ali.download = actionName;
       ali.href = data.file;
       const event = new MouseEvent('click');
       ali.dispatchEvent(event);
@@ -395,19 +401,19 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId,
     })
+    message.success('状态更新成功！')
+
   }
   const handleGetStop = async (obj) => {
-    console.log(obj);
     await getStop(obj);
     handleGetInfo({
       page: current,
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId,
     })
+    message.success('状态更新成功！')
   }
 
   //qc更新
@@ -441,6 +447,9 @@ const Together = (props) => {
       date: dateTime,
       // equipment_id: lineId
     });
+    console.log(props);
+
+
   }, [])
 
   const { Option } = Select;
@@ -1074,13 +1083,19 @@ const Together = (props) => {
 
     })
   }
-  const handleCancelm = () => {
-    setVisible3(false)
-    handleGetHadCompletem({
-      date: dateTime,
-      day_shift: isLight,
-      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id)
-    })
+  const handleCancelm = (time) => {
+    if (time.start) {
+      setVisible3(false)
+      handleGetHadCompletem({
+        date: time,
+        day_shift: isLight,
+        equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id)
+      })
+    }
+    else {
+      message.error('请先选择时间范围')
+    }
+
   }
 
   //qc
@@ -1127,6 +1142,17 @@ const Together = (props) => {
       setChangeTime4({ start, end })
     } else {
       setChangeTime4({ start: null, end: null })
+    }
+
+  }
+  //选择异常时间
+  const handleChangeTime5 = (e) => {
+    if (e) {
+      const start = e[0].format('YYYY-MM-DD');
+      const end = e[1].format('YYYY-MM-DD');
+      setChangeTime5({ start, end })
+    } else {
+      setChangeTime5({ start: null, end: null })
     }
 
   }
@@ -1219,11 +1245,18 @@ const Together = (props) => {
     setShow4(false);
     handledownloadWeihu4(changeTime4)
   }
+  const handleOk5 = async () => {
+    setShow5(false);
+    handleCancelm(changeTime5)
+  }
   const handleCancel3 = () => {
     setShow3(false)
   }
   const handleCancel4 = () => {
     setShow4(false)
+  }
+  const handleCancel5 = () => {
+    setShow5(false)
   }
   const changePage = (e) => {
     setCurrent(e);
@@ -1312,14 +1345,14 @@ const Together = (props) => {
     const val = e.target.value;
     setActionName(val)
   }
-  const blurActionANme=async(e)=>{
+  const blurActionANme = async (e) => {
     const val = e.target.value;
     console.log(val);
     await getActionName({
       day_shift: isLight,
       date: dateTime,
       equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
-      name:val
+      name: val
     })
 
   }
@@ -1327,7 +1360,9 @@ const Together = (props) => {
     <Spin
       spinning={loading}
     >
+      <HeaderAccount />
       <div className="together2">
+
         <div className="menu-header">
           <div className="header-top">
 
@@ -1461,9 +1496,10 @@ const Together = (props) => {
                 <div className='product_name line_input'>{task && task.name}</div>
                 {task && <div className='success_percent line_input'>完成率({task.rate})</div>
                 }
-                <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={handleCancelm}>本机器生产数据导出</Button>
-                <Input placeholder="请输入操作人员姓名" className='line_input' value={actionName} onBlur={blurActionANme} onChange={changeActionName} />
-
+                <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={() => setShow5(true)}>本机器生产数据导出</Button>
+                <p style={{ margin: '0', position: 'relative', marginLeft: '10px', color: '#4e4b4b' }}>操作师傅: {props.info === '123456' && actionName}</p>
+                {props.info === '888888' && <Input placeholder="请输入操作人员姓名" className='line_input2' value={actionName} onBlur={blurActionANme} onChange={changeActionName} />
+                }
               </div>
               <div className='table_right'>
                 <div className="table_container_left">
@@ -1671,7 +1707,16 @@ const Together = (props) => {
         >
           <RangePicker style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime4} format={"YYYY-MM-DD"} />
         </Modal>
-
+        <Modal title='选择本机器生产数据时间'
+          visible={show5}
+          okText='导出'
+          cancelText="取消"
+          onOk={handleOk5}
+          onCancel={handleCancel5}
+          width={500}
+        >
+          <RangePicker style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime5} format={"YYYY-MM-DD"} />
+        </Modal>
         <Modal title='请选择导出维护时间'
           visible={show3}
           okText='导出'
@@ -1712,7 +1757,7 @@ const Together = (props) => {
         />
       </div>
 
-    </Spin>
+    </Spin >
 
 
   );

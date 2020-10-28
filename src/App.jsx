@@ -15,7 +15,7 @@ import './App.css'
 
 
 //组件
-// import Login from './pages/Login'
+import Login from './pages/Login'
 import { useEffect } from 'react'
 
 function _App(props) {
@@ -43,7 +43,7 @@ function _App(props) {
             if (Object.keys(JSON.parse(localStorage.getItem('loginInfo')))[0]) {
                 props.getInfo(JSON.parse(localStorage.getItem('loginInfo')))
             }
-        }else{
+        } else {
             props.getInfo({})
         }
     }, [props.IsPC])
@@ -51,7 +51,7 @@ function _App(props) {
         <>
             <Router>
                 <Switch>
-                    {/* <Route path='/login' exact component={Login}></Route> */}
+                    <Route path='/login' exact component={Login}></Route>
                     <Route path='/' exact component={BaseLayout} ></Route>
                     <Redirect to="/404" />
                 </Switch>

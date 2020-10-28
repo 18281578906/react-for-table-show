@@ -1,13 +1,13 @@
-import React,{useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { mapStateToProps, mapDispatchToProps } from '../../redux/actionCreator'
 import { connect } from 'react-redux'
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LockOutlined } from '@ant-design/icons';
 import {
   Input, Button, Form, message,
 } from 'antd';
 import './style.less';
-import request from '../../api/request';
+// import request from '../../api/request';
 import 'react-photo-view/dist/index.css';
 const layout = {
   labelCol: { span: 4 },
@@ -16,33 +16,32 @@ const layout = {
 };
 
 const LoginPage = (props) => {
-  const [width,setWidth]=useState('40%')
+  const [width, setWidth] = useState('40%')
 
   const history = useHistory();
-  const login = async (account, password) => {
-    return await request({
-      method: 'post',
-      url: '/merchant/v1/login',
-      params: {
-        account,
-        password,
-      }
-    })
-  }
+  // const login = async (account, password) => {
+  //   return await request({
+  //     method: 'post',
+  //     url: '/merchant/v1/login',
+  //     params: {
+  //       account,
+  //       password,
+  //     }
+  //   })
+  // }
 
   const onFinish = async (values) => {
-    const { username, password } = values;
+    const { password } = values;
     // const result = await login(username, password);
-    const result=true;
+    const result = password;
     if (result) {
       history.push('/');
       localStorage.setItem('loginInfo', JSON.stringify(result));
       props.getInfo(result)
       window.location.reload('/');
       message.success('登录成功！')
-
     }
-    else{
+    else {
       message.error('密码或用户名错误！')
     }
   };
@@ -50,18 +49,18 @@ const LoginPage = (props) => {
   const onFinishFailed = (err) => {
     console.log('err', err);
   };
-useEffect(() => {
-  if(props.isPc===true){
-    setWidth('400px')
-  }else{
-    setWidth('40% ')
+  useEffect(() => {
+    if (props.isPc === true) {
+      setWidth('400px')
+    } else {
+      setWidth('40% ')
 
-  }
-}, [props.isPc])
+    }
+  }, [props.isPc])
   return (
     <div className="page-login">
       <div className="login-wrap">
-        <div className="login-box" style={{width}}>
+        <div className="login-box" style={{ width }}>
           <Form
             className="login-form"
             onFinish={onFinish}
@@ -69,7 +68,7 @@ useEffect(() => {
             {...layout}
           >
 
-            <Form.Item
+            {/* <Form.Item
               label="账号"
               name="username"
               rules={[{ required: true, message: '请输入用户名' }]}
@@ -78,7 +77,7 @@ useEffect(() => {
                 prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
                 placeholder="用户名"
               />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item
               label="密码"
               name="password"
