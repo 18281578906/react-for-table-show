@@ -637,8 +637,8 @@ const Together = (props) => {
       dataIndex: 'sort',
       key: 'sort',
       width: 100,
-      className: 'drag-visible',
-      render: (text, record, index) => <span> <DragHandle /> {text}</span>
+      // className: 'drag-visible',
+      render: (text, record, index) => <div><span> <DragHandle /> {text}</span></div>
 
     },
     {
