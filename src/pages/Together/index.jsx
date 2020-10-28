@@ -79,6 +79,9 @@ const Together = (props) => {
   const [errorReason, setErrorReason] = useState(null)
   //异常的数据
   const [errdata, setErrdata] = useState(null)
+
+  //操作人名字
+  const [actionName, setActionName] = useState(null)
   const handleGetInfo = async (obj) => {
     setLoading(true)
     const data = await getInfo(obj);
@@ -93,6 +96,7 @@ const Together = (props) => {
     const ee = new Date().getFullYear() + '/' + data.date.split('月')[0] + '/' + data.date.split('月')[1].split('日')[0];
     setDateTime(new Date(ee).getTime() / 1000)
     const mm = data.list && data.list.list[0] && data.list.list[0].task;
+    setActionName(data.list && data.list.list[0] && data.list.list[0].operator)
     setTask(data.list && data.list.list[0] && data.list.list[0])
     if (mm) {
       mm.forEach((e, index) => {
@@ -310,7 +314,7 @@ const Together = (props) => {
       setLoading(true)
 
       const ali = document.createElement('a');
-      ali.download = "机器生产数据导出";
+      ali.download =actionName;
       ali.href = data.file;
       const event = new MouseEvent('click');
       ali.dispatchEvent(event);
@@ -1075,7 +1079,7 @@ const Together = (props) => {
     handleGetHadCompletem({
       date: dateTime,
       day_shift: isLight,
-      equment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id)
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id)
     })
   }
 
@@ -1167,7 +1171,7 @@ const Together = (props) => {
   const dowloadWeihu4 = (params) => {
     return request({
       method: 'get',
-      url: ' /task/export/date/anomaly',
+      url: '/task/export/date/anomaly',
       params: params
     })
 
@@ -1270,7 +1274,7 @@ const Together = (props) => {
       order_id: nextPre,
       date: dateTime,
       day_shift: isLight,
-      equment_id: lineId
+      equipment_id: lineId
     })
   }
 
@@ -1292,6 +1296,32 @@ const Together = (props) => {
       date: dateTime,
       // equipment_id: lineId,
     })
+  }
+
+  //更改操作人
+
+  const getActionName = (params) => {
+    return request({
+      method: 'post',
+      url: '/task/operator',
+      params: params  //post data:
+    })
+  }
+
+  const changeActionName = (e) => {
+    const val = e.target.value;
+    setActionName(val)
+  }
+  const blurActionANme=async(e)=>{
+    const val = e.target.value;
+    console.log(val);
+    await getActionName({
+      day_shift: isLight,
+      date: dateTime,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      name:val
+    })
+
   }
   return (
     <Spin
@@ -1432,6 +1462,8 @@ const Together = (props) => {
                 {task && <div className='success_percent line_input'>完成率({task.rate})</div>
                 }
                 <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={handleCancelm}>本机器生产数据导出</Button>
+                <Input placeholder="请输入操作人员姓名" className='line_input' value={actionName} onBlur={blurActionANme} onChange={changeActionName} />
+
               </div>
               <div className='table_right'>
                 <div className="table_container_left">
