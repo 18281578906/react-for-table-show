@@ -7,27 +7,27 @@ const FormModal = (props) => {
   const status = props.clickData.status;
 
   return (
- 
-      <Modal
-        title={<p>序号为 <span style={{ color: 'red' }}>{data.sort}</span> 的数据展示</p>}
-        visible={props.visibleColumn}
-        footer={<div className="btn">
-          {(status === 3||status === 2) ? <Button  type="primary" onClick={() => props.showQC(data)}>QC</Button> : ''}
-          {status === 4 ? <Button onClick={() => props.showReset(data)}>恢复</Button> : ''}
-          {status === 1 && !props.type2 ? <Button type="primary" onClick={() => props.showStart(data)}>开始</Button> : ''}
-          {status === 2 ? <Button type="primary" onClick={() => props.showComplete(data)}>完成</Button> : ''}
-          {(status === 2 || status === 1) ? <Button danger onClick={() => props.showError(data)}>异常</Button> : ''}
-          {(status === 1 || status === 2 || status === 3) ? <Button danger onClick={() => props.showCard(data)}>二维码</Button> : ''}
-        </div>}
-        onCancel={() => props.setVisibleColumn(false)}
-        width={800}
-        bodyStyle={{
-          height:500,
-          overflowY: 'scroll',
-          position: 'relative'
-        }}
-      >
-           <div className="formPage">
+
+    <Modal
+      title={<p>序号为 <span style={{ color: 'red' }}>{data.sort}</span> 的数据展示</p>}
+      visible={props.visibleColumn}
+      footer={<div className="btn">
+        {(status === 3 || status === 2) ? <Button type="primary" onClick={() => props.showQC(data)}>QC</Button> : ''}
+        {status === 4 ? <Button onClick={() => props.showReset(data)}>恢复</Button> : ''}
+        {status === 1 && !props.type2 ? <Button type="primary" onClick={() => props.showStart(data)}>开始</Button> : ''}
+        {status === 2 ? <Button type="primary" onClick={() => props.showComplete(data)}>完成</Button> : ''}
+        {(status === 2 || status === 1) ? <Button danger onClick={() => props.handleClickerr(data)}>异常</Button> : ''}
+        {(status === 1 || status === 2 || status === 3) ? <Button danger onClick={() => props.showCard(data)}>二维码</Button> : ''}
+      </div>}
+      onCancel={() => props.setVisibleColumn(false)}
+      width={800}
+      bodyStyle={{
+        height: 500,
+        overflowY: 'scroll',
+        position: 'relative'
+      }}
+    >
+      <div className="formPage">
         <Form
           layout="vertical"
         >
@@ -61,12 +61,15 @@ const FormModal = (props) => {
           <Form.Item label="条码物料名称">
             {data.code_materials_name}
           </Form.Item>
+          <Form.Item label="投料单单号">
+            {data.feed_id}
+          </Form.Item>
           <Form.Item label="总平方数">
             {data.square}
           </Form.Item>
-          <Form.Item label="交货日期">
+          {/* <Form.Item label="交货日期">
             {data.customer_require_date}
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="提供生产批号">
             {data.support_create_number}
           </Form.Item>
@@ -116,7 +119,7 @@ const FormModal = (props) => {
             {data.customer_use_industry}
           </Form.Item>
 
-       
+
           <Form.Item label="备注">
             {data.comment26}
           </Form.Item>
@@ -124,8 +127,8 @@ const FormModal = (props) => {
             {data.abnormal_comment}
           </Form.Item>
         </Form>
-</div>
-      </Modal>
+      </div>
+    </Modal>
 
   )
 

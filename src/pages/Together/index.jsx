@@ -73,6 +73,12 @@ const Together = (props) => {
   const [nextPre, setNextPre] = useState(null)
   //数据
   const [dataSource, setDataSource] = useState(null)
+  //异常
+  const [showReanson, setShowReason] = useState(false)
+  //异常原因
+  const [errorReason, setErrorReason] = useState(null)
+  //异常的数据
+  const [errdata, setErrdata] = useState(null)
   const handleGetInfo = async (obj) => {
     setLoading(true)
     const data = await getInfo(obj);
@@ -116,7 +122,6 @@ const Together = (props) => {
           setType4(e.item)
         }
       })
-      console.log(mm);
     }
     else {
       setType1(null);
@@ -423,7 +428,6 @@ const Together = (props) => {
   }
 
   const onChange2 = (value) => {
-    console.log(value)
     setLineId(value);
     handleGetInfo({
       page: current,
@@ -465,7 +469,6 @@ const Together = (props) => {
   //选择table项
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       const arr = [];
       selectedRows.forEach(e => {
         arr.push(e.order_id);
@@ -547,10 +550,11 @@ const Together = (props) => {
 
   }
 
-  const showError = (record) => {
+  const showError = () => {
+    setShowReason(false)
     handleError({
-      order_id: record.order_id,
-      abnormal_comment: record.abnormal_comment
+      order_id: errdata.order_id,
+      abnormal_comment: errorReason
     })
     setVisibleColumn(false)
 
@@ -582,7 +586,11 @@ const Together = (props) => {
   const clickColumn = (record) => {
     setVisibleColumn(true);
     setClickedData(record)
-    console.log(record);
+  }
+  const handleClickerr = (record) => {
+    setShowReason(true)
+    setVisibleColumn(false)
+    setErrdata(record)
 
   }
 
@@ -596,7 +604,7 @@ const Together = (props) => {
         {  status === 1 && !type2 ? <Button size="small" type="primary" onClick={() => showStart(record)}>开始</Button> : ''}
 
         {status === 2 ? <Button size="small" type="primary" onClick={() => showComplete(record)}>完成</Button> : ''}
-        { (status === 2 || status === 1) ? <Button size="small" danger onClick={() => showError(record)}>异常</Button> : ''}
+        { (status === 2 || status === 1) ? <Button size="small" danger onClick={() => handleClickerr(record)}>异常</Button> : ''}
         { (status === 1 || status === 2 || status === 3) ? <Button size="small" danger onClick={() => showCard(record)}>二维码</Button> : ''}
         {/* {  status === 2 ? <Button size="small" type="primary" onClick={() => showDelete(record)}>删除</Button> : ''} */}
 
@@ -741,20 +749,20 @@ const Together = (props) => {
         </Tooltip>
       ),
     },
-    // {
-    //   title: '投料单单号',
-    //   dataIndex: 'feed_id',
-    //   key: 'feed_id',
-    //   width: 100,
-    //   ellipsis: {
-    //     showTitle: false,
-    //   },
-    //   render: feed_id => (
-    //     <Tooltip placement="topLeft" title={feed_id}>
-    //       {feed_id}
-    //     </Tooltip>
-    //   ),
-    // },
+    {
+      title: '投料单单号',
+      dataIndex: 'feed_id',
+      key: 'feed_id',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: feed_id => (
+        <Tooltip placement="topLeft" title={feed_id}>
+          {feed_id}
+        </Tooltip>
+      ),
+    },
     {
       title: '总平方数',
       dataIndex: 'square',
@@ -769,20 +777,20 @@ const Together = (props) => {
         </Tooltip>
       ),
     },
-    {
-      title: '交货日期',
-      dataIndex: 'customer_require_date',
-      key: 'customer_require_date',
-      width: 100,
-      ellipsis: {
-        showTitle: false,
-      },
-      render: customer_require_date => (
-        <Tooltip placement="topLeft" title={customer_require_date}>
-          {customer_require_date}
-        </Tooltip>
-      ),
-    },
+    // {
+    //   title: '交货日期',
+    //   dataIndex: 'customer_require_date',
+    //   key: 'customer_require_date',
+    //   width: 100,
+    //   ellipsis: {
+    //     showTitle: false,
+    //   },
+    //   render: customer_require_date => (
+    //     <Tooltip placement="topLeft" title={customer_require_date}>
+    //       {customer_require_date}
+    //     </Tooltip>
+    //   ),
+    // },
     {
       title: '提供生产批号',
       dataIndex: 'support_create_number',
@@ -1083,6 +1091,11 @@ const Together = (props) => {
       setChangeTime3({ start: null, end: null })
     }
 
+  }
+  //输入异常原因
+  const handleChangeReason = (e) => {
+    const val = e.target.value;
+    setErrorReason(val)
   }
   //选择异常时间
   const handleChangeTime4 = (e) => {
@@ -1616,7 +1629,19 @@ const Together = (props) => {
           <RangePicker style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime3} format={"YYYY-MM-DD"} />
         </Modal>
 
-
+        <Modal title='请输入异常理由'
+          visible={showReanson}
+          okText='确认'
+          cancelText="取消"
+          onOk={showError}
+          onCancel={() => {
+            setShowReason(false);
+            setVisibleColumn(false)
+          }}
+          width={500}
+        >
+          <Input style={{ marginLeft: 15, width: 300 }} onChange={handleChangeReason} />
+        </Modal>
 
         <FormModal
           clickData={clickData}
@@ -1625,10 +1650,11 @@ const Together = (props) => {
           showReset={showReset}
           showStart={showStart}
           showComplete={showComplete}
-          showError={showError}
+          showError={() => setShowReason(true)}
           showCard={showCard}
           visibleColumn={visibleColumn}
           setVisibleColumn={setVisibleColumn}
+          handleClickerr={handleClickerr}
         />
       </div>
 
