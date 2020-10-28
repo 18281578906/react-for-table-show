@@ -372,13 +372,31 @@ const Together = (props) => {
   const getWeihu = (params) => {
     return request({
       method: 'get',
-      url: '/task/export/anomaly',
+      url: '/task/date/maintain',
+      params: params  //post data:
+    })
+  }
+  const getStop = (params) => {
+    return request({
+      method: 'get',
+      url: '/task/date/anomaly',
       params: params  //post data:
     })
   }
 
   const handleGetWeihu = async (obj) => {
     await getWeihu(obj);
+    handleGetInfo({
+      page: current,
+      pageSize: 1,
+      day_shift: isLight,
+      date: dateTime,
+      // equipment_id: lineId,
+    })
+  }
+  const handleGetStop = async (obj) => {
+    console.log(obj);
+    await getStop(obj);
     handleGetInfo({
       page: current,
       pageSize: 1,
@@ -1114,7 +1132,7 @@ const Together = (props) => {
       const start = e[0].format('YYYY-MM-DD H:m');
       const end = e[1].format('YYYY-MM-DD H:m');
       handleGetWeihu({
-        equipment_id: lineId,
+        equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
         start,
         end
       })
@@ -1126,7 +1144,11 @@ const Together = (props) => {
     if (e) {
       const start = e[0].format('YYYY-MM-DD H:m');
       const end = e[1].format('YYYY-MM-DD H:m');
-      console.log(start, end);
+      handleGetStop({
+        equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+        start,
+        end
+      })
     }
   }
 
@@ -1403,7 +1425,7 @@ const Together = (props) => {
                 <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={() => setShow3(true)}>维护时间导出</Button>
                 <p style={{ margin: '0', position: 'absolute', marginLeft: '10px', color: '#4e4b4b' }}>请输入异常停机时间:</p>
 
-                <RangePicker showTime className='line_input' nChange={handleChangeStop} style={{ marginTop: '30px' }} />
+                <RangePicker showTime className='line_input' onChange={handleChangeStop} style={{ marginTop: '30px' }} />
                 <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={() => setShow4(true)}>异常停机导出</Button>
 
                 <div className='product_name line_input'>{task && task.name}</div>
