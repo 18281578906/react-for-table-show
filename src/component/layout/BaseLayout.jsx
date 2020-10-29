@@ -8,13 +8,13 @@ import './BaseLayout.scss'
 //路由
 import router from '../../router/router'
 function _Layout(props) {
-let history=useHistory()
-// setTimeout(() => {
-        if (!props.info) {
-        console.log(history,props);
-         history.push('/login')
+    let history = useHistory()
+    // setTimeout(() => {
+    if (!props.info) {
+        console.log(history, props);
+        history.push('/#/login')
     }
-// }, 300);
+    // }, 300);
 
 
     return (
@@ -30,7 +30,7 @@ let history=useHistory()
             {/* <TabBar /> */}
             <div>
                 {console.log(props.isPc)}
-                {props.isPc !== 'init' ? <>{!props.isPc ?<Together /> : <Together /> }</> : null}
+                {props.isPc !== 'init' ? <>{!props.isPc ? <Together /> : <Together />}</> : null}
             </div>
         </div>
     )

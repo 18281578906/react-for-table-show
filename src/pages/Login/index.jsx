@@ -38,7 +38,7 @@ const LoginPage = (props) => {
       history.push('/');
       localStorage.setItem('loginInfo', JSON.stringify(result));
       props.getInfo(result)
-      window.location.reload('/');
+      // window.location.reload('/');
       message.success('登录成功！')
     }
     else {
