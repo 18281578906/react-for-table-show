@@ -40,7 +40,7 @@ const HeaderAccount = (props) => {
   // }
   const loginOut = () => {
     localStorage.removeItem('loginInfo');
-    history.push('/login');
+    history.push('/#/login');
     props.getInfo({})
     //  window.location.reload()
   }
