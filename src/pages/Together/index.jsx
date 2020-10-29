@@ -13,7 +13,7 @@ import FormModal from '../../component/FormModal';
 import HeaderAccount from '../../component/HeaderAccount'
 import { request } from '../../api/request'
 import moment from 'moment'
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 
 import './style.less';
 //二维码
@@ -26,7 +26,7 @@ const { Search } = Input;
 const { RangePicker } = DatePicker;
 
 const Together = (props) => {
-  const history = useHistory();
+  // const history = useHistory();
 
   //登录人员  密码88888为管理员 密码123456为基本用户
   const [visible, setVisible] = useState(false);
@@ -64,7 +64,7 @@ const Together = (props) => {
 
   //导出异常时间
   const [changeTime4, setChangeTime4] = useState({ start: null, end: null })
-  const [changeTime5, setChangeTime5] = useState({ start: null, end: null })
+  const [changeTime5, setChangeTime5] = useState(null)
 
   //显示二维码
   const [showDislog, showDialog] = useState(false)
@@ -91,6 +91,8 @@ const Together = (props) => {
 
   //操作人名字
   const [actionName, setActionName] = useState(null)
+  //白天晚上
+  const [day,setDay]=useState(null)
   const handleGetInfo = async (obj) => {
     setLoading(true)
     const data = await getInfo(obj);
@@ -143,7 +145,6 @@ const Together = (props) => {
       setType4(null)
     }
     setLoading(false)
-
   }
   //下一班
 
@@ -332,6 +333,7 @@ const Together = (props) => {
     else {
       message.error('当前时间暂无数据')
     }
+    setDay(null)
   }
   //下载 异常清单
   const getHadError = (params) => {
@@ -435,12 +437,40 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId,
     })
     message.success('更新成功！')
   }
+  //遍历按钮
+  const handleMapButton=(info)=>{
+    let button=document.getElementsByTagName('button');
+    let input=document.getElementsByTagName('input');
+for(var i=0;i<button.length;i++){
+      if (Object.keys(info).length <=0) {
+        if(button[i].innerText==='立即登录')
+        button[i].disabled=false;
+        else{
+          button[i].disabled=true;
+        }
+      }
+      console.log(info);
+      if(info==='123456'){
+        if(button[i].innerText==='维护时间导出'||button[i].innerText==='异常停机导出')
+        button[i].disabled=true;
+        else{
+          button[i].disabled=false;
+        }
+      }
+      if(button[i].innerText==='立即登录'||button[i].innerText==='退出登录')
+      button[i].disabled=false;
+    }
 
+    for(var j=0;j<input.length;j++){
+      if (Object.keys(info).length <=0) {
+        input[j].disabled=true
+      }
 
+    }
+ }
 
   useEffect(() => {
     handleGetInfo({
@@ -448,13 +478,8 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId
     });
-    console.log(props);
-    // setTimeout(() => {
-    //   if (Object.keys(props.info).length <= 0)
-    //     history.push('/login');
-    // }, 5000)
+    handleMapButton(props.info)
   }, [])
 
   const { Option } = Select;
@@ -1089,16 +1114,16 @@ const Together = (props) => {
     })
   }
   const handleCancelm = (time) => {
-    if (time.start) {
+    if (time&&day) {
       setVisible3(false)
       handleGetHadCompletem({
-        date: time,
-        day_shift: isLight,
+        date:  new Date(time).getTime() / 1000,
+        day_shift: day,
         equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id)
       })
     }
     else {
-      message.error('请先选择时间范围')
+      message.error('请先选择时间范围和班次')
     }
 
   }
@@ -1153,11 +1178,11 @@ const Together = (props) => {
   //选择异常时间
   const handleChangeTime5 = (e) => {
     if (e) {
-      const start = e[0].format('YYYY-MM-DD');
-      const end = e[1].format('YYYY-MM-DD');
-      setChangeTime5({ start, end })
+      // const start = e[0].format('YYYY-MM-DD');
+      // const end = e[1].format('YYYY-MM-DD');
+      setChangeTime5(e.format('YYYY-MM-DD'))
     } else {
-      setChangeTime5({ start: null, end: null })
+      setChangeTime5(null)
     }
 
   }
@@ -1261,7 +1286,7 @@ const Together = (props) => {
     setShow4(false)
   }
   const handleCancel5 = () => {
-    setShow5(false)
+    setShow5(false);
   }
   const changePage = (e) => {
     setCurrent(e);
@@ -1370,6 +1395,10 @@ const Together = (props) => {
   //   }
 
   // }
+  const ChangeDay=(e)=>{
+    console.log(e);
+    setDay(e===22?2:1)
+  }
   return (
     <Spin
       spinning={loading}
@@ -1381,7 +1410,10 @@ const Together = (props) => {
           <div className="header-top">
 
             <div className="top-time">
-              {time && <DatePicker style={{ width: '160px' }} onChange={changeTime1} defaultValue={moment('2020年' + time, dateFormat)} format={dateFormat} />}            </div>
+              {time && <DatePicker 
+                                disabled={Object.keys(props.info).length>0?false:true}
+
+              style={{ width: '160px' }} onChange={changeTime1} defaultValue={moment('2020年' + time, dateFormat)} format={dateFormat} />}            </div>
             <div className="top-time">{info.week}</div>
             <div className="top-time">
               <Select
@@ -1401,6 +1433,8 @@ const Together = (props) => {
                 filterOption={(input, option) =>
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
+                disabled={Object.keys(props.info).length>0?false:true}
+
                 value={isLight}
               >
                 {info.shifts && info.shifts.map(e => <Option key={e.value} value={e.key}>{e.value}</Option>
@@ -1432,6 +1466,8 @@ const Together = (props) => {
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
                 value={rateLine}
+                disabled={Object.keys(props.info).length>0?false:true}
+
               >
                 {info.complete_rate && info.complete_rate.map(
                   (e, index) => <Option key={e.equipment_type_message} value={e.equipment_type_message}>{e.equipment_type_message}</Option>
@@ -1442,7 +1478,7 @@ const Together = (props) => {
               完成率({
                 (rateLine === '旧线') ? info.complete_rate && info.complete_rate[0].rate : info.complete_rate && info.complete_rate[1].rate
               })
-            <Button type='primary' className='btn' onClick={() => setVisible3(true)}>导出生产数据</Button>
+            <Button type='primary' className='btn' onClick={() => setVisible3(true)} >导出生产数据</Button>
             </div>
           </div>
         </div>
@@ -1461,6 +1497,7 @@ const Together = (props) => {
                     backgroundColor: 'rgba(255, 255, 255, 1) ',
                     marginRight: 15
                   }}
+                  disabled={Object.keys(props.info).length>0?false:true}
                   placeholder="请选择机器号"
                   optionFilterProp="children"
                   onChange={onChange2}
@@ -1500,11 +1537,11 @@ const Together = (props) => {
             <div className='table'>
               <div className='table_left'>
                 <p style={{ margin: '0', position: 'absolute', marginLeft: '10px', color: '#4e4b4b' }}>请输入维护时间:</p>
-                <RangePicker showTime className='line_input' onChange={handleChangeWeihu} style={{ marginTop: '30px' }} />
+                <RangePicker disabled={Object.keys(props.info).length>0?false:true} showTime className='line_input' onChange={handleChangeWeihu} style={{ marginTop: '30px' }} />
                 <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={() => setShow3(true)}>维护时间导出</Button>
                 <p style={{ margin: '0', position: 'absolute', marginLeft: '10px', color: '#4e4b4b' }}>请输入异常停机时间:</p>
 
-                <RangePicker showTime className='line_input' onChange={handleChangeStop} style={{ marginTop: '30px' }} />
+                <RangePicker disabled={Object.keys(props.info).length>0?false:true} showTime className='line_input' onChange={handleChangeStop} style={{ marginTop: '30px' }} />
                 <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={() => setShow4(true)}>异常停机导出</Button>
 
                 <div className='product_name line_input'>{task && task.name}</div>
@@ -1692,7 +1729,10 @@ const Together = (props) => {
             <Button onClick={() => setVisible3(false)}>取消</Button>
           </div>}
         >
-          <DatePicker placeholder='请选择时间' style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime} format={dateFormat} />
+          <DatePicker 
+                            disabled={Object.keys(props.info).length>0?false:true}
+
+          placeholder='请选择时间' style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime} format={dateFormat} />
         </Modal>
 
         <Modal title='二维码'
@@ -1719,7 +1759,9 @@ const Together = (props) => {
           onCancel={handleCancel4}
           width={500}
         >
-          <RangePicker style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime4} format={"YYYY-MM-DD"} />
+          <RangePicker 
+          disabled={Object.keys(props.info).length>0?false:true}
+          style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime4} format={"YYYY-MM-DD"} />
         </Modal>
         <Modal title='选择本机器生产数据时间'
           visible={show5}
@@ -1729,7 +1771,22 @@ const Together = (props) => {
           onCancel={handleCancel5}
           width={500}
         >
-          <RangePicker style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime5} format={"YYYY-MM-DD"} />
+          <DatePicker 
+                            disabled={Object.keys(props.info).length>0?false:true}
+
+          style={{ marginLeft: 15, width: 300 }} placeholder="请选择时间" onChange={handleChangeTime5} format={"YYYY-MM-DD"} />
+          <Select
+                className="pic"
+                style={{ marginLeft: 15, width: 300,marginTop:10 }}
+                placeholder="请选择班次"
+                optionFilterProp="children"
+                onChange={ChangeDay}               
+                disabled={Object.keys(props.info).length>0?false:true}
+
+              >
+            <Option value={11}>白班</Option>
+            <Option value={22}>夜班</Option>
+          </Select>
         </Modal>
         <Modal title='请选择导出维护时间'
           visible={show3}
@@ -1739,7 +1796,9 @@ const Together = (props) => {
           onCancel={handleCancel3}
           width={500}
         >
-          <RangePicker style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime3} format={"YYYY-MM-DD"} />
+          <RangePicker 
+          disabled={Object.keys(props.info).length>0?false:true}
+          style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime3} format={"YYYY-MM-DD"} />
         </Modal>
 
         <Modal title='请输入异常理由'

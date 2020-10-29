@@ -38,8 +38,9 @@ const LoginPage = (props) => {
       history.push('/');
       localStorage.setItem('loginInfo', JSON.stringify(result));
       props.getInfo(result)
-      // window.location.reload('/');
       message.success('登录成功！')
+      window.location.reload('/');
+
     }
     else {
       message.error('密码或用户名错误！')

@@ -1,9 +1,10 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Table } from 'antd';
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 // import { MenuOutlined } from '@ant-design/icons';
 import arrayMove from 'array-move';
-
+import { mapStateToProps, mapDispatchToProps } from '../../redux/actionCreator'
+import { connect } from 'react-redux'
 // const DragHandle = sortableHandle(() => (
 //   <MenuOutlined style={{ cursor: 'pointer', color: '#999' }} />
 // ));
@@ -13,6 +14,35 @@ const SortableItem = sortableElement(props => {
 const SortableContainer = sortableContainer(props => <tbody {...props} />);
 
 const DragSortingTableMobile = (props) => {
+
+    //遍历按钮
+    const handleMapButton=(info)=>{
+      var button=document.getElementsByTagName('button');
+      for(var i=0;i<button.length;i++){
+        if (Object.keys(info).length <=0) {
+          if(button[i].innerText==='立即登录')
+          button[i].disabled=false;
+          else{
+            button[i].disabled=true;
+          }
+        }
+        console.log(info);
+        if(info==='123456'){
+          if(button[i].innerText==='维护时间导出'||button[i].innerText==='异常停机导出')
+          button[i].disabled=true;
+          else{
+            button[i].disabled=false;
+          }
+        }
+      }
+   }
+  
+    
+useEffect(()=>{
+  console.log(props);
+  handleMapButton(props.info)
+
+},[props])
   let dataSource = props.data;
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
@@ -79,8 +109,8 @@ const DragSortingTableMobile = (props) => {
       showHeader={props.showHeader}
       components={{
         body: {
-          wrapper: DraggableContainer,
-          row: DraggableBodyRow,
+          wrapper:props.info==='888888'&& DraggableContainer,
+          row:props.info==='888888'&& DraggableBodyRow,
         },
       }}
       scroll={{ y: '170px' }}
@@ -89,13 +119,13 @@ const DragSortingTableMobile = (props) => {
         onClick: () => getClickCount(record),
       })}
       rowClassName={record => {
-        if (record.tag !== '' && record.status === 1 && record.tag !== 3) { return 'table-color-dust'; }
-        if (record.tag !== '' && record.status === 1 && record.tag !== 1) return 'table-yellow-dust';
-
+        if ( record.status === 1 && record.tag === 3) { return 'table-color-dust'; }
+        if ( record.status === 1 && record.tag === 1) return 'table-yellow-dust';
+        if ( record.status === 1 && record.tag === 2) return 'table-red-dust';
       }}
     />
   );
 
 }
 
-export default DragSortingTableMobile;
+export default connect(mapStateToProps, mapDispatchToProps)(DragSortingTableMobile)

@@ -1,6 +1,8 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef,useEffect } from 'react';
 import { DndProvider, useDrag, useDrop, createDndContext } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { mapStateToProps, mapDispatchToProps } from '../../redux/actionCreator'
+import { connect } from 'react-redux'
 import { Table } from 'antd';
 // import update from 'immutability-helper';
 // import { request } from '../../api/request'
@@ -52,7 +54,33 @@ const DragSortingTable: React.FC = (props) => {
       row: DragableBodyRow,
     },
   };
+    //遍历按钮
+    const handleMapButton=(info)=>{
+      var button=document.getElementsByTagName('button');
+      for(var i=0;i<button.length;i++){
+        if (Object.keys(info).length <=0) {
+          if(button[i].innerText==='立即登录')
+          button[i].disabled=false;
+          else{
+            button[i].disabled=true;
+          }
+        }
+        console.log(info);
+        if(info==='123456'){
+          if(button[i].innerText==='维护时间导出'||button[i].innerText==='异常停机导出')
+          button[i].disabled=true;
+          else{
+            button[i].disabled=false;
+          }
+        }
+      }
+   }
+  
+useEffect(()=>{
+  console.log(props);
+  handleMapButton(props.info)
 
+},[props])
 
   const moveRow = useCallback(
     (dragIndex, hoverIndex) => {
@@ -83,7 +111,7 @@ const DragSortingTable: React.FC = (props) => {
         <Table
           columns={columns}
           dataSource={data}
-          components={components}
+          components={props.info==='888888'&& components}
           onRow={(record, index) => ({
             index,
             moveRow,
@@ -93,13 +121,11 @@ const DragSortingTable: React.FC = (props) => {
           pagination={props.pagination}
           rowSelection={props.rowSelection}
           scroll={{ y: '170px' }}
-          // bordered
           rowKey={(e) => e.order_id}
-
           rowClassName={record => {
-            if (record.tag !== '' && record.status === 1 && record.tag !== 3) { return 'table-color-dust'; }
-            if (record.tag !== '' && record.status === 1 && record.tag !== 1) return 'table-yellow-dust';
-
+            if ( record.status === 1 && record.tag === 3) { return 'table-color-dust'; }
+            if ( record.status === 1 && record.tag === 1) return 'table-yellow-dust';
+            if ( record.status === 1 && record.tag === 2) return 'table-red-dust';
           }}
         />
       </DndProvider>
@@ -107,4 +133,4 @@ const DragSortingTable: React.FC = (props) => {
     </>
   );
 };
-export default DragSortingTable;
+export default connect(mapStateToProps, mapDispatchToProps)(DragSortingTable)
