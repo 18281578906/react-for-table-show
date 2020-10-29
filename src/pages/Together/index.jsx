@@ -451,13 +451,10 @@ const Together = (props) => {
       // equipment_id: lineId
     });
     console.log(props);
-    setTimeout(() => {
-      if (Object.keys(props.info).length <= 0)
-        history.push('/login');
-    }, 2000)
-
-
-
+    // setTimeout(() => {
+    //   if (Object.keys(props.info).length <= 0)
+    //     history.push('/login');
+    // }, 2000)
   }, [])
 
   const { Option } = Select;
