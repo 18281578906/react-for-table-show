@@ -453,7 +453,7 @@ const Together = (props) => {
     console.log(props);
     setTimeout(() => {
       if (Object.keys(props.info).length <= 0)
-        history.push('/#/login');
+        history.push('/login');
     }, 2000)
 
 
