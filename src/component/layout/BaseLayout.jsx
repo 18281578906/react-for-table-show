@@ -12,7 +12,7 @@ function _Layout(props) {
     // setTimeout(() => {
     if (!props.info) {
         console.log(history, props);
-        history.push('/#/login')
+        history.push('/login')
     }
     // }, 300);
 

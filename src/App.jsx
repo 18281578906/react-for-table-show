@@ -2,7 +2,7 @@
 import React from 'react'
 import { mapStateToProps, mapDispatchToProps } from './redux/actionCreator'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 
 
 //路由
@@ -51,8 +51,8 @@ function _App(props) {
         <>
             <Router>
                 <Switch>
-                    <Route path='/login' exact component={Login}></Route>
                     <Route path='/' exact component={BaseLayout} ></Route>
+                    <Route path='/login' exact component={Login}></Route>
                     <Redirect to="/404" />
                 </Switch>
             </Router>
