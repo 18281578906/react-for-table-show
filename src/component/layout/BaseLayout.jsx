@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { mapStateToProps, mapDispatchToProps } from '../../redux/actionCreator'
 import { connect } from 'react-redux'
 import Together from '../../pages/Together'
@@ -8,12 +8,12 @@ import './BaseLayout.scss'
 //路由
 import router from '../../router/router'
 function _Layout(props) {
-    let history = useHistory()
+    // let history = useHistory()
     // setTimeout(() => {
-    if (!props.info) {
-        console.log(history, props);
-        history.push('/login')
-    }
+    // if (!props.info) {
+    //     console.log(history, props);
+    //     history.push('/login')
+    // }
     // }, 300);
 
 

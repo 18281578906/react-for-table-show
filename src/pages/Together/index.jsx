@@ -454,7 +454,7 @@ const Together = (props) => {
     // setTimeout(() => {
     //   if (Object.keys(props.info).length <= 0)
     //     history.push('/login');
-    // }, 2000)
+    // }, 5000)
   }, [])
 
   const { Option } = Select;
@@ -1361,12 +1361,21 @@ const Together = (props) => {
     })
 
   }
+  // const handleCheckLogin = () => {
+  //   if (Object.keys(props.info).length <= 0) {
+  //     alert('请先登录！3秒后即将跳转登录...');
+  //     setTimeout(() => {
+  //       history.push('/login')
+  //     }, 3000)
+  //   }
+
+  // }
   return (
     <Spin
       spinning={loading}
     >
       <HeaderAccount />
-      <div className="together2">
+      <div className="together2" >
 
         <div className="menu-header">
           <div className="header-top">
