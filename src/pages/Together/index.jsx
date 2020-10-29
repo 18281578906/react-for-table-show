@@ -13,6 +13,7 @@ import FormModal from '../../component/FormModal';
 import HeaderAccount from '../../component/HeaderAccount'
 import { request } from '../../api/request'
 import moment from 'moment'
+import { useHistory } from 'react-router-dom';
 
 import './style.less';
 //二维码
@@ -25,6 +26,8 @@ const { Search } = Input;
 const { RangePicker } = DatePicker;
 
 const Together = (props) => {
+  const history = useHistory();
+
   //登录人员  密码88888为管理员 密码123456为基本用户
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
@@ -448,6 +451,11 @@ const Together = (props) => {
       // equipment_id: lineId
     });
     console.log(props);
+    setTimeout(() => {
+      if (Object.keys(props.info).length <= 0)
+        history.push('/login');
+    }, 2000)
+
 
 
   }, [])

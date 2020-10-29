@@ -97,8 +97,8 @@ const DragSortingTable: React.FC = (props) => {
           rowKey={(e) => e.order_id}
 
           rowClassName={record => {
-            if (record.tag !== '' && record.status === 3) return 'table-color-dust';
-            if (record.tag !== '' && record.status === 1) return 'table-yellow-dust';
+            if (record.tag !== '' && record.status === 1 && record.tag !== 3) { return 'table-color-dust'; }
+            if (record.tag !== '' && record.status === 1 && record.tag !== 1) return 'table-yellow-dust';
 
           }}
         />

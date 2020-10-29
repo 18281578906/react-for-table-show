@@ -54,8 +54,13 @@ const HeaderAccount = (props) => {
       <p>{account && account.username}</p> 
    </span> */}
       <span>
-        <p>{props.info === '123456' ? '普通用户' : '管理员'}</p>
-        <span style={{ marginLeft: '10px' }} onClick={loginOut}> <Button danger>退出登录</Button></span>
+
+        {Object.keys(props.info).length > 0 ?
+          <>
+            <p>{props.info === '123456' ? '普通用户' : '管理员'}</p>
+            <span style={{ marginLeft: '10px' }} onClick={loginOut}> <Button danger>退出登录</Button></span>
+          </>
+          : <span style={{ marginLeft: '10px' }} onClick={loginOut}> <Button type="primary">立即登录</Button></span>}
 
 
       </span>

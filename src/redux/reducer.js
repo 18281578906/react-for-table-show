@@ -10,7 +10,7 @@ export const reducer = (state = initState, action) => {
     switch (action.type) {
         case 'ADD':
             state.num++
-            break;
+                break;
         case "TAB":
             state.tabStatus = action.index
             break;

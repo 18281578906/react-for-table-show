@@ -34,7 +34,7 @@ const LoginPage = (props) => {
     const { password } = values;
     // const result = await login(username, password);
     const result = password;
-    if (result) {
+    if (result === '123456' || result === '888888') {
       history.push('/');
       localStorage.setItem('loginInfo', JSON.stringify(result));
       props.getInfo(result)
@@ -86,7 +86,7 @@ const LoginPage = (props) => {
               <Input
                 prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
                 type="password"
-                placeholder="密码"
+                placeholder="输入密码"
               />
             </Form.Item>
             <div className="ant-row ant-form-item">
