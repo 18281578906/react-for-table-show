@@ -1548,8 +1548,8 @@ for(var i=0;i<button.length;i++){
                 {task && <div className='success_percent line_input'>完成率({task.rate})</div>
                 }
                 <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={() => setShow5(true)}>本机器生产数据导出</Button>
-                <p style={{ margin: '0', position: 'relative', marginLeft: '10px', color: '#4e4b4b' }}>操作师傅: {props.info === '123456' && actionName}</p>
-                {props.info === '888888' && <Input placeholder="请输入操作人员姓名" className='line_input2' value={actionName} onBlur={blurActionANme} onChange={changeActionName} />
+                <p style={{ margin: '0', position: 'relative', marginLeft: '10px', color: '#4e4b4b' }}>操作师傅: {Object.keys(props.info).length<=0 && actionName}</p>
+                {dataSource&&dataSource.list&&dataSource.list.list&&dataSource.list.list[0]&&dataSource.list.list[0].id &&Object.keys(props.info).length>0&& <Input placeholder="请输入操作人员姓名" className='line_input2' value={actionName} onBlur={blurActionANme} onChange={changeActionName} />
                 }
               </div>
               <div className='table_right'>
