@@ -52,7 +52,8 @@ const Together = (props) => {
   const [type3, setType3] = useState(null)
   const [type4, setType4] = useState(null)
   const [type5, setType5] = useState(null)
-
+  //搜索
+  const [search, setSearch] = useState(null)
   //时间
   const [time, setTime] = useState(null)
 
@@ -92,7 +93,7 @@ const Together = (props) => {
   //操作人名字
   const [actionName, setActionName] = useState(null)
   //白天晚上
-  const [day,setDay]=useState(null)
+  const [day, setDay] = useState(null)
   const handleGetInfo = async (obj) => {
     setLoading(true)
     const data = await getInfo(obj);
@@ -441,36 +442,35 @@ const Together = (props) => {
     message.success('更新成功！')
   }
   //遍历按钮
-  const handleMapButton=(info)=>{
-    let button=document.getElementsByTagName('button');
-    let input=document.getElementsByTagName('input');
-for(var i=0;i<button.length;i++){
-      if (Object.keys(info).length <=0) {
-        if(button[i].innerText==='立即登录')
-        button[i].disabled=false;
-        else{
-          button[i].disabled=true;
+  const handleMapButton = (info) => {
+    let button = document.getElementsByTagName('button');
+    let input = document.getElementsByTagName('input');
+    for (var i = 0; i < button.length; i++) {
+      if (Object.keys(info).length <= 0) {
+        if (button[i].innerText === '立即登录')
+          button[i].disabled = false;
+        else {
+          button[i].disabled = true;
         }
       }
-      console.log(info);
-      if(info==='123456'){
-        if(button[i].innerText==='维护时间导出'||button[i].innerText==='异常停机导出')
-        button[i].disabled=true;
-        else{
-          button[i].disabled=false;
+      if (info === '123456') {
+        if (button[i].innerText === '维护时间导出' || button[i].innerText === '异常停机导出')
+          button[i].disabled = true;
+        else {
+          button[i].disabled = false;
         }
       }
-      if(button[i].innerText==='立即登录'||button[i].innerText==='退出登录')
-      button[i].disabled=false;
+      if (button[i].innerText === '立即登录' || button[i].innerText === '退出登录')
+        button[i].disabled = false;
     }
 
-    for(var j=0;j<input.length;j++){
-      if (Object.keys(info).length <=0) {
-        input[j].disabled=true
+    for (var j = 0; j < input.length; j++) {
+      if (Object.keys(info).length <= 0) {
+        input[j].disabled = true
       }
 
     }
- }
+  }
 
   useEffect(() => {
     handleGetInfo({
@@ -489,13 +489,15 @@ for(var i=0;i<button.length;i++){
   }
 
   const onChange2 = (value) => {
+    console.log(value);
     setLineId(value);
     handleGetInfo({
-      page: current,
+      page: 1,
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      equipment_id: value
+      equipment_id: value,
+      search: search
     })
   }
 
@@ -508,9 +510,6 @@ for(var i=0;i<button.length;i++){
       date: dateTime,
       // equipment_id: lineId
     })
-  }
-
-  function onSearch(val) {
   }
 
   const layout = {
@@ -556,7 +555,7 @@ for(var i=0;i<button.length;i++){
         pageSize: 1,
         day_shift: isLight,
         date: timePicker,
-        // equipment_id: lineId
+        // equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
       })
     }
 
@@ -565,23 +564,25 @@ for(var i=0;i<button.length;i++){
   //search for
   const changeSearch = (e) => {
     const val = e.target.value;
+    setSearch(val)
     handleGetInfo({
       page: 1,
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
       search: val
     })
   }
 
   const changeSearch2 = (e) => {
+    setSearch(e)
     handleGetInfo({
       page: 1,
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
       search: e
     })
   }
@@ -1114,10 +1115,10 @@ for(var i=0;i<button.length;i++){
     })
   }
   const handleCancelm = (time) => {
-    if (time&&day) {
+    if (time && day) {
       setVisible3(false)
       handleGetHadCompletem({
-        date:  new Date(time).getTime() / 1000,
+        date: new Date(time).getTime() / 1000,
         day_shift: day,
         equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id)
       })
@@ -1295,7 +1296,8 @@ for(var i=0;i<button.length;i++){
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      search: search
     })
 
   }
@@ -1377,7 +1379,6 @@ for(var i=0;i<button.length;i++){
   }
   const blurActionANme = async (e) => {
     const val = e.target.value;
-    console.log(val);
     await getActionName({
       day_shift: isLight,
       date: dateTime,
@@ -1395,9 +1396,8 @@ for(var i=0;i<button.length;i++){
   //   }
 
   // }
-  const ChangeDay=(e)=>{
-    console.log(e);
-    setDay(e===22?2:1)
+  const ChangeDay = (e) => {
+    setDay(e === 22 ? 2 : 1)
   }
   return (
     <Spin
@@ -1410,10 +1410,10 @@ for(var i=0;i<button.length;i++){
           <div className="header-top">
 
             <div className="top-time">
-              {time && <DatePicker 
-                                disabled={Object.keys(props.info).length>0?false:true}
+              {time && <DatePicker
+                disabled={Object.keys(props.info).length > 0 ? false : true}
 
-              style={{ width: '160px' }} onChange={changeTime1} defaultValue={moment('2020年' + time, dateFormat)} format={dateFormat} />}            </div>
+                style={{ width: '160px' }} onChange={changeTime1} defaultValue={moment('2020年' + time, dateFormat)} format={dateFormat} />}            </div>
             <div className="top-time">{info.week}</div>
             <div className="top-time">
               <Select
@@ -1429,11 +1429,10 @@ for(var i=0;i<button.length;i++){
                 placeholder="请选择班次"
                 optionFilterProp="children"
                 onChange={onChange3}
-                onSearch={onSearch}
                 filterOption={(input, option) =>
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
-                disabled={Object.keys(props.info).length>0?false:true}
+                disabled={Object.keys(props.info).length > 0 ? false : true}
 
                 value={isLight}
               >
@@ -1461,12 +1460,11 @@ for(var i=0;i<button.length;i++){
                 placeholder="请选择"
                 optionFilterProp="children"
                 onChange={onChange1}
-                onSearch={onSearch}
                 filterOption={(input, option) =>
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
                 value={rateLine}
-                disabled={Object.keys(props.info).length>0?false:true}
+                disabled={Object.keys(props.info).length > 0 ? false : true}
 
               >
                 {info.complete_rate && info.complete_rate.map(
@@ -1497,11 +1495,10 @@ for(var i=0;i<button.length;i++){
                     backgroundColor: 'rgba(255, 255, 255, 1) ',
                     marginRight: 15
                   }}
-                  disabled={Object.keys(props.info).length>0?false:true}
+                  disabled={Object.keys(props.info).length > 0 ? false : true}
                   placeholder="请选择机器号"
                   optionFilterProp="children"
                   onChange={onChange2}
-                  onSearch={onSearch}
                   filterOption={(input, option) =>
                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
@@ -1537,19 +1534,19 @@ for(var i=0;i<button.length;i++){
             <div className='table'>
               <div className='table_left'>
                 <p style={{ margin: '0', position: 'absolute', marginLeft: '10px', color: '#4e4b4b' }}>请输入维护时间:</p>
-                <RangePicker disabled={Object.keys(props.info).length>0?false:true} showTime className='line_input' onChange={handleChangeWeihu} style={{ marginTop: '30px' }} />
+                <RangePicker disabled={Object.keys(props.info).length > 0 ? false : true} showTime className='line_input' onChange={handleChangeWeihu} style={{ marginTop: '30px' }} />
                 <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={() => setShow3(true)}>维护时间导出</Button>
                 <p style={{ margin: '0', position: 'absolute', marginLeft: '10px', color: '#4e4b4b' }}>请输入异常停机时间:</p>
 
-                <RangePicker disabled={Object.keys(props.info).length>0?false:true} showTime className='line_input' onChange={handleChangeStop} style={{ marginTop: '30px' }} />
+                <RangePicker disabled={Object.keys(props.info).length > 0 ? false : true} showTime className='line_input' onChange={handleChangeStop} style={{ marginTop: '30px' }} />
                 <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={() => setShow4(true)}>异常停机导出</Button>
 
                 <div className='product_name line_input'>{task && task.name}</div>
                 {task && <div className='success_percent line_input'>完成率({task.rate})</div>
                 }
                 <Button type="primary" style={{ margin: '0 10px 10px 10px' }} onClick={() => setShow5(true)}>本机器生产数据导出</Button>
-                <p style={{ margin: '0', position: 'relative', marginLeft: '10px', color: '#4e4b4b' }}>操作师傅: {Object.keys(props.info).length<=0 && actionName}</p>
-                {dataSource&&dataSource.list&&dataSource.list.list&&dataSource.list.list[0]&&dataSource.list.list[0].id &&Object.keys(props.info).length>0&& <Input placeholder="请输入操作人员姓名" className='line_input2' value={actionName} onBlur={blurActionANme} onChange={changeActionName} />
+                <p style={{ margin: '0', position: 'relative', marginLeft: '10px', color: '#4e4b4b' }}>操作师傅: {Object.keys(props.info).length <= 0 && actionName}</p>
+                {dataSource && dataSource.list && dataSource.list.list && dataSource.list.list[0] && dataSource.list.list[0].id && Object.keys(props.info).length > 0 && <Input placeholder="请输入操作人员姓名" className='line_input2' value={actionName} onBlur={blurActionANme} onChange={changeActionName} />
                 }
               </div>
               <div className='table_right'>
@@ -1729,10 +1726,10 @@ for(var i=0;i<button.length;i++){
             <Button onClick={() => setVisible3(false)}>取消</Button>
           </div>}
         >
-          <DatePicker 
-                            disabled={Object.keys(props.info).length>0?false:true}
+          <DatePicker
+            disabled={Object.keys(props.info).length > 0 ? false : true}
 
-          placeholder='请选择时间' style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime} format={dateFormat} />
+            placeholder='请选择时间' style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime} format={dateFormat} />
         </Modal>
 
         <Modal title='二维码'
@@ -1759,9 +1756,9 @@ for(var i=0;i<button.length;i++){
           onCancel={handleCancel4}
           width={500}
         >
-          <RangePicker 
-          disabled={Object.keys(props.info).length>0?false:true}
-          style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime4} format={"YYYY-MM-DD"} />
+          <RangePicker
+            disabled={Object.keys(props.info).length > 0 ? false : true}
+            style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime4} format={"YYYY-MM-DD"} />
         </Modal>
         <Modal title='选择本机器生产数据时间'
           visible={show5}
@@ -1771,19 +1768,19 @@ for(var i=0;i<button.length;i++){
           onCancel={handleCancel5}
           width={500}
         >
-          <DatePicker 
-                            disabled={Object.keys(props.info).length>0?false:true}
+          <DatePicker
+            disabled={Object.keys(props.info).length > 0 ? false : true}
 
-          style={{ marginLeft: 15, width: 300 }} placeholder="请选择时间" onChange={handleChangeTime5} format={"YYYY-MM-DD"} />
+            style={{ marginLeft: 15, width: 300 }} placeholder="请选择时间" onChange={handleChangeTime5} format={"YYYY-MM-DD"} />
           <Select
-                className="pic"
-                style={{ marginLeft: 15, width: 300,marginTop:10 }}
-                placeholder="请选择班次"
-                optionFilterProp="children"
-                onChange={ChangeDay}               
-                disabled={Object.keys(props.info).length>0?false:true}
+            className="pic"
+            style={{ marginLeft: 15, width: 300, marginTop: 10 }}
+            placeholder="请选择班次"
+            optionFilterProp="children"
+            onChange={ChangeDay}
+            disabled={Object.keys(props.info).length > 0 ? false : true}
 
-              >
+          >
             <Option value={11}>白班</Option>
             <Option value={22}>夜班</Option>
           </Select>
@@ -1796,9 +1793,9 @@ for(var i=0;i<button.length;i++){
           onCancel={handleCancel3}
           width={500}
         >
-          <RangePicker 
-          disabled={Object.keys(props.info).length>0?false:true}
-          style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime3} format={"YYYY-MM-DD"} />
+          <RangePicker
+            disabled={Object.keys(props.info).length > 0 ? false : true}
+            style={{ marginLeft: 15, width: 300 }} onChange={handleChangeTime3} format={"YYYY-MM-DD"} />
         </Modal>
 
         <Modal title='请输入异常理由'

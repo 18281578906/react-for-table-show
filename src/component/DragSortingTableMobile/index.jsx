@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Table } from 'antd';
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 // import { MenuOutlined } from '@ant-design/icons';
@@ -15,34 +15,32 @@ const SortableContainer = sortableContainer(props => <tbody {...props} />);
 
 const DragSortingTableMobile = (props) => {
 
-    //遍历按钮
-    const handleMapButton=(info)=>{
-      var button=document.getElementsByTagName('button');
-      for(var i=0;i<button.length;i++){
-        if (Object.keys(info).length <=0) {
-          if(button[i].innerText==='立即登录')
-          button[i].disabled=false;
-          else{
-            button[i].disabled=true;
-          }
-        }
-        console.log(info);
-        if(info==='123456'){
-          if(button[i].innerText==='维护时间导出'||button[i].innerText==='异常停机导出')
-          button[i].disabled=true;
-          else{
-            button[i].disabled=false;
-          }
+  //遍历按钮
+  const handleMapButton = (info) => {
+    var button = document.getElementsByTagName('button');
+    for (var i = 0; i < button.length; i++) {
+      if (Object.keys(info).length <= 0) {
+        if (button[i].innerText === '立即登录')
+          button[i].disabled = false;
+        else {
+          button[i].disabled = true;
         }
       }
-   }
-  
-    
-useEffect(()=>{
-  console.log(props);
-  handleMapButton(props.info)
+      if (info === '123456') {
+        if (button[i].innerText === '维护时间导出' || button[i].innerText === '异常停机导出')
+          button[i].disabled = true;
+        else {
+          button[i].disabled = false;
+        }
+      }
+    }
+  }
 
-},[props])
+
+  useEffect(() => {
+    handleMapButton(props.info)
+
+  }, [props])
   let dataSource = props.data;
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
@@ -109,8 +107,8 @@ useEffect(()=>{
       showHeader={props.showHeader}
       components={{
         body: {
-          wrapper:props.info==='888888'&& DraggableContainer,
-          row:props.info==='888888'&& DraggableBodyRow,
+          wrapper: props.info === '888888' && DraggableContainer,
+          row: props.info === '888888' && DraggableBodyRow,
         },
       }}
       scroll={{ y: '170px' }}
@@ -119,9 +117,9 @@ useEffect(()=>{
         onClick: () => getClickCount(record),
       })}
       rowClassName={record => {
-        if ( record.status === 1 && record.tag === 3) { return 'table-color-dust'; }
-        if ( record.status === 1 && record.tag === 1) return 'table-yellow-dust';
-        if ( record.status === 1 && record.tag === 2) return 'table-red-dust';
+        if (record.status === 1 && record.tag === 3) { return 'table-color-dust'; }
+        if (record.status === 1 && record.tag === 1) return 'table-yellow-dust';
+        if (record.status === 1 && record.tag === 2) return 'table-red-dust';
       }}
     />
   );
