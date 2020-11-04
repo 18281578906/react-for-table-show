@@ -120,10 +120,10 @@ const FormModal = (props) => {
           </Form.Item>
 
 
-          <Form.Item label="备注">
+          <Form.Item label="备注" style={{ display: 'block' }}>
             {data.comment26}
           </Form.Item>
-          <Form.Item label="异常备注">
+          <Form.Item label="异常备注" style={{ display: 'block' }}>
             {data.abnormal_comment}
           </Form.Item>
         </Form>
