@@ -493,7 +493,7 @@ for(var i=0;i<button.length;i++){
     handleGetInfo({
       page: current,
       pageSize: 1,
-      day_shift: value,
+      day_shift: isLight,
       date: dateTime,
       equipment_id: value
     })
