@@ -61,7 +61,7 @@ const FormModal = (props) => {
           <Form.Item label="条码物料名称">
             {data.code_materials_name}
           </Form.Item>
-          <Form.Item label="投料单单号">
+          <Form.Item label="客户订单号">
             {data.feed_id}
           </Form.Item>
           <Form.Item label="总平方数">
@@ -94,7 +94,7 @@ const FormModal = (props) => {
           <Form.Item label="宽">
             {data.width}
           </Form.Item>
-          <Form.Item label="扣减数">
+          <Form.Item label="对应客户品名">
             {data.decuction_number}
           </Form.Item>
 
