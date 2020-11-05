@@ -1064,7 +1064,20 @@ const Together = (props) => {
         </Tooltip>
       ),
     },
-
+    {
+      title: '对应客户料号',
+      dataIndex: 'decuction_number_befor',
+      key: 'decuction_number_befor',
+      width: 100,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: decuction_number_befor => (
+        <Tooltip placement="topLeft" title={decuction_number_befor}>
+          {decuction_number_befor}
+        </Tooltip>
+      ),
+    },
     {
       title: '备注',
       dataIndex: 'comment26',

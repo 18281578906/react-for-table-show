@@ -118,7 +118,9 @@ const FormModal = (props) => {
           <Form.Item label="行业">
             {data.customer_use_industry}
           </Form.Item>
-
+          <Form.Item label="对应客户料号">
+            {data.decuction_number_befor}
+          </Form.Item>
 
           <Form.Item label="备注" style={{ display: 'block' }}>
             {data.comment26}
