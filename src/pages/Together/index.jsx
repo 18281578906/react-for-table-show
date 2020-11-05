@@ -812,7 +812,7 @@ const Together = (props) => {
       ),
     },
     {
-      title: '投料单单号',
+      title: '客户订单号',
       dataIndex: 'feed_id',
       key: 'feed_id',
       width: 100,
@@ -966,7 +966,7 @@ const Together = (props) => {
       ),
     },
     {
-      title: '扣减数',
+      title: '对应客户品名',
       dataIndex: 'decuction_number',
       key: 'decuction_number',
       width: 100,
