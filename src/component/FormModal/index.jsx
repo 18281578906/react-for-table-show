@@ -43,9 +43,7 @@ const FormModal = (props) => {
           <Form.Item label="规格型号">
             {data.customer_model}
           </Form.Item>
-          <Form.Item label="产品规格(厚*宽*长*只)">
-            {data.product_model}
-          </Form.Item>
+
           <Form.Item label="交货方式">
             {data.delivery_type}
           </Form.Item>
@@ -58,9 +56,7 @@ const FormModal = (props) => {
           <Form.Item label="完成时间">
             {data.complete_date}
           </Form.Item>
-          <Form.Item label="条码物料名称">
-            {data.code_materials_name}
-          </Form.Item>
+
           <Form.Item label="客户订单号">
             {data.feed_id}
           </Form.Item>
@@ -110,23 +106,26 @@ const FormModal = (props) => {
           <Form.Item label="预计入库时间">
             {data.code_materials_befor}
           </Form.Item>
-
           <Form.Item label="管材类型">
             {data.pipe_type}
           </Form.Item>
-
           <Form.Item label="行业">
             {data.customer_use_industry}
           </Form.Item>
           <Form.Item label="对应客户料号">
             {data.decuction_number_befor}
           </Form.Item>
-
-          <Form.Item label="备注" style={{ display: 'block' }}>
-            {data.comment26}
+          <Form.Item label="产品规格(厚*宽*长*只)" style={{ display: 'block' }}>
+            {data.product_model}
+          </Form.Item>
+          <Form.Item label="条码物料名称" style={{ display: 'block' }}>
+            {data.code_materials_name}
           </Form.Item>
           <Form.Item label="异常备注" style={{ display: 'block' }}>
             {data.abnormal_comment}
+          </Form.Item>
+          <Form.Item label="备注" style={{ display: 'block' }}>
+            {data.comment26}
           </Form.Item>
         </Form>
       </div>
