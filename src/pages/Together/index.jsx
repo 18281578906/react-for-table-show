@@ -8,7 +8,7 @@ import DragSortingTableMobile from '../../component/DragSortingTableMobile'
 import { mapStateToProps, mapDispatchToProps } from '../../redux/actionCreator'
 import { connect } from 'react-redux'
 import { sortableHandle } from 'react-sortable-hoc';
-import { MenuOutlined } from '@ant-design/icons';
+import { MenuOutlined,ExclamationCircleOutlined } from '@ant-design/icons';
 import FormModal from '../../component/FormModal';
 import HeaderAccount from '../../component/HeaderAccount'
 import { request } from '../../api/request'
@@ -650,6 +650,49 @@ const Together = (props) => {
     setVisibleColumn(false)
 
   }
+  // const [cancelData,setCancelData]=useState(null);
+  const setCancel = (params) => {
+    return request({
+      method: 'get',
+      url: '/task/cancel',
+      params: params  //post data:
+    })
+  }
+  const handleOkCancel=async(record)=>{
+ await setCancel({
+   order_id:record.order_id
+ })
+ message.success('状态更新成功！');
+ handleGetInfo({
+   page: current,
+   pageSize: 1,
+   day_shift: isLight,
+   date: dateTime,
+   equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+   search: search
+ })
+
+  }
+  const showCancel=(record)=>{
+    setVisibleColumn(false)
+    console.log(record.order_id);
+    Modal.confirm({
+      title: '确认取消？',
+      icon: <ExclamationCircleOutlined />,
+      okType: 'danger',
+      okText: '确认',
+      cancelText: '取消',
+      onOk() {
+      handleOkCancel(record);
+      console.log('Cancel');
+
+      },
+      onCancel(){
+        console.log('Cancel');
+
+      }
+    });
+  }
 
   //删除
   // const showDelete = (record) => {
@@ -682,6 +725,8 @@ const Together = (props) => {
         {status === 2 ? <Button size="small" type="primary" onClick={() => showComplete(record)}>完成</Button> : ''}
         { (status === 2 || status === 1) ? <Button size="small" danger onClick={() => handleClickerr(record)}>异常</Button> : ''}
         { (status === 1 || status === 2 || status === 3) ? <Button size="small" danger onClick={() => showCard(record)}>二维码</Button> : ''}
+        {  status === 1 && <Button size="small" type="default" onClick={() =>showCancel(record)}>取消</Button>}
+
         {/* {  status === 2 ? <Button size="small" type="primary" onClick={() => showDelete(record)}>删除</Button> : ''} */}
 
 
@@ -1840,7 +1885,7 @@ const Together = (props) => {
         >
           <Input style={{ marginLeft: 15, width: 300 }} onChange={handleChangeReason} />
         </Modal>
-
+   
         <FormModal
           clickData={clickData}
           type2={type2}
@@ -1853,6 +1898,7 @@ const Together = (props) => {
           visibleColumn={visibleColumn}
           setVisibleColumn={setVisibleColumn}
           handleClickerr={handleClickerr}
+          showCancel={showCancel}
         />
       </div>
 
