@@ -20,9 +20,9 @@ const FormModal = (props) => {
         {(status === 1 || status === 2 || status === 3) ? <Button danger onClick={() => props.showCard(data)}>二维码</Button> : ''}
       </div>}
       onCancel={() => props.setVisibleColumn(false)}
-      width={800}
+      width={1000}
       bodyStyle={{
-        height: 500,
+        height: 600,
         overflowY: 'scroll',
         position: 'relative'
       }}
@@ -47,7 +47,7 @@ const FormModal = (props) => {
           <Form.Item label="交货方式">
             {data.delivery_type}
           </Form.Item>
-          <Form.Item label="开始时间">
+          {/* <Form.Item label="开始时间">
             {data.start}
           </Form.Item>
           <Form.Item label="预计完成时间">
@@ -55,7 +55,7 @@ const FormModal = (props) => {
           </Form.Item>
           <Form.Item label="完成时间">
             {data.complete_date}
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item label="客户订单号">
             {data.feed_id}
@@ -115,16 +115,16 @@ const FormModal = (props) => {
           <Form.Item label="对应客户料号">
             {data.decuction_number_befor}
           </Form.Item>
-          <Form.Item label="产品规格(厚*宽*长*只)" style={{ display: 'block' }}>
+          <Form.Item label="产品规格(厚*宽*长*只)" style={{ display: 'block', width: '100%', maxWidth: '100%', minWidth: '100%' }}>
             {data.product_model}
           </Form.Item>
-          <Form.Item label="条码物料名称" style={{ display: 'block' }}>
+          <Form.Item label="条码物料名称" style={{ display: 'block', width: '100%', maxWidth: '100%', minWidth: '100%' }}>
             {data.code_materials_name}
           </Form.Item>
-          <Form.Item label="异常备注" style={{ display: 'block' }}>
+          <Form.Item label="异常备注" style={{ display: 'block', width: '100%', maxWidth: '100%', minWidth: '100%' }}>
             {data.abnormal_comment}
           </Form.Item>
-          <Form.Item label="备注" style={{ display: 'block' }}>
+          <Form.Item label="备注" style={{ display: 'block', width: '100%', maxWidth: '100%', minWidth: '100%' }}>
             {data.comment26}
           </Form.Item>
         </Form>
