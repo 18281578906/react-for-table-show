@@ -189,7 +189,8 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      search: search
     })
   }
 
@@ -209,7 +210,8 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      search: search
     })
   }
 
@@ -229,7 +231,8 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      search: search
     })
   }
 
@@ -249,7 +252,8 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      search: search
     })
 
   }
@@ -407,6 +411,8 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      search: search
     })
     message.success('状态更新成功！')
 
@@ -418,6 +424,8 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      search: search
     })
     message.success('状态更新成功！')
   }
@@ -438,6 +446,8 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      search: search
     })
     message.success('更新成功！')
   }
@@ -478,6 +488,8 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
+      // equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      // search: search
     });
     handleMapButton(props.info)
   }, [])
@@ -508,7 +520,8 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: value,
       date: dateTime,
-      // equipment_id: lineId
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      search: search
     })
   }
 
@@ -555,7 +568,8 @@ const Together = (props) => {
         pageSize: 1,
         day_shift: isLight,
         date: timePicker,
-        // equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+        equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+        search: search
       })
     }
 
@@ -1340,7 +1354,8 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      search: search
     })
     message.success("切换至本班成功！")
 
@@ -1372,7 +1387,8 @@ const Together = (props) => {
       pageSize: 1,
       day_shift: isLight,
       date: dateTime,
-      // equipment_id: lineId,
+      equipment_id: lineId || (dataSource.list && dataSource.list.list[0] && dataSource.list.list[0].id),
+      search: search
     })
   }
 
