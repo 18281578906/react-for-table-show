@@ -18,6 +18,8 @@ const FormModal = (props) => {
         {status === 2 ? <Button type="primary" onClick={() => props.showComplete(data)}>完成</Button> : ''}
         {(status === 2 || status === 1) ? <Button danger onClick={() => props.handleClickerr(data)}>异常</Button> : ''}
         {(status === 1 || status === 2 || status === 3) ? <Button danger onClick={() => props.showCard(data)}>二维码</Button> : ''}
+        {  status === 1 && <Button type="default" onClick={() =>props.showCancel(data)}>取消</Button>}
+
       </div>}
       onCancel={() => props.setVisibleColumn(false)}
       width={1000}
