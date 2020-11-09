@@ -1712,6 +1712,9 @@ const Together = (props) => {
             <Form.Item name="scrap_anomaly" label="异常报废（平方米）">
               <Input />
             </Form.Item>
+            <Form.Item name="weight" label="重量">
+              <Input />
+            </Form.Item>
             <Form.Item name="comment" label="备注" >
               <Input />
             </Form.Item>
