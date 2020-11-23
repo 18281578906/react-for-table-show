@@ -237,7 +237,11 @@ display: flex;
   }
   .tabel_type:nth-child(2), .tabel_type:nth-child(3), .tabel_type:nth-child(4) p{
     position: relative;
-    top: -55px;
+    top: 50px;
+  }
+   .tabel_type:nth-child(3), .tabel_type:nth-child(4) p{
+    position: relative;
+    top: 100px;
   }
 }
 .table_container{
@@ -285,8 +289,23 @@ display: flex;
     font-size: 16px;
   }
   .type_table{
-    // margin-left:150px;
-    display: inline-block;
+    height:100%;
+    background-color: #fff;
+        display: inline-block;
+
+  }
+  .ant-table-tbody > tr > td{
+    border: none;
+  }
+}
+.table_line_pre{
+  height:270px;
+
+}
+.table_line_err{
+  height:100px;
+  .type_table{
+   
 
   }
 }

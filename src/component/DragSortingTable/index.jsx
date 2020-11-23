@@ -120,7 +120,7 @@ useEffect(()=>{
           showHeader={props.showHeader}
           pagination={props.pagination}
           rowSelection={props.rowSelection}
-          scroll={{ y: '170px' }}
+          scroll={{ y: props.heightTable}}
           rowKey={(e) => e.order_id}
           rowClassName={record => {
             if ( record.status === 1 && record.tag === 3) { return 'table-color-dust'; }
