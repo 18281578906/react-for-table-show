@@ -717,7 +717,7 @@ const Together = (props) => {
 
   const ActionRender = (text, record) => {
     const status = record.status;
-    console.log('********',props.info)
+    console.log('********', props.info)
     return (
       <div>
 
@@ -728,7 +728,7 @@ const Together = (props) => {
         {status === 2 ? <Button size="small" type="primary" onClick={() => showComplete(record)}>完成</Button> : ''}
         { (status === 2 || status === 1) ? <Button size="small" danger onClick={() => handleClickerr(record)}>异常</Button> : ''}
         { (status === 1 || status === 2 || status === 3) ? <Button size="small" danger onClick={() => showCard(record)}>二维码</Button> : ''}
-        {  status === 1&&props.info==='888888' && <Button size="small"  type="default" onClick={() => showCancel(record)}>取消</Button>}
+        {  status === 1 && props.info === '888888' && <Button size="small" type="default" onClick={() => showCancel(record)}>取消</Button>}
 
         {/* {  status === 2 ? <Button size="small" type="primary" onClick={() => showDelete(record)}>删除</Button> : ''} */}
 
@@ -1635,9 +1635,9 @@ const Together = (props) => {
 
                 </div>
                 {props.isPc ? <div className="table_container">
-                  <div className='table_line'>
+                  <div className='table_line table_line_now'>
                     {/* <div className='tabel_type'><p>正在生产</p></div> */}
-                    <div className="type_table"> <DragSortingTable clickColumn={clickColumn} heightTable={'170px'} moveLine={handleMove} showHeader={true} data={type2} columns={columns} pagination={false} /></div>
+                    <div className="type_table"> <DragSortingTable clickColumn={clickColumn} heightTable={'115px'} moveLine={handleMove} showHeader={true} data={type2} columns={columns} pagination={false} /></div>
                   </div>
                   <div className='table_line table_line_pre'>
                     {/* <div className='tabel_type'><p>将要生产</p></div> */}
@@ -1653,17 +1653,17 @@ const Together = (props) => {
                   </div>
                 </div> :
                   <div className="table_container">
-                    <div className='table_line'>
-                      <div className="type_table"> <DragSortingTableMobile clickColumn={clickColumn} moveLine={handleMove} showHeader={true} data={type2} columns={columns} pagination={false} /> </div>
+                    <div className='table_line table_line_now'>
+                      <div className="type_table"> <DragSortingTableMobile heightTable={'115px'} clickColumn={clickColumn} moveLine={handleMove} showHeader={true} data={type2} columns={columns} pagination={false} /> </div>
+                    </div>
+                    <div className='table_line table_line_pre'>
+                      <div className="type_table"> <DragSortingTableMobile heightTable={'270px'} clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type1} columns={columns} pagination={false} /></div>
                     </div>
                     <div className='table_line'>
-                      <div className="type_table"> <DragSortingTableMobile clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type1} columns={columns} pagination={false} /></div>
+                      <div className="type_table"> <DragSortingTableMobile heightTable={'170px'} clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type3} columns={columns} pagination={false} /></div>
                     </div>
-                    <div className='table_line'>
-                      <div className="type_table"> <DragSortingTableMobile clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type3} columns={columns} pagination={false} /></div>
-                    </div>
-                    <div className='table_line'>
-                      <div className="type_table"> <DragSortingTableMobile clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type4} columns={columns} /></div>
+                    <div className='table_line table_line_err'>
+                      <div className="type_table"> <DragSortingTableMobile heightTable={'100px'} clickColumn={clickColumn} moveLine={handleMove} showHeader={false} data={type4} columns={columns} /></div>
                     </div>
                   </div>
                 }

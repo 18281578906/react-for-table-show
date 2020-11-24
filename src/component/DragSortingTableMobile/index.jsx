@@ -111,7 +111,7 @@ const DragSortingTableMobile = (props) => {
           row: props.info === '888888' && DraggableBodyRow,
         },
       }}
-      scroll={{ y: '170px' }}
+      scroll={{ y: props.heightTable }}
       onRow={(record, index) => ({
         index,
         onClick: () => getClickCount(record),
