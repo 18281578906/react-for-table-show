@@ -492,6 +492,7 @@ const Together = (props) => {
       // search: search
     });
     handleMapButton(props.info)
+    console.log(document.getElementsByClassName('pic_select')[0].innerHTML.child);
   }, [])
 
   const { Option } = Select;
@@ -1563,7 +1564,7 @@ const Together = (props) => {
               <p className="pic">机器号</p>
               <div className='input_wrap'>
                 <Select
-                  className="pic"
+                  className="pic pic_select"
                   showSearch
                   style={{
                     width: 300,
@@ -1576,10 +1577,12 @@ const Together = (props) => {
                   placeholder="请选择机器号"
                   optionFilterProp="children"
                   onChange={onChange2}
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
+                  autoFocus={false}
+                // filterOption={(input, option) =>
+                //   option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                // }
                 // value={lineId}
+                // readonly="readonly"
                 >
                   {info.equipment && info.equipment.map(e => <Option key={e.name} value={e.id}>{e.name}</Option>
                   )}
