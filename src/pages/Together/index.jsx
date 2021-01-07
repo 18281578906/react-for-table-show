@@ -1491,7 +1491,7 @@ const Together = (props) => {
               {time && <DatePicker
                 disabled={Object.keys(props.info).length > 0 ? false : true}
 
-                style={{ width: '160px' }} onChange={changeTime1} defaultValue={moment('2020年' + time, dateFormat)} format={dateFormat} />}            </div>
+                style={{ width: '160px' }} onChange={changeTime1} defaultValue={moment(new Date().getFullYear()+'年' + time, dateFormat)} format={dateFormat} />}            </div>
             <div className="top-time">{info.week}</div>
             <div className="top-time">
               <Select
